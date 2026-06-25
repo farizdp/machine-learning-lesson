@@ -42,12 +42,13 @@ open lessons/0001-what-is-ai.html
 | Lesson | Topics |
 |--------|--------|
 | [08 — Perceptrons & Neural Networks](lessons/0008-deep-learning-intro.html) | Perceptron anatomy, Why nonlinearity is essential, Multi-layer Perceptron (MLP), Deep Neural Networks, Forward pass, Feature hierarchy |
+| [09 — Activation Functions & Training](lessons/0009-activation-training.html) | Step / Sigmoid / Tanh / ReLU / Leaky ReLU / Swish / Softmax, Loss functions (MSE vs Cross-Entropy), Training loop, Backpropagation & Chain rule, Vanishing & Exploding gradients |
 
 ---
 
 ## What's Coming
 
-- **Lesson 09** — Activation Functions & Neural Network Training: Sigmoid, Tanh, ReLU, Leaky ReLU, Softmax, Loss functions, Backpropagation, Chain rule, Vanishing/exploding gradients
+- **Lesson 10** — Optimizers & Regularization: Momentum, AdaGrad, RMSProp, Adam, L1/L2, Dropout, Early stopping
 - **Lesson 10** — Optimizers & Regularization: Momentum, AdaGrad, RMSProp, Adam, L1/L2 regularization, Dropout, Early stopping
 - **Lesson 11** — Convolutional Neural Networks (CNN): Convolution, Pooling, CNN architecture
 - **Lesson 12** — Recurrent Neural Networks (RNN): RNN, LSTM (Forget / Input / Output gates), Seq2Seq

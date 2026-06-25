@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 09 — Activation Functions & Neural Network Training</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 38%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 03 · Lesson 9 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <h1>Activation Functions &amp; How Neural Networks Learn</h1>
+    <p class="subtitle">The functions that give networks their power — and the algorithm that teaches them.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Activation Functions ───────────── -->
+  <h2>1. Common Activation Functions</h2>
+
+  <p>Every neuron applies an <strong>activation function</strong> after its weighted sum. In Lesson 08 you learned <em>why</em> nonlinearity is essential — now let's meet the specific functions used in practice. The exam expects you to know all seven.</p>
+
+  <!-- Step -->
+  <h3>① Step Function</h3>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">What it does</div>
+      Outputs 1 if the input exceeds a threshold, 0 otherwise. Binary on/off — mimics the original biological neuron "fires or doesn't fire."
+    </div>
+    <div class="def-item">
+      <div class="def-term">Problem</div>
+      The gradient is zero everywhere except exactly at the threshold — so gradient descent can't learn through it. <strong>Not used in modern deep learning.</strong>
+    </div>
+  </div>
+
+  <!-- Sigmoid -->
+  <h3>② Sigmoid (Logistic)</h3>
+  <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
+    <svg viewBox="0 0 300 100" width="280" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10" y1="50" x2="290" y2="50" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="95" stroke="#e8e6e1" stroke-width="1"/>
+      <path d="M 15 88 C 40 87 70 80 100 65 S 160 20 185 12 S 250 8 285 7" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+      <text x="5"   y="13" font-family="sans-serif" font-size="9" fill="#6b6b63">1</text>
+      <text x="5"   y="53" font-family="sans-serif" font-size="9" fill="#dc2626">0.5</text>
+      <text x="5"   y="93" font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
+      <text x="258" y="10" font-family="sans-serif" font-size="9" fill="#2563eb">σ(z)</text>
+      <line x1="10" y1="50" x2="290" y2="50" stroke="#dc2626" stroke-width="0.8" stroke-dasharray="4,3"/>
+    </svg>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">σ(z) = 1 / (1 + e<sup>−z</sup>) — output always between 0 and 1</p>
+  </div>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Use</div>Output layer of binary classifiers — the output is a probability. Already covered in Logistic Regression.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Problem</div><strong>Vanishing gradient</strong> — for very large or very small inputs, the curve is nearly flat (gradient ≈ 0). Gradients shrink to near-zero as they flow back through many layers, stalling learning.
+    </div>
+  </div>
+
+  <!-- Tanh -->
+  <h3>③ Tanh (Hyperbolic Tangent)</h3>
+  <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
+    <svg viewBox="0 0 300 110" width="280" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10" y1="55" x2="290" y2="55" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="105" stroke="#e8e6e1" stroke-width="1"/>
+      <path d="M 15 100 C 50 98 80 85 110 65 S 170 20 200 10 S 255 6 285 5" stroke="#7c3aed" stroke-width="2.5" fill="none"/>
+      <text x="5" y="10"  font-family="sans-serif" font-size="9" fill="#6b6b63">+1</text>
+      <text x="5" y="57"  font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
+      <text x="5" y="103" font-family="sans-serif" font-size="9" fill="#6b6b63">−1</text>
+      <text x="260" y="10" font-family="sans-serif" font-size="9" fill="#7c3aed">tanh(z)</text>
+    </svg>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">Output range: (−1, +1) — zero-centered</p>
+  </div>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Advantage over Sigmoid</div>Output is <strong>zero-centered</strong> (−1 to +1 instead of 0 to 1). This makes gradient updates more symmetric and often speeds up training.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Problem</div>Still suffers from vanishing gradients at the extremes. Less common in hidden layers today.
+    </div>
+  </div>
+
+  <!-- ReLU -->
+  <h3>④ ReLU (Rectified Linear Unit)</h3>
+  <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
+    <svg viewBox="0 0 300 100" width="280" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10" y1="80" x2="290" y2="80" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="95" stroke="#e8e6e1" stroke-width="1"/>
+      <!-- flat left, rising right -->
+      <polyline points="15,80 150,80 285,10" stroke="#15803d" stroke-width="2.5" fill="none"/>
+      <text x="155" y="78" font-family="sans-serif" font-size="9" fill="#15803d">f(z) = max(0, z)</text>
+      <text x="18" y="75" font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
+    </svg>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">f(z) = max(0, z) — zero below 0, linear above 0</p>
+  </div>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Why it dominates</div>Gradient is exactly 1 for all positive inputs — no vanishing gradient on the positive side. Extremely fast to compute. <strong>The default activation function for hidden layers today.</strong>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Problem — Dying ReLU</div>If a neuron's input is always negative, it always outputs 0, and its gradient is always 0 — it permanently stops learning ("dies"). Solution: Leaky ReLU.
+    </div>
+  </div>
+
+  <!-- Leaky ReLU -->
+  <h3>⑤ Leaky ReLU</h3>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">What it does</div>Same as ReLU for positive inputs. For negative inputs, instead of outputting exactly 0, it outputs a small negative value: <code>f(z) = max(0.01z, z)</code>.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Why it fixes Dying ReLU</div>The tiny slope (0.01) on the negative side means the gradient is never exactly zero — neurons can always recover and keep learning.
+    </div>
+  </div>
+
+  <!-- Swish -->
+  <h3>⑥ Swish</h3>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Formula</div><code>f(z) = z · σ(z)</code> — the input multiplied by its own sigmoid. Proposed by Google in 2017.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Why it's used</div>Smooth everywhere (unlike ReLU's sharp corner at 0), allows small negative values through, and empirically outperforms ReLU on some deep networks. Used in models like EfficientNet and some Transformer variants.
+    </div>
+  </div>
+
+  <!-- Softmax -->
+  <h3>⑦ Softmax</h3>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">What it does</div>Takes a vector of raw scores (one per class) and converts them into <strong>probabilities that sum to 1</strong>. <code>softmax(zᵢ) = e<sup>zᵢ</sup> / Σe<sup>zⱼ</sup></code>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Where it lives</div><strong>Output layer of multi-class classifiers only.</strong> For a network classifying 10 digits (0–9), the output layer has 10 neurons, Softmax converts their scores into 10 probabilities. The highest probability wins.
+    </div>
+  </div>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:460px">
+      <thead>
+        <tr style="background:#f3f4f6">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Function</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Output range</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Used where</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key weakness</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Step</td>
+          <td style="padding:0.4rem 0.75rem">{0, 1}</td>
+          <td style="padding:0.4rem 0.75rem">Historical only</td>
+          <td style="padding:0.4rem 0.75rem">Zero gradient everywhere</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Sigmoid</td>
+          <td style="padding:0.4rem 0.75rem">(0, 1)</td>
+          <td style="padding:0.4rem 0.75rem">Binary output layer</td>
+          <td style="padding:0.4rem 0.75rem">Vanishing gradient</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Tanh</td>
+          <td style="padding:0.4rem 0.75rem">(−1, +1)</td>
+          <td style="padding:0.4rem 0.75rem">Hidden layers (older)</td>
+          <td style="padding:0.4rem 0.75rem">Vanishing gradient</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem; font-weight:700">ReLU ★</td>
+          <td style="padding:0.4rem 0.75rem">[0, ∞)</td>
+          <td style="padding:0.4rem 0.75rem"><strong>Hidden layers (default)</strong></td>
+          <td style="padding:0.4rem 0.75rem">Dying ReLU</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Leaky ReLU</td>
+          <td style="padding:0.4rem 0.75rem">(−∞, ∞)</td>
+          <td style="padding:0.4rem 0.75rem">Hidden layers</td>
+          <td style="padding:0.4rem 0.75rem">Extra hyperparameter (slope)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Swish</td>
+          <td style="padding:0.4rem 0.75rem">(−∞, ∞)</td>
+          <td style="padding:0.4rem 0.75rem">Deep hidden layers</td>
+          <td style="padding:0.4rem 0.75rem">Slightly more compute</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4rem 0.75rem">Softmax</td>
+          <td style="padding:0.4rem 0.75rem">(0,1) sums to 1</td>
+          <td style="padding:0.4rem 0.75rem"><strong>Multi-class output only</strong></td>
+          <td style="padding:0.4rem 0.75rem">Not for hidden layers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>ReLU</strong> = default for hidden layers. <strong>Sigmoid</strong> = binary output layer. <strong>Softmax</strong> = multi-class output layer (probabilities sum to 1). <strong>Tanh</strong> = zero-centered, but still vanishing gradient. <strong>Leaky ReLU</strong> = fixes Dying ReLU by allowing a small negative slope.
+  </div>
+
+  <!-- ───────────── SECTION 2: Loss Functions ───────────── -->
+  <h2>2. Loss Functions</h2>
+
+  <p>A <strong>loss function</strong> (also called cost function) measures how wrong the model's prediction is compared to the correct answer. Training is literally the process of minimizing this number.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Mean Squared Error (MSE) — for Regression</div>
+      <code>MSE = (1/n) Σ(ŷᵢ − yᵢ)²</code><br>
+      Squares the error so large mistakes are punished heavily. Always non-negative. Output: a single number representing average squared error over all training examples.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Cross-Entropy Loss — for Classification</div>
+      Measures the difference between the predicted probability distribution and the true label. When the model assigns high probability to the correct class, loss is low; when it's confident about the wrong class, loss is very high.<br>
+      <em>Binary cross-entropy</em> for 2 classes; <em>categorical cross-entropy</em> for multiple classes (used with Softmax).
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>MSE</strong> = regression tasks. <strong>Cross-Entropy</strong> = classification tasks. The choice of loss function depends on the task type, not the model architecture.
+  </div>
+
+  <!-- ───────────── SECTION 3: How a Network Learns ───────────── -->
+  <h2>3. How a Neural Network Learns</h2>
+
+  <p>Training a neural network is a two-pass process repeated thousands of times:</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.85rem; display:flex; flex-direction:column; gap:0.6rem">
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#1d4ed8">① Forward Pass</div>
+        <div style="color:#374151; font-size:0.875rem">Input flows left→right through all layers. Each layer computes <code>z = Wx + b</code>, then <code>a = f(z)</code>. Final layer produces prediction ŷ.</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#fce7f3; border:1.5px solid #db2777; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#9d174d">② Compute Loss</div>
+        <div style="color:#374151; font-size:0.875rem">Compare ŷ (predicted) to y (true label) using the loss function. Get a single number: how wrong were we?</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#dcfce7; border:1.5px solid #16a34a; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#15803d">③ Backward Pass</div>
+        <div style="color:#374151; font-size:0.875rem">Compute how much each weight contributed to the loss. Flow gradients right→left through all layers using the <strong>chain rule</strong>. This is <strong>backpropagation</strong>.</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#92400e">④ Update Weights</div>
+        <div style="color:#374151; font-size:0.875rem">Adjust every weight by a small step in the direction that reduces loss: <code>w ← w − η · ∂L/∂w</code>. (η is the learning rate.)</div>
+      </div>
+      <div style="text-align:center; color:#6b6b63; font-size:0.8rem; margin-top:0.25rem">↺ Repeat for every batch until loss converges</div>
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy — Learning to Throw a Basketball</div>
+    You throw (forward pass), see where the ball lands (compute loss). You work backwards — was it the wrist angle? The elbow? The jump? (backpropagation). You adjust each joint slightly (update weights). Throw again. Each attempt, you get a little closer to the basket.
+  </div>
+
+  <!-- ───────────── SECTION 4: Chain Rule / Backprop ───────────── -->
+  <h2>4. Backpropagation &amp; the Chain Rule</h2>
+
+  <p><strong>Backpropagation</strong> (backprop) is the algorithm that computes gradients efficiently through a deep network. It applies the <strong>chain rule</strong> from calculus.</p>
+
+  <div class="callout tip">
+    <div class="callout-title">The Chain Rule in plain English</div>
+    If <em>A affects B</em> and <em>B affects C</em>, then the total effect of <em>A on C</em> is the product of both effects:<br>
+    <code style="font-size:0.95rem">∂C/∂A = (∂C/∂B) × (∂B/∂A)</code><br><br>
+    In a neural network: output loss depends on layer 3, which depends on layer 2, which depends on layer 1. The chain rule lets you compute "how much did layer 1's weights contribute to the final loss?" by multiplying gradients along the path.
+  </div>
+
+  <p>Backprop works by starting at the loss, computing the gradient with respect to the output layer's weights, then chaining backwards through each layer until every weight in the network has a gradient. Then gradient descent uses those gradients to update all weights in one step.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Backpropagation</strong> = efficient application of the chain rule to compute gradients for all weights in a network. It flows <strong>backward</strong> (right to left), while the forward pass flows left to right. Without backprop, training deep networks would be computationally impossible.
+  </div>
+
+  <!-- ───────────── SECTION 5: Vanishing & Exploding Gradients ───────────── -->
+  <h2>5. Vanishing &amp; Exploding Gradients</h2>
+
+  <p>As gradients are chained backwards through many layers, they can become problematic in two opposite ways:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">📉 Vanishing Gradients</div>
+      Gradients are multiplied together as they flow backward. If each layer's gradient is a small number (e.g. the flat ends of Sigmoid/Tanh), multiplying many small numbers together gives a number close to zero. Early layers receive near-zero gradients and learn almost nothing — the network effectively only trains its last few layers.<br><br>
+      <strong>Common cause:</strong> Sigmoid or Tanh activations in deep networks.<br>
+      <strong>Solutions:</strong> Use ReLU activations; use Batch Normalization; use skip connections (ResNet).
+    </div>
+    <div class="def-item">
+      <div class="def-term">📈 Exploding Gradients</div>
+      The opposite problem: gradients grow exponentially as they flow backward, eventually becoming so large that weight updates blow up (weights become NaN or infinity). More common in RNNs.<br><br>
+      <strong>Solutions:</strong> <strong>Gradient clipping</strong> — cap gradient magnitude at a maximum value before updating. Also: careful weight initialization (Xavier, He initialization).
+    </div>
+  </div>
+
+  <div class="diagram" style="padding:1rem 1.5rem">
+    <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+      <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#92400e; margin-bottom:0.4rem">📉 Vanishing</div>
+        <div style="color:#451a03">gradient × gradient × … ≈ <strong>0</strong><br>Early layers freeze. Network learns poorly.</div>
+        <div style="margin-top:0.6rem; font-size:0.78rem; color:#78350f"><strong>Fix:</strong> ReLU · Batch Norm · ResNet skip connections</div>
+      </div>
+      <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#991b1b; margin-bottom:0.4rem">📈 Exploding</div>
+        <div style="color:#7f1d1d">gradient × gradient × … = <strong>∞</strong><br>Weights blow up. Training diverges.</div>
+        <div style="margin-top:0.6rem; font-size:0.78rem; color:#9b1c1c"><strong>Fix:</strong> Gradient clipping · Xavier/He init</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Vanishing gradient</strong>: caused by activations with small derivatives (Sigmoid, Tanh); fix with ReLU. <strong>Exploding gradient</strong>: gradients grow out of control; fix with <strong>gradient clipping</strong>. Both are problems of very deep networks. ReLU's constant gradient of 1 for positive inputs is the main reason it replaced Sigmoid in hidden layers.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A neural network classifies images into 10 categories (digits 0–9). Which activation function should be used in the output layer?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">ReLU, because it is the default activation for all layers</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Sigmoid, because the output must be a probability between 0 and 1</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Softmax, because it converts scores into probabilities that sum to 1 across all 10 classes</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Tanh, because it is zero-centered and works well for output layers</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">What is the "Dying ReLU" problem and which activation function was designed to fix it?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">ReLU outputs explode for large inputs; Tanh was designed to cap the output range</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Neurons with always-negative inputs permanently output zero and stop learning; Leaky ReLU fixes this with a small negative slope</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">ReLU gradients vanish for positive inputs; Swish was designed to maintain gradients everywhere</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">ReLU is too slow to compute; Sigmoid was designed as a faster alternative for hidden layers</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">During training, in which direction does the backward pass (backpropagation) flow?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Left to right — from the input layer toward the output layer</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Right to left — from the loss back through the output layer toward the input layer</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Bidirectional — simultaneously from input and output toward the hidden layers</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">It has no fixed direction — each layer independently computes its own gradient</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">A deep network using Sigmoid activations has its early layers learning almost nothing despite many training steps. What is the most likely cause?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The learning rate is too high, causing weight updates to overshoot the minimum</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Vanishing gradients — Sigmoid's near-zero derivatives multiply to near zero across many layers</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Exploding gradients — Sigmoid gradients grow uncontrollably when multiplied across layers</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The model is underfitting because Sigmoid is not suitable for classification tasks</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">Which loss function is appropriate for a regression task (predicting a house price)?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Mean Squared Error (MSE), because it penalizes the numeric difference between predicted and actual values</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Cross-Entropy Loss, because it measures the difference between two probability distributions</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Softmax Loss, because house prices must sum to a fixed total across all predictions</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Binary Cross-Entropy, because the prediction is either above or below the market average</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>7 activation functions: Step, Sigmoid, Tanh, ReLU (★ default hidden), Leaky ReLU, Swish, Softmax (★ multi-class output)</li>
+        <li>Loss functions: MSE for regression, Cross-Entropy for classification</li>
+        <li>Training loop: Forward pass → Compute loss → Backward pass (backprop) → Update weights</li>
+        <li>Backpropagation applies the chain rule to flow gradients backward through all layers</li>
+        <li>Vanishing gradient: fix with ReLU. Exploding gradient: fix with gradient clipping</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0010-optimizers-regularization.html">Lesson 10 → Optimizers &amp; Regularization</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://www.3blue1brown.com/topics/neural-networks" target="_blank">Neural Networks — 3Blue1Brown (YouTube)</a>
+    — Episodes 3 &amp; 4 cover backpropagation and the chain rule with stunning visuals. ~25 min. Highly recommended before the next lesson.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0008-deep-learning-intro.html">← Lesson 08: Perceptrons &amp; Neural Networks</a>
+    <a href="0010-optimizers-regularization.html" class="nav-next">Next: Optimizers &amp; Regularization →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Softmax is the right choice for multi-class classification output layers. It converts the raw scores of all 10 output neurons into probabilities that sum to exactly 1. Sigmoid is only for binary (2-class) output. ReLU and Tanh are for hidden layers.",
+    wrong:   "Not quite. When the task has more than 2 classes, the output layer needs Softmax — it converts all class scores into probabilities that sum to 1, so you can read off 'this image is 73% likely to be a 3.' Sigmoid handles binary outputs (2 classes). ReLU and Tanh are hidden-layer functions."
+  },
+  q2: {
+    correct: "Correct! Dying ReLU: if a neuron always receives negative input, ReLU always outputs 0 and its gradient is 0 — the neuron never updates. Leaky ReLU fixes this by returning a tiny negative value (0.01z) instead of 0, keeping a small gradient alive.",
+    wrong:   "Not quite. Dying ReLU means neurons with always-negative inputs permanently output zero and have zero gradient — they stop learning entirely. The fix is Leaky ReLU, which allows a small negative slope (0.01z) so the gradient is never completely zero."
+  },
+  q3: {
+    correct: "Correct! The forward pass goes left→right (input to output). Backpropagation goes the opposite direction — right→left — starting from the loss and propagating gradients back through every layer toward the input, using the chain rule at each step.",
+    wrong:   "Not quite. The forward pass is left→right. Backpropagation (the backward pass) goes right→left — from the computed loss, back through the output layer, through each hidden layer, all the way to the input. This is why it's called 'back' propagation."
+  },
+  q4: {
+    correct: "Correct! Sigmoid's gradient is very small (near 0) at its extremes. When many such small gradients are multiplied together during backpropagation across many layers, they shrink to near-zero — early layers get almost no gradient signal and fail to learn. This is the vanishing gradient problem.",
+    wrong:   "Not quite. When early layers learn almost nothing despite many epochs, the classic diagnosis is vanishing gradients — not an overly high learning rate (which would cause unstable loss, not frozen layers) and not exploding gradients (which causes blow-up). Sigmoid's near-flat regions multiply into near-zero gradients across many layers."
+  },
+  q5: {
+    correct: "Correct! MSE (Mean Squared Error) is standard for regression. It measures the squared numeric difference between prediction and truth — exactly right when you're predicting a continuous number like a price. Cross-Entropy is for classification, where you're predicting probabilities over classes.",
+    wrong:   "Not quite. Regression tasks (predicting a number) use MSE. Cross-Entropy is for classification (predicting which class something belongs to). Softmax Loss and Binary Cross-Entropy are also classification tools, not regression ones."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
