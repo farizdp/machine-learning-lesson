@@ -30,6 +30,7 @@ Content Material.md  # Original syllabus outline (Huawei HCIA-AI)
 | 07 | Common ML Algorithms | Ch 02 — Machine Learning |
 | 08 | Deep Learning: Perceptrons & Neural Networks | Ch 03 — Deep Learning & Foundation Models |
 
+
 ## How to Continue Learning
 
 Open any lesson file in a browser. After completing a lesson, return to Claude Code and type `next lesson`.
