@@ -46,12 +46,12 @@ open lessons/0001-what-is-ai.html
 | [10 — Optimizers & Regularization](lessons/0010-optimizers-regularization.html) | Momentum, AdaGrad, RMSProp, Adam (default ★), L1 regularization (sparse), L2 regularization (weight decay), Early Stopping, Dropout (training only) |
 | [11 — Convolutional Neural Networks](lessons/0011-cnn.html) | Why CNNs beat FC networks, Convolution operation, Kernel / Stride / Padding, Output size formula, Parameter sharing, Local connectivity, Max Pooling, Average Pooling, Fully-Connected layer, Full CNN pipeline |
 | [12 — Recurrent Neural Networks &amp; LSTM](lessons/0012-rnn-lstm.html) | Why sequences need memory, RNN hidden state, Vanishing gradient in time, LSTM cell state, Forget Gate, Input Gate, Output Gate, Candidate, Seq2Seq (Encoder → Context Vector → Decoder) |
+| [13 — Transformer Architecture &amp; Attention](lessons/0013-transformer-attention.html) | Attention motivation, Q/K/V, Self-attention, Multi-head attention, Positional encoding, Transformer encoder/decoder, Add &amp; Norm, Masked Self-Attention, Cross-Attention, BERT (encoder-only / bidirectional), GPT-1 (decoder-only), Mixture of Experts (MoE) |
 
 ---
 
 ## What's Coming
 
-- **Lesson 13** — Transformer Architecture &amp; Attention
 - **Lesson 14** — AI Development Frameworks: PyTorch, MindSpore, Computational graphs, LeNet implementation
 
 ---

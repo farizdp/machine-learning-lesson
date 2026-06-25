@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 13 — Transformer Architecture &amp; Attention</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 54%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 03 · Lesson 13 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <h1>Transformer Architecture &amp; Attention</h1>
+    <p class="subtitle">The architecture behind GPT, BERT, and every modern large language model — and why it replaced RNNs overnight.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Motivation ───────────── -->
+  <h2>1. The Problem Attention Was Built to Solve</h2>
+
+  <p>In Lesson 12 you saw that Seq2Seq has a bottleneck: the entire input sentence must be compressed into a single fixed-size context vector. For long sentences, information gets lost.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Imagine translating a 200-word paragraph. The Seq2Seq approach requires you to read the whole thing, write a single one-paragraph summary on a notecard, then translate from only that notecard — discarding the original. Attention lets you keep the original and look back at any part of it whenever you need it while translating.
+  </div>
+
+  <p><strong>Attention</strong> fixes this by letting the decoder, at each output step, look at <em>all</em> encoder hidden states — not just the last one — and decide which input words are most relevant right now.</p>
+
+  <!-- ───────────── SECTION 2: Attention Mechanism ───────────── -->
+  <h2>2. The Attention Mechanism</h2>
+
+  <p>Attention computes a <strong>weighted sum</strong> of the encoder's hidden states, where the weights reflect how relevant each encoder position is to the current decoder step.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Query (Q)</div>
+      What the decoder is currently looking for. "I'm generating the French word for 'cat' — what encoder positions are relevant?" One vector per decoder step.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Key (K)</div>
+      What each encoder position offers. "This position encoded 'cat', this one encoded 'sat'…" One vector per encoder position.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Value (V)</div>
+      The actual content to retrieve from each encoder position. Once attention scores tell us how relevant each position is, we take a weighted sum of its Value vectors.
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">Q / K / V as a library search</div>
+    <strong>Query</strong>: what you type in the search bar. <strong>Keys</strong>: book titles and tags in the catalogue. <strong>Values</strong>: the actual book content. Attention computes how well each key matches your query, then blends the corresponding values proportionally.
+  </div>
+
+  <!-- Attention score diagram -->
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 520 160" width="520" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="arr2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0, 7 3.5, 0 7" fill="#7c3aed"/>
+        </marker>
+      </defs>
+
+      <!-- Encoder positions -->
+      <text x="60" y="18" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6b6b63" font-weight="700">Encoder positions</text>
+      <rect x="10"  y="26" width="40" height="30" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="30"  y="45" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"The"</text>
+      <rect x="58"  y="26" width="40" height="30" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="78"  y="45" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"cat"</text>
+      <rect x="106" y="26" width="40" height="30" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="126" y="45" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"sat"</text>
+
+      <!-- Attention scores (weights) -->
+      <text x="78" y="78" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">scores (softmax)</text>
+      <text x="30"  y="92" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#7c3aed">0.05</text>
+      <text x="78"  y="92" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#7c3aed" font-weight="700">0.88</text>
+      <text x="126" y="92" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#7c3aed">0.07</text>
+
+      <!-- Arrows from encoder to score -->
+      <line x1="30"  y1="56" x2="30"  y2="84" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="78"  y1="56" x2="78"  y2="84" stroke="#7c3aed" stroke-width="2"/>
+      <line x1="126" y1="56" x2="126" y2="84" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Weighted sum -->
+      <text x="78" y="115" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">weighted sum of Values</text>
+      <rect x="30"  y="122" width="100" height="24" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="80"  y="138" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#5b21b6">context for "le chat"</text>
+
+      <!-- Right side: decoder current step -->
+      <text x="340" y="18" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6b6b63" font-weight="700">Decoder step</text>
+      <rect x="290" y="26" width="100" height="30" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="340" y="45" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d">generating "le chat"</text>
+
+      <!-- Query arrow -->
+      <text x="230" y="42" font-family="sans-serif" font-size="8" fill="#6b6b63" text-anchor="middle">Query</text>
+      <line x1="250" y1="41" x2="190" y2="41" stroke="#15803d" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="220" y="55" font-family="sans-serif" font-size="7" fill="#6b6b63" text-anchor="middle">"what input is</text>
+      <text x="220" y="65" font-family="sans-serif" font-size="7" fill="#6b6b63" text-anchor="middle">relevant to me?"</text>
+
+      <!-- Context back to decoder -->
+      <line x1="190" y1="134" x2="285" y2="80" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="250" y="120" font-family="sans-serif" font-size="8" fill="#7c3aed">context vector</text>
+      <text x="250" y="130" font-family="sans-serif" font-size="8" fill="#7c3aed">fed to decoder</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      When generating "le chat", the decoder's Query matches heavily against "cat" (score 0.88). The context vector is dominated by that encoder position's Value.
+    </p>
+  </div>
+
+  <!-- ───────────── SECTION 3: Self-Attention ───────────── -->
+  <h2>3. Self-Attention</h2>
+
+  <p>The Transformer took attention one step further: instead of attention between encoder and decoder, it introduced <strong>self-attention</strong> — each position in a sequence attends to <em>all other positions in the same sequence</em> to build richer representations.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Why self-attention matters</div>
+    In the sentence "The animal didn't cross the street because <strong>it</strong> was too tired," what does "it" refer to? A human knows it refers to "animal." Self-attention lets the model figure this out: when encoding "it", the model looks at all other words and assigns high attention weight to "animal" — resolving the reference without any special coreference module.
+  </div>
+
+  <!-- Self-attention diagram -->
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 500 140" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Words -->
+      <rect x="10"  y="80" width="55" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="37"  y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"animal"</text>
+
+      <rect x="80"  y="80" width="55" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="107" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"didn't"</text>
+
+      <rect x="150" y="80" width="55" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="177" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"cross"</text>
+
+      <rect x="220" y="80" width="55" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="247" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"the"</text>
+
+      <rect x="290" y="80" width="55" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="317" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">"street"</text>
+
+      <rect x="365" y="80" width="30" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="380" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">…</text>
+
+      <rect x="405" y="80" width="30" height="28" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+      <text x="420" y="98" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9d174d" font-weight="700">"it"</text>
+
+      <!-- Attention lines from "it" to other words -->
+      <line x1="420" y1="80" x2="37"  y2="108" stroke="#db2777" stroke-width="2.5" opacity="0.9"/>
+      <line x1="420" y1="80" x2="107" y2="108" stroke="#db2777" stroke-width="0.8" opacity="0.3"/>
+      <line x1="420" y1="80" x2="177" y2="108" stroke="#db2777" stroke-width="0.6" opacity="0.2"/>
+      <line x1="420" y1="80" x2="247" y2="108" stroke="#db2777" stroke-width="0.6" opacity="0.2"/>
+      <line x1="420" y1="80" x2="317" y2="108" stroke="#db2777" stroke-width="1.2" opacity="0.4"/>
+      <line x1="420" y1="80" x2="380" y2="108" stroke="#db2777" stroke-width="0.6" opacity="0.2"/>
+
+      <!-- Labels -->
+      <text x="120" y="130" font-family="sans-serif" font-size="8" fill="#9d174d" text-anchor="middle">strong attention</text>
+      <text x="120" y="140" font-family="sans-serif" font-size="8" fill="#9d174d" text-anchor="middle">("it" → "animal")</text>
+      <text x="420" y="20" font-family="sans-serif" font-size="9" fill="#9d174d" text-anchor="middle" font-weight="700">encoding "it"</text>
+      <text x="420" y="32" font-family="sans-serif" font-size="8" fill="#9d174d" text-anchor="middle">attends to ALL</text>
+      <text x="420" y="42" font-family="sans-serif" font-size="8" fill="#9d174d" text-anchor="middle">other positions</text>
+      <line x1="420" y1="44" x2="420" y2="78" stroke="#9d174d" stroke-width="1" stroke-dasharray="3,2"/>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      When encoding "it", self-attention assigns a high weight to "animal" — resolving the pronoun reference automatically.
+    </p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Self-attention formula: <strong>Attention(Q, K, V) = softmax(Q·Kᵀ / √dₖ) · V</strong>. The √dₖ is a scaling factor that prevents dot products from becoming too large (which would cause softmax to saturate). Q, K, V are all derived from the same sequence by multiplying with learned weight matrices.
+  </div>
+
+  <!-- ───────────── SECTION 4: Multi-Head Attention ───────────── -->
+  <h2>4. Multi-Head Attention</h2>
+
+  <p>Running self-attention once captures one kind of relationship. <strong>Multi-head attention</strong> runs self-attention <em>h</em> times in parallel (the "heads"), each with its own Q/K/V weight matrices. The results are concatenated and projected back down.</p>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 420 120" width="420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Input -->
+      <rect x="175" y="5" width="70" height="25" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="210" y="22" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#333">Input</text>
+
+      <!-- Three heads -->
+      <line x1="210" y1="30" x2="60"  y2="48" stroke="#6b6b63" stroke-width="1"/>
+      <line x1="210" y1="30" x2="210" y2="48" stroke="#6b6b63" stroke-width="1"/>
+      <line x1="210" y1="30" x2="355" y2="48" stroke="#6b6b63" stroke-width="1"/>
+
+      <rect x="20"  y="48" width="80" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="60"  y="62" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a" font-weight="700">Head 1</text>
+      <text x="60"  y="73" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">Attention(Q₁K₁V₁)</text>
+
+      <rect x="170" y="48" width="80" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="210" y="62" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Head 2</text>
+      <text x="210" y="73" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">Attention(Q₂K₂V₂)</text>
+
+      <rect x="320" y="48" width="80" height="28" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="360" y="62" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9d174d" font-weight="700">Head h</text>
+      <text x="360" y="73" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d">Attention(QₕKₕVₕ)</text>
+
+      <!-- Concat + project -->
+      <line x1="60"  y1="76" x2="210" y2="93" stroke="#6b6b63" stroke-width="1"/>
+      <line x1="210" y1="76" x2="210" y2="93" stroke="#6b6b63" stroke-width="1"/>
+      <line x1="360" y1="76" x2="210" y2="93" stroke="#6b6b63" stroke-width="1"/>
+
+      <rect x="130" y="93" width="160" height="24" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="210" y="109" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#5b21b6">Concat → Linear projection</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      Each head learns a different type of relationship (syntax, coreference, long-range dependencies…). The outputs are concatenated and projected back to the original dimension.
+    </p>
+  </div>
+
+  <!-- ───────────── SECTION 5: Positional Encoding ───────────── -->
+  <h2>5. Positional Encoding</h2>
+
+  <p>Self-attention looks at all positions simultaneously — it has no built-in concept of order. "The cat sat" and "sat cat The" would produce the same attention scores. To fix this, <strong>positional encodings</strong> are added to each word's embedding before it enters the Transformer.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">How it works</div>
+      A vector of sine and cosine waves at different frequencies is generated for each position and added to the word embedding. Nearby positions produce similar encodings; distant positions produce very different ones. The model can learn to use this positional signal to understand order.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Learned vs Fixed</div>
+      The original Transformer uses fixed sinusoidal encoding. Modern models (GPT, BERT) often use <em>learned</em> positional embeddings instead — just another set of parameters trained from data.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Positional encoding is <strong>added</strong> to word embeddings before the first Transformer layer. Without it, the model is permutation-invariant — it cannot distinguish "dog bites man" from "man bites dog".
+  </div>
+
+  <!-- ───────────── SECTION 6: Transformer Architecture ───────────── -->
+  <h2>6. The Transformer Architecture</h2>
+
+  <p>The original Transformer (Vaswani et al., "Attention Is All You Need", 2017) uses an <strong>encoder stack</strong> and a <strong>decoder stack</strong>, each made of repeated identical layers.</p>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 480 310" width="480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- ENCODER STACK -->
+      <rect x="10" y="10" width="200" height="280" rx="10" fill="#fffbeb" stroke="#b45309" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="110" y="28" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#b45309" font-weight="700">ENCODER (×N layers)</text>
+
+      <rect x="25" y="38" width="170" height="28" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="110" y="56" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f">Input Embedding + Positional Encoding</text>
+
+      <rect x="25" y="78" width="170" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="110" y="92" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a" font-weight="700">Multi-Head Self-Attention</text>
+      <text x="110" y="103" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">(attends to all input positions)</text>
+
+      <rect x="25" y="116" width="170" height="22" rx="5" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="110" y="131" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#3730a3">Add &amp; Norm (residual)</text>
+
+      <rect x="25" y="148" width="170" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="110" y="162" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Feed-Forward Network</text>
+      <text x="110" y="173" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">(two FC layers + ReLU)</text>
+
+      <rect x="25" y="186" width="170" height="22" rx="5" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="110" y="201" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#3730a3">Add &amp; Norm (residual)</text>
+
+      <text x="110" y="228" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#b45309">↑ Repeated N times ↑</text>
+
+      <rect x="25" y="238" width="170" height="28" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="110" y="256" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f" font-weight="700">Encoder Output</text>
+      <text x="110" y="267" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f">(one vector per input token)</text>
+
+      <!-- DECODER STACK -->
+      <rect x="270" y="10" width="200" height="280" rx="10" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="370" y="28" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#15803d" font-weight="700">DECODER (×N layers)</text>
+
+      <rect x="285" y="38" width="170" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="370" y="56" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d">Output Embedding + Positional Encoding</text>
+
+      <rect x="285" y="78" width="170" height="28" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="370" y="92" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9d174d" font-weight="700">Masked Multi-Head Self-Attention</text>
+      <text x="370" y="103" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d">(can't see future tokens)</text>
+
+      <rect x="285" y="116" width="170" height="22" rx="5" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="370" y="131" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#3730a3">Add &amp; Norm</text>
+
+      <rect x="285" y="148" width="170" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="370" y="162" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a" font-weight="700">Cross-Attention</text>
+      <text x="370" y="173" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">(Q from decoder, K/V from encoder)</text>
+
+      <rect x="285" y="186" width="170" height="22" rx="5" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="370" y="201" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#3730a3">Add &amp; Norm</text>
+
+      <rect x="285" y="218" width="170" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="370" y="236" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Linear + Softmax</text>
+      <text x="370" y="247" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">(predict next token)</text>
+
+      <!-- Encoder to decoder arrow -->
+      <line x1="210" y1="252" x2="270" y2="162" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arr)"/>
+      <text x="242" y="215" font-family="sans-serif" font-size="8" fill="#b45309" text-anchor="middle">K, V</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      The encoder builds rich representations of every input token. The decoder generates output tokens one at a time, attending to both its own past outputs and all encoder positions.
+    </p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Add &amp; Norm (Residual Connection + Layer Norm)</div>
+      After each sub-layer, the input is added back to the output (residual/skip connection, like ResNet), then layer normalisation is applied. This lets gradients flow directly and stabilises training.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Masked Self-Attention (decoder only)</div>
+      During training, the decoder cannot peek at future tokens. A mask blocks attention to positions after the current one — ensuring the model learns to predict each token from only previous tokens.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Cross-Attention (decoder only)</div>
+      The decoder's Query comes from the decoder itself; Keys and Values come from the encoder output. This is how the decoder reads the input while generating output — the modern version of the Seq2Seq attention from Lesson 12.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The original Transformer has: <strong>Encoder</strong> (Multi-Head Self-Attention → FFN, repeated N times) and <strong>Decoder</strong> (Masked Self-Attention → Cross-Attention → FFN, repeated N times). Key advantages over RNN: <strong>parallelisable</strong> (all positions processed simultaneously during training) and <strong>no vanishing gradient</strong> over sequence length.
+  </div>
+
+  <!-- ───────────── SECTION 7: Encoder-only vs Decoder-only ───────────── -->
+  <h2>7. GPT-1 and BERT — Two Ways to Use the Transformer</h2>
+
+  <p>Modern models don't always use both encoder and decoder. They specialise:</p>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.88rem; margin-top:0.5rem">
+    <thead>
+      <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+        <th style="padding:0.6rem 0.8rem; text-align:left">Property</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">BERT (Encoder-only)</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">GPT-1 (Decoder-only)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.6rem 0.8rem">Architecture</td>
+        <td style="padding:0.6rem 0.8rem">Encoder stack only</td>
+        <td style="padding:0.6rem 0.8rem">Decoder stack only (masked)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.6rem 0.8rem">Pre-training task</td>
+        <td style="padding:0.6rem 0.8rem">Masked Language Modelling — predict randomly masked words</td>
+        <td style="padding:0.6rem 0.8rem">Causal Language Modelling — predict the next word</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.6rem 0.8rem">Attention direction</td>
+        <td style="padding:0.6rem 0.8rem">Bidirectional — sees left AND right context</td>
+        <td style="padding:0.6rem 0.8rem">Left-to-right only — cannot see future tokens</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.6rem 0.8rem">Best for</td>
+        <td style="padding:0.6rem 0.8rem">Understanding tasks: classification, NER, Q&amp;A</td>
+        <td style="padding:0.6rem 0.8rem">Generation tasks: text completion, dialogue, code</td>
+      </tr>
+      <tr>
+        <td style="padding:0.6rem 0.8rem">Lineage</td>
+        <td style="padding:0.6rem 0.8rem">Google, 2018. Fine-tuned on many NLP tasks.</td>
+        <td style="padding:0.6rem 0.8rem">OpenAI, 2018. Led to GPT-2, GPT-3, GPT-4.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>BERT = Encoder-only, Bidirectional</strong> (sees full context, good for understanding). <strong>GPT = Decoder-only, Unidirectional</strong> (left-to-right, good for generation). Both are pre-trained on large text corpora and then fine-tuned for downstream tasks.
+  </div>
+
+  <!-- ───────────── SECTION 8: MoE ───────────── -->
+  <h2>8. Mixture of Experts (MoE)</h2>
+
+  <p>A standard Transformer's feed-forward layer activates all parameters for every input token. <strong>Mixture of Experts (MoE)</strong> replaces that layer with many <em>expert</em> sub-networks, and a <strong>router</strong> that selects only a small number of them (e.g. top-2 out of 64) for each token.</p>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 460 120" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Input token -->
+      <rect x="10" y="44" width="70" height="28" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="45" y="62" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#333">Token</text>
+
+      <!-- Router -->
+      <rect x="100" y="38" width="70" height="40" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="135" y="57" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f" font-weight="700">Router</text>
+      <text x="135" y="70" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f">picks top-k</text>
+      <line x1="80" y1="58" x2="100" y2="58" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Expert lanes: 4 experts, 2 active -->
+      <line x1="170" y1="58" x2="195" y2="28" stroke="#15803d" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="195" y="14" width="70" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="230" y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Expert 1 ✓</text>
+
+      <line x1="170" y1="58" x2="195" y2="58" stroke="#15803d" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="195" y="44" width="70" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="230" y="62" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Expert 2 ✓</text>
+
+      <line x1="170" y1="58" x2="195" y2="84" stroke="#d4d4c8" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="195" y="74" width="70" height="28" rx="5" fill="#f0f0ec" stroke="#d4d4c8" stroke-width="1"/>
+      <text x="230" y="92" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9ca3af">Expert 3 ✗</text>
+
+      <!-- Weighted sum -->
+      <line x1="265" y1="28" x2="310" y2="55" stroke="#15803d" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="265" y1="58" x2="310" y2="58" stroke="#15803d" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="310" y="42" width="100" height="32" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="360" y="57" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#5b21b6" font-weight="700">Weighted Sum</text>
+      <text x="360" y="69" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#5b21b6">→ token output</text>
+
+      <text x="295" y="108" font-family="sans-serif" font-size="8" fill="#6b6b63" text-anchor="middle">Only 2 of 3+ experts active — most parameters are skipped</text>
+    </svg>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Why MoE?</div>
+      Increases model capacity (more total parameters) without proportionally increasing computation — because only a fraction of experts run per token. A 100B-parameter MoE model might only compute as much as a 10B dense model per token.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Used in</div>
+      DeepSeek, Mixtral, and GPT-4 reportedly use MoE. It's a major reason modern frontier models can be so large yet remain feasible to run.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    MoE key idea: <strong>many expert FFN layers + a router that activates only top-k experts per token</strong>. Result: large total parameters, small active parameters per token. This trades more memory for less computation.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">In the attention mechanism, what is the role of the Query vector?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It stores the actual content retrieved from the encoder and returned to the decoder</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">It represents what the current step is looking for and is matched against all Key vectors</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It labels each encoder position so the decoder knows which position each vector came from</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It encodes the position of each token in the sequence to preserve word order</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Why is positional encoding added to word embeddings in a Transformer?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">To increase the size of each embedding vector so the model has more capacity</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">To replace the word embedding once the model is fully trained</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Because self-attention processes all positions in parallel and has no built-in sense of order</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">To apply dropout regularisation before tokens enter the first attention layer</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">What is the purpose of the mask in the decoder's Masked Self-Attention layer?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">To block padding tokens so they do not influence the attention scores</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">To randomly drop attention weights during training as a form of regularisation</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">To prevent the decoder from attending to future output tokens it has not yet generated</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">To block the decoder from attending to the encoder output during self-attention</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">BERT is described as bidirectional. What does this mean?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">It processes text both left-to-right and right-to-left with two separate RNN layers</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Its self-attention can see all tokens in both directions — left and right context simultaneously</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">It contains both an encoder and a decoder stack, enabling both understanding and generation</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">It is trained on two datasets — one forward pass and one backward pass through each batch</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">What is the main advantage of Mixture of Experts (MoE) over a standard dense Transformer feed-forward layer?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">It removes the need for attention layers by routing tokens directly to classification heads</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">It reduces the total number of parameters so the model fits on smaller hardware</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">It increases total model capacity while keeping per-token computation low by activating only a few experts</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">It replaces positional encoding with a learned routing signal that captures word order</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Attention: decoder looks at all encoder positions via Query / Key / Value weighted sum</li>
+        <li>Self-attention: every position attends to all other positions in the same sequence</li>
+        <li>Formula: Attention(Q,K,V) = softmax(QKᵀ / √dₖ) · V</li>
+        <li>Multi-head attention: run attention h times in parallel, each learning different relationships</li>
+        <li>Positional encoding: added to embeddings so the model knows token order</li>
+        <li>Transformer encoder: Multi-Head Self-Attention → Add&amp;Norm → FFN → Add&amp;Norm</li>
+        <li>Transformer decoder: Masked Self-Attention → Cross-Attention → FFN</li>
+        <li>BERT: encoder-only, bidirectional, pre-trained with masked LM — best for understanding</li>
+        <li>GPT: decoder-only, left-to-right, pre-trained with next-token prediction — best for generation</li>
+        <li>MoE: router activates top-k experts per token — large capacity, low per-token compute</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0014-ai-frameworks.html">Lesson 14 → AI Development Frameworks</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank">The Illustrated Transformer — Jay Alammar</a>
+    — The best visual explanation of every component in the Transformer. Read alongside this lesson; the animated diagrams make self-attention and multi-head attention very concrete.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0012-rnn-lstm.html">← Lesson 12: RNN &amp; LSTM</a>
+    <a href="0014-ai-frameworks.html" class="nav-next">Next: AI Development Frameworks →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! The Query is what the current position is asking — 'what information do I need right now?' It is compared against all Key vectors (one per position) via a dot product to produce attention scores. High score = that position's Value is highly relevant to the current step.",
+    wrong:   "Not quite. Query = what you're looking for. Key = labels describing what each position offers. Value = the actual content retrieved. The Query is not content itself, not a position label, and not positional encoding. It's the 'search question' that gets matched against Keys."
+  },
+  q2: {
+    correct: "Correct! Unlike an RNN, self-attention has no notion of step order — it computes relationships between all pairs of positions simultaneously. Without positional encoding, 'dog bites man' and 'man bites dog' would look identical. Adding a position-dependent vector tells the model where each token sits in the sequence.",
+    wrong:   "Not quite. Positional encoding is about order, not capacity or regularisation. Self-attention processes all tokens in parallel and is inherently permutation-invariant — swapping tokens around changes the meaning but not the raw attention computation. Positional encodings inject order information by adding a unique vector to each position's embedding."
+  },
+  q3: {
+    correct: "Correct! The decoder generates output one token at a time. During training, all target tokens are fed in at once for efficiency, but the model must not cheat by looking at token t+1 when predicting token t. The causal mask blocks upper-triangle positions in the attention matrix, ensuring each position only attends to itself and positions before it.",
+    wrong:   "Not quite. The mask in Masked Self-Attention is a causal mask — it prevents the decoder from seeing future output tokens. It's not about padding, not about dropout, and not about blocking the encoder (that would defeat cross-attention). Without this mask, the model could 'cheat' during training by copying future words."
+  },
+  q4: {
+    correct: "Correct! BERT's encoder self-attention has no causal mask — every token attends to every other token in both directions simultaneously. When encoding the word 'bank', BERT sees both 'river' before it and 'account' after it, which lets it resolve the ambiguity. This bidirectionality is what makes BERT so powerful for understanding tasks.",
+    wrong:   "Not quite. BERT is bidirectional because its Transformer encoder's self-attention is unmasked — every token sees all other tokens in both directions at the same time. It's not two separate RNN passes. It doesn't have a decoder stack (it's encoder-only). And the 'two passes' option confuses it with gradient descent, not architecture."
+  },
+  q5: {
+    correct: "Correct! A dense FFN uses all its parameters for every token. MoE replaces it with N expert networks but only activates k of them (e.g. k=2 out of N=64) per token, chosen by the router. Total parameters are large (N experts × FFN size), but computation per token is only k × FFN size — a huge saving that allows building much larger models within the same compute budget.",
+    wrong:   "Not quite. MoE increases total parameters (not reduces them) by having many expert FFNs. It doesn't remove attention layers. It doesn't replace positional encoding. Its benefit is: more total capacity with the same per-token compute — the router simply skips most experts for any given token."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
