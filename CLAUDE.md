@@ -28,6 +28,7 @@ Content Material.md  # Original syllabus outline (Huawei HCIA-AI)
 | 05 | The ML Process | Ch 02 — Machine Learning |
 | 06 | Key ML Concepts: Gradient Descent, Hyperparameters & Cross-Validation | Ch 02 — Machine Learning |
 | 07 | Common ML Algorithms | Ch 02 — Machine Learning |
+| 08 | Deep Learning: Perceptrons & Neural Networks | Ch 03 — Deep Learning & Foundation Models |
 
 ## How to Continue Learning
 

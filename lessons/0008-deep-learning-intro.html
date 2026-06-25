@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 08 — Deep Learning: Perceptrons & Neural Networks</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 30%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 03 · Lesson 8 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <h1>Deep Learning: Perceptrons &amp; Neural Networks</h1>
+    <p class="subtitle">How the brain inspired a revolution in AI — and how a chain of simple math operations can learn almost anything.</p>
+  </header>
+
+  <!-- ───────────── BRIDGE FROM ML ───────────── -->
+  <h2>From ML Algorithms to Deep Learning</h2>
+
+  <p>In Chapter 02 you learned algorithms like Decision Trees and SVMs — each hand-crafted to solve a specific type of problem. Deep Learning takes a different approach: instead of designing the algorithm, you <strong>design the structure</strong> of a network, and the network learns everything else from data.</p>
+
+  <p>The building block of every neural network — from a simple classifier to GPT-4 — is the <strong>perceptron</strong>.</p>
+
+  <!-- ───────────── SECTION 1: Perceptron ───────────── -->
+  <h2>1. What Is a Perceptron?</h2>
+
+  <p>A perceptron is a <strong>mathematical model of a single biological neuron</strong>. Just as a brain neuron receives signals, combines them, and fires if the combined signal is strong enough — a perceptron receives numbers, multiplies each by a weight, sums them, and produces an output.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Biological Analogy</div>
+    A real neuron receives electrical signals through <em>dendrites</em>, combines them in the <em>cell body</em>, and fires an output signal through the <em>axon</em> if the total input crosses a threshold. A perceptron does exactly this — in math.
+  </div>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 420 190" width="400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Input nodes -->
+      <circle cx="55" cy="60"  r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="55" y="64"  font-family="sans-serif" font-size="12" fill="#1d4ed8" text-anchor="middle">x₁</text>
+      <circle cx="55" cy="115" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="55" y="119" font-family="sans-serif" font-size="12" fill="#1d4ed8" text-anchor="middle">x₂</text>
+      <circle cx="55" cy="170" r="20" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="55" y="174" font-family="sans-serif" font-size="12" fill="#1d4ed8" text-anchor="middle">x₃</text>
+      <!-- Bias node -->
+      <circle cx="110" cy="22" r="16" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="110" y="26" font-family="sans-serif" font-size="11" fill="#b45309" text-anchor="middle">b</text>
+      <!-- Weight lines -->
+      <line x1="75"  y1="60"  x2="188" y2="107" stroke="#9ca3af" stroke-width="1.5"/>
+      <line x1="75"  y1="115" x2="188" y2="107" stroke="#9ca3af" stroke-width="1.5"/>
+      <line x1="75"  y1="170" x2="188" y2="107" stroke="#9ca3af" stroke-width="1.5"/>
+      <line x1="122" y1="30"  x2="188" y2="107" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <!-- Weight labels -->
+      <text x="115" y="72"  font-family="sans-serif" font-size="10" fill="#dc2626">w₁</text>
+      <text x="115" y="108" font-family="sans-serif" font-size="10" fill="#dc2626">w₂</text>
+      <text x="115" y="148" font-family="sans-serif" font-size="10" fill="#dc2626">w₃</text>
+      <!-- Neuron body -->
+      <circle cx="210" cy="107" r="32" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+      <text x="210" y="103" font-family="sans-serif" font-size="10" fill="#166534" text-anchor="middle">Σ then</text>
+      <text x="210" y="116" font-family="sans-serif" font-size="10" fill="#166534" text-anchor="middle">f(z)</text>
+      <!-- Output arrow -->
+      <line x1="242" y1="107" x2="345" y2="107" stroke="#15803d" stroke-width="2" marker-end="url(#arr2)"/>
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#15803d"/>
+        </marker>
+      </defs>
+      <!-- Output node -->
+      <circle cx="365" cy="107" r="20" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+      <text x="365" y="111" font-family="sans-serif" font-size="12" fill="#15803d" text-anchor="middle">ŷ</text>
+      <!-- Formula -->
+      <text x="210" y="162" font-family="sans-serif" font-size="11" fill="#6b6b63" text-anchor="middle">ŷ = f(w₁x₁ + w₂x₂ + w₃x₃ + b)</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">The perceptron: weighted sum of inputs plus bias, then an activation function <em>f</em>.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Inputs (x₁, x₂, x₃…)</div>
+      The features fed into the neuron — numbers representing your data (e.g. pixel brightness, temperature, word count).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Weights (w₁, w₂, w₃…)</div>
+      How much each input matters. A large positive weight amplifies the input; a negative weight suppresses it. <strong>Weights are learned during training.</strong>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Bias (b)</div>
+      A constant that shifts the output up or down, independent of the inputs. Gives the neuron flexibility to fire even when all inputs are zero. Also learned during training.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Activation function f(·)</div>
+      Applied to the weighted sum. Without it, the perceptron is just linear arithmetic — and stacking linear operations gives you nothing extra (more on this shortly).
+    </div>
+  </div>
+
+  <h3>What can a single perceptron do?</h3>
+
+  <p>A single perceptron can learn a <strong>linear decision boundary</strong> — it can separate two classes with a straight line. It works for simple problems (AND gate, OR gate) but <strong>fails on anything non-linear</strong> (XOR gate, complex image patterns).</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    A single perceptron can only solve <strong>linearly separable</strong> problems. It cannot solve XOR — this limitation was famously identified in 1969 and temporarily halted AI research. The solution: stack perceptrons into <strong>multi-layer networks</strong>.
+  </div>
+
+  <!-- ───────────── SECTION 2: Why Nonlinearity ───────────── -->
+  <h2>2. Nonlinearity — Why It's Essential</h2>
+
+  <p>Before stacking layers, we need to understand why stacking <em>linear</em> layers alone is mathematically pointless.</p>
+
+  <p>If every neuron just computes <code>w·x + b</code> (a linear function), then no matter how many layers you add, the whole network is still one big linear function. You could always collapse 100 linear layers into a single equivalent layer — depth adds zero expressive power.</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+      <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#dc2626; margin-bottom:0.5rem">Without Nonlinearity</div>
+        <div style="color:#7f1d1d; font-size:0.82rem; line-height:1.7">
+          Layer 1: <code>y = W₁x + b₁</code><br>
+          Layer 2: <code>z = W₂y + b₂</code><br>
+          Combined: <code>z = (W₂W₁)x + c</code><br><br>
+          <strong>Still just one linear layer.</strong> No matter how deep you go, you gain nothing new.
+        </div>
+      </div>
+      <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#15803d; margin-bottom:0.5rem">With Nonlinearity</div>
+        <div style="color:#14532d; font-size:0.82rem; line-height:1.7">
+          Layer 1: <code>a = f(W₁x + b₁)</code><br>
+          Layer 2: <code>z = f(W₂a + b₂)</code><br><br>
+          Because <em>f</em> is nonlinear, these <strong>cannot</strong> be collapsed. Each layer learns genuinely new representations.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>The <strong>activation function</strong> is what introduces nonlinearity after each layer's weighted sum. It is what makes "deep" in deep learning meaningful — enabling networks to learn edges, curves, shapes, words, and strategies from raw data.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Without nonlinear activation functions, stacking more layers gives <strong>no extra expressive power</strong>. Nonlinearity is the core ingredient that allows deep networks to learn complex patterns.
+  </div>
+
+  <!-- ───────────── SECTION 3: Multi-layer Perceptron ───────────── -->
+  <h2>3. Multi-layer Perceptron (MLP)</h2>
+
+  <p>Stack multiple layers of neurons together and you get a <strong>Multi-layer Perceptron (MLP)</strong>, also called a <strong>Feedforward Neural Network</strong> or <strong>Fully-connected Neural Network</strong>.</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 440 230" width="420" xmlns="http://www.w3.org/2000/svg">
+      <!-- Column labels -->
+      <text x="55"  y="18" font-family="sans-serif" font-size="11" fill="#6b6b63" text-anchor="middle" font-weight="600">Input</text>
+      <text x="55"  y="30" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Layer</text>
+      <text x="175" y="18" font-family="sans-serif" font-size="11" fill="#6b6b63" text-anchor="middle" font-weight="600">Hidden</text>
+      <text x="175" y="30" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Layer 1</text>
+      <text x="280" y="18" font-family="sans-serif" font-size="11" fill="#6b6b63" text-anchor="middle" font-weight="600">Hidden</text>
+      <text x="280" y="30" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Layer 2</text>
+      <text x="390" y="18" font-family="sans-serif" font-size="11" fill="#6b6b63" text-anchor="middle" font-weight="600">Output</text>
+      <text x="390" y="30" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Layer</text>
+
+      <!-- Input layer (3 nodes) -->
+      <circle cx="55" cy="75"  r="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <circle cx="55" cy="125" r="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <circle cx="55" cy="175" r="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="55" y="79"  font-family="sans-serif" font-size="11" fill="#1d4ed8" text-anchor="middle">x₁</text>
+      <text x="55" y="129" font-family="sans-serif" font-size="11" fill="#1d4ed8" text-anchor="middle">x₂</text>
+      <text x="55" y="179" font-family="sans-serif" font-size="11" fill="#1d4ed8" text-anchor="middle">x₃</text>
+
+      <!-- Hidden layer 1 (4 nodes) -->
+      <circle cx="175" cy="55"  r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <circle cx="175" cy="105" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <circle cx="175" cy="155" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <circle cx="175" cy="205" r="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+
+      <!-- Hidden layer 2 (3 nodes) -->
+      <circle cx="280" cy="75"  r="18" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <circle cx="280" cy="125" r="18" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <circle cx="280" cy="175" r="18" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+
+      <!-- Output layer (2 nodes) -->
+      <circle cx="390" cy="100" r="20" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+      <circle cx="390" cy="155" r="20" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+      <text x="390" y="104" font-family="sans-serif" font-size="10" fill="#15803d" text-anchor="middle">Cat</text>
+      <text x="390" y="159" font-family="sans-serif" font-size="10" fill="#15803d" text-anchor="middle">Dog</text>
+
+      <!-- Connections input → h1 -->
+      <line x1="73" y1="75"  x2="157" y2="55"  stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="75"  x2="157" y2="105" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="75"  x2="157" y2="155" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="75"  x2="157" y2="205" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="125" x2="157" y2="55"  stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="125" x2="157" y2="105" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="125" x2="157" y2="155" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="125" x2="157" y2="205" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="175" x2="157" y2="55"  stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="175" x2="157" y2="105" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="175" x2="157" y2="155" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="175" x2="157" y2="205" stroke="#c4b5fd" stroke-width="0.8" opacity="0.55"/>
+
+      <!-- Connections h1 → h2 -->
+      <line x1="193" y1="55"  x2="262" y2="75"  stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="55"  x2="262" y2="125" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="55"  x2="262" y2="175" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="105" x2="262" y2="75"  stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="105" x2="262" y2="125" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="105" x2="262" y2="175" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="155" x2="262" y2="75"  stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="155" x2="262" y2="125" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="155" x2="262" y2="175" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="205" x2="262" y2="75"  stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="205" x2="262" y2="125" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="205" x2="262" y2="175" stroke="#fbcfe8" stroke-width="0.8" opacity="0.55"/>
+
+      <!-- Connections h2 → output -->
+      <line x1="298" y1="75"  x2="370" y2="100" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+      <line x1="298" y1="75"  x2="370" y2="155" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+      <line x1="298" y1="125" x2="370" y2="100" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+      <line x1="298" y1="125" x2="370" y2="155" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+      <line x1="298" y1="175" x2="370" y2="100" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+      <line x1="298" y1="175" x2="370" y2="155" stroke="#bbf7d0" stroke-width="1" opacity="0.8"/>
+
+      <text x="220" y="225" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Every neuron connects to every neuron in the next layer (fully connected)</text>
+    </svg>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Input Layer</div>
+      Receives the raw data. Each node is one feature. No computation happens here — it just passes values forward.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Hidden Layers</div>
+      Where the learning happens. Each neuron computes a weighted sum of all its inputs, adds a bias, then applies an activation function. "Hidden" because their values are not directly observed from outside the network.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Output Layer</div>
+      Produces the final prediction. For classification, each node represents one class — the node with the highest score wins.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Fully Connected (Dense)</div>
+      Every neuron in one layer connects to every neuron in the next. All weights are learned — this is why a large network has millions of parameters.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 4: Deep Neural Network ───────────── -->
+  <h2>4. Deep Neural Network (DNN)</h2>
+
+  <p>A <strong>Deep Neural Network</strong> is an MLP with <em>many</em> hidden layers — typically 3 or more. The word "deep" refers to the number of layers (the network's depth).</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy — Feature Hierarchy in Image Recognition</div>
+    A deep network recognizing a face learns a hierarchy without being told:
+    <ul style="margin:0.5rem 0 0 1rem; line-height:1.9">
+      <li><strong>Layer 1</strong> detects edges (horizontal, vertical, diagonal lines)</li>
+      <li><strong>Layer 2</strong> combines edges into shapes (circles, curves, corners)</li>
+      <li><strong>Layer 3</strong> combines shapes into parts (eyes, nose, mouth)</li>
+      <li><strong>Layer 4+</strong> combines parts into a full face &rarr; identifies the person</li>
+    </ul>
+    Each layer builds on the previous one. You never programmed any of this — the network discovered it from data alone.
+  </div>
+
+  <h3>The Forward Pass</h3>
+
+  <p>Data flows <strong>left to right</strong> from input to output. This single forward journey through the network is called the <strong>forward pass</strong>.</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; justify-content:center">
+      <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
+        <div style="font-weight:700; color:#1d4ed8; font-size:0.8rem">Input x</div>
+        <div style="color:#1e3a8a; font-size:0.75rem">raw features</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1.3rem">&rarr;</div>
+      <div style="background:#ede9fe; border:1.5px solid #7c3aed; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
+        <div style="font-weight:700; color:#6d28d9; font-size:0.8rem">Layer 1</div>
+        <div style="color:#4c1d95; font-size:0.75rem">z = Wx + b<br>a = f(z)</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1.3rem">&rarr;</div>
+      <div style="background:#ede9fe; border:1.5px solid #7c3aed; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
+        <div style="font-weight:700; color:#6d28d9; font-size:0.8rem">Layer 2</div>
+        <div style="color:#4c1d95; font-size:0.75rem">z = Wa + b<br>a = f(z)</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1.1rem">&rarr; &hellip; &rarr;</div>
+      <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
+        <div style="font-weight:700; color:#15803d; font-size:0.8rem">Output &#375;</div>
+        <div style="color:#14532d; font-size:0.75rem">prediction</div>
+      </div>
+    </div>
+    <p style="text-align:center; color:#6b6b63; font-size:0.8rem; margin-top:0.75rem">At each layer: <strong>z = Wx + b</strong> (weighted sum), then <strong>a = f(z)</strong> (activation). Pass <em>a</em> to the next layer.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Pre-activation (z)</div>
+      <code>z = W·a_prev + b</code> — the raw weighted sum before the activation function. Also called the "logit."
+    </div>
+    <div class="def-item">
+      <div class="def-term">Post-activation (a)</div>
+      <code>a = f(z)</code> — the output after applying the activation function. This becomes the input to the next layer.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 5: Capability Comparison ───────────── -->
+  <h2>5. How Depth Increases Capability</h2>
+
+  <p>In theory, a network with one sufficiently wide hidden layer can approximate any function (Universal Approximation Theorem). In practice, <strong>deep networks are far more efficient</strong> than wide shallow ones:</p>
+
+  <ul>
+    <li>They build <em>hierarchical</em> representations (pixels → edges → objects)</li>
+    <li>Each layer <em>reuses</em> features built by previous layers</li>
+    <li>They need far fewer total neurons to achieve the same capability</li>
+  </ul>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <table style="font-family:sans-serif; font-size:0.82rem; border-collapse:collapse; width:100%; min-width:420px">
+      <thead>
+        <tr style="background:#f3f4f6">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Architecture</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Capability</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Typical use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Single perceptron</td>
+          <td style="padding:0.4rem 0.75rem">Linear boundary only</td>
+          <td style="padding:0.4rem 0.75rem">Linearly separable problems</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">1 hidden layer (MLP)</td>
+          <td style="padding:0.4rem 0.75rem">Any smooth curve (in theory)</td>
+          <td style="padding:0.4rem 0.75rem">Basic pattern recognition</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">2–5 hidden layers</td>
+          <td style="padding:0.4rem 0.75rem">Hierarchical features</td>
+          <td style="padding:0.4rem 0.75rem">Images, audio, text</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4rem 0.75rem">Many layers (10s–100s)</td>
+          <td style="padding:0.4rem 0.75rem">Very abstract representations</td>
+          <td style="padding:0.4rem 0.75rem">GPT, image recognition, AlphaFold</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the three layer types: <strong>Input</strong> (no computation), <strong>Hidden</strong> (learns features), <strong>Output</strong> (prediction). The forward pass computes <strong>z = Wx + b</strong> then <strong>a = f(z)</strong> at each layer. "Deep" means many hidden layers. Nonlinearity is what makes depth valuable.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Knowledge Check &middot; Question 1 of 4</div>
+    <div class="quiz-question">A perceptron receives inputs x₁ = 2, x₂ = 3 with weights w₁ = 0.5, w₂ = -1, and bias b = 1. What is the pre-activation value z?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">z = 4.0, by adding all values: 2 + 3 + 0.5 + (−1) + 1</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">z = 1.5, by multiplying inputs by weights: (2 × 0.5) × (3 × −1) + 1</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">z = −0.5, computed as (0.5×2) + (−1×3) + 1 = 1 − 3 + 1</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">z = 2.5, computed as (0.5×2) + (−1×3) × 1 = 1 + (−3) × 1</button>
+    </div>
+    <div class="quiz-feedback" id="q1-feedback"></div>
+    <button class="quiz-next" onclick="show('q2')">Next question &rarr;</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Knowledge Check &middot; Question 2 of 4</div>
+    <div class="quiz-question">Why can't a single perceptron solve the XOR problem?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">XOR requires more input features than a single perceptron can process at once</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">A single perceptron has no bias term, so its boundary is always fixed at the origin</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">XOR is not linearly separable — no single straight-line boundary can correctly split its outputs</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">XOR outputs fractions between 0 and 1, but a perceptron only outputs whole numbers</button>
+    </div>
+    <div class="quiz-feedback" id="q2-feedback"></div>
+    <button class="quiz-next" onclick="show('q3')">Next question &rarr;</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Knowledge Check &middot; Question 3 of 4</div>
+    <div class="quiz-question">Why is it mathematically useless to stack many layers that all use only linear transformations (no activation function)?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Any number of linear layers can always be collapsed into a single equivalent linear layer, so depth adds no new capability</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Without activation functions, the network cannot accept more than one input feature at a time</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Linear layers cannot update their weights during training, so the network cannot learn anything</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Without activation functions, all neuron outputs become negative, which causes the loss to grow without limit</button>
+    </div>
+    <div class="quiz-feedback" id="q3-feedback"></div>
+    <button class="quiz-next" onclick="show('q4')">Next question &rarr;</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Knowledge Check &middot; Question 4 of 4</div>
+    <div class="quiz-question">In a deep neural network trained on images, what do the later (deeper) hidden layers tend to represent compared to the earlier ones?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Later layers represent simpler, lower-level patterns like pixel brightness values</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Later layers store a compressed copy of the input, scaled to fit the output range</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Later layers represent more abstract, high-level concepts built on features from earlier layers</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Later layers predict the final class probability directly, bypassing the output layer</button>
+    </div>
+    <div class="quiz-feedback" id="q4-feedback"></div>
+    <button class="quiz-next" onclick="showDone()">See results &rarr;</button>
+  </div>
+
+  <div id="done-box" style="display:none; background:var(--success-light); border:1.5px solid var(--success); border-radius:8px; padding:1.2rem 1.5rem; font-family:sans-serif; margin:2rem 0">
+    <div style="font-weight:700; color:var(--success); margin-bottom:0.4rem">Lesson Complete</div>
+    <div id="done-score" style="font-size:0.9rem; color:var(--text)"></div>
+  </div>
+
+  <nav class="lesson-nav">
+    <a href="0007-ml-algorithms.html">&larr; Lesson 07: Common ML Algorithms</a>
+    <a class="nav-next" href="0009-activation-training.html">Lesson 09: Activation Functions &amp; Training &rarr;</a>
+  </nav>
+
+</div>
+
+<script>
+  const feedback = {
+    q1: {
+      correct: "Correct. z = (w₁ × x₁) + (w₂ × x₂) + b = (0.5 × 2) + (−1 × 3) + 1 = 1 − 3 + 1 = −0.5. The activation function f(z) would then be applied to this value to produce the perceptron's output.",
+      wrong: {
+        0: "Incorrect. You don't simply add all the values together. The formula is a weighted sum: each input is multiplied by its own weight first, then summed with the bias. z = (w₁×x₁) + (w₂×x₂) + b.",
+        1: "Incorrect. The terms are added together (weighted sum), not multiplied together. z = (0.5×2) + (−1×3) + 1 = 1 − 3 + 1 = −0.5.",
+        3: "Incorrect. The bias is added, not multiplied by the last term. z = (0.5×2) + (−1×3) + 1 = 1 − 3 + 1 = −0.5."
+      }
+    },
+    q2: {
+      correct: "Correct. XOR requires a curved or broken decision boundary — no single straight line can correctly label all four XOR input combinations. A perceptron can only produce a linear (straight-line) boundary.",
+      wrong: {
+        0: "Incorrect. XOR uses exactly two binary inputs — that's not too many. The problem is the shape of boundary required, not the number of features.",
+        1: "Incorrect. A standard perceptron does include a bias term, which lets the boundary shift freely. The issue with XOR is that no linear boundary, regardless of shift, can solve it.",
+        3: "Incorrect. XOR outputs only 0 or 1, which is exactly what a threshold perceptron can output. The issue is that no straight-line boundary separates the XOR truth table correctly."
+      }
+    },
+    q3: {
+      correct: "Correct. A chain of linear transformations W₂(W₁x + b₁) + b₂ always simplifies to a single linear transformation (W₂W₁)x + c. No matter how many linear layers you stack, the result is still one big linear function — so depth adds no benefit without nonlinear activation functions.",
+      wrong: {
+        1: "Incorrect. Linear layers accept any number of input features — the number of inputs has nothing to do with activation functions. The issue is mathematical expressiveness, not input size.",
+        2: "Incorrect. Linear layers can update their weights via gradient descent just fine. The problem is not about learning — it's that the function being learned remains linear regardless of how many layers are stacked.",
+        3: "Incorrect. Linear transformations can produce both positive and negative outputs. The problem is about mathematical expressiveness, not the sign of outputs or loss behavior."
+      }
+    },
+    q4: {
+      correct: "Correct. Deep networks learn a hierarchy of representations: early layers detect simple, low-level patterns (edges, textures), while later layers combine those into complex, high-level concepts (shapes, parts, objects). This hierarchical feature learning is one of the key strengths of deep learning.",
+      wrong: {
+        0: "Incorrect. It's the opposite — early layers detect low-level patterns like edges and pixel gradients. Later layers represent higher-level abstractions like faces or objects.",
+        1: "Incorrect. Hidden layers do not compress or copy the input — they transform it into a new representation using learned weights and activation functions. Each layer encodes different abstractions.",
+        3: "Incorrect. Final class probabilities are the job of the output layer, not the hidden layers. Hidden layers produce intermediate feature representations that feed into the next layer."
+      }
+    }
+  };
+
+  let score = 0;
+  let answered = {};
+
+  function answer(btn, qid, correct) {
+    if (answered[qid]) return;
+    answered[qid] = true;
+    const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+    opts.forEach(o => o.disabled = true);
+    const fb = document.getElementById(qid + '-feedback');
+    const idx = Array.from(opts).indexOf(btn);
+    if (correct) {
+      btn.classList.add('correct');
+      fb.textContent = feedback[qid].correct;
+      fb.className = 'quiz-feedback correct';
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = feedback[qid].wrong[idx];
+      fb.className = 'quiz-feedback wrong';
+      opts.forEach(o => {
+        if (o.onclick.toString().includes('true')) o.classList.add('correct');
+      });
+    }
+    btn.closest('.quiz').querySelector('.quiz-next').style.display = 'inline-block';
+  }
+
+  function show(id) {
+    const el = document.getElementById(id);
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showDone() {
+    const box = document.getElementById('done-box');
+    box.style.display = 'block';
+    const msgs = [
+      'Keep reviewing — these foundations support everything in Chapter 03.',
+      'Good effort — revisit the sections you missed before moving on.',
+      'Solid grasp — you are ready to continue.',
+      'Excellent — strong foundation!',
+      'Perfect score — outstanding work!'
+    ];
+    document.getElementById('done-score').textContent =
+      'You got ' + score + ' out of 4 correct. ' + msgs[score];
+    box.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</div>
+</body>
+</html>
