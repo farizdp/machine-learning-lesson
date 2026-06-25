@@ -25,6 +25,9 @@ Content Material.md  # Original syllabus outline (Huawei HCIA-AI)
 | 02 | AI Technologies: NLP, CV & Foundation Models | Ch 01 — AI Overview |
 | 03 | DeepSeek, AI Applications & Huawei PanGu | Ch 01 — AI Overview |
 | 04 | Machine Learning Overview | Ch 02 — Machine Learning |
+| 05 | The ML Process | Ch 02 — Machine Learning |
+| 06 | Key ML Concepts: Gradient Descent, Hyperparameters & Cross-Validation | Ch 02 — Machine Learning |
+| 07 | Common ML Algorithms | Ch 02 — Machine Learning |
 
 ## How to Continue Learning
 

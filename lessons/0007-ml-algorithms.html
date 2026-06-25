@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 07 — Common ML Algorithms</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 26%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 02 · Lesson 7 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <h1>Common Machine Learning Algorithms</h1>
+    <p class="subtitle">The full toolkit: regression, classification, clustering, and ensemble methods — what each does and when to use it.</p>
+  </header>
+
+  <!-- ───────────── ALGORITHM MAP ───────────── -->
+  <h2>The Algorithm Landscape</h2>
+
+  <p>Before diving into each algorithm, here's the map. Every algorithm in this lesson fits into one of three learning types you already know:</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem">
+      <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:8px; padding:0.75rem">
+        <div style="font-weight:700; color:#1d4ed8; margin-bottom:0.5rem">Supervised</div>
+        <div style="color:#1e3a8a; font-size:0.8rem; line-height:1.6">
+          Linear Regression<br>
+          Polynomial Regression<br>
+          Logistic Regression<br>
+          Decision Tree<br>
+          SVM<br>
+          k-Nearest Neighbors<br>
+          Naive Bayes<br>
+          Random Forest<br>
+          Gradient Boosted DT
+        </div>
+      </div>
+      <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:8px; padding:0.75rem">
+        <div style="font-weight:700; color:#15803d; margin-bottom:0.5rem">Unsupervised</div>
+        <div style="color:#14532d; font-size:0.8rem; line-height:1.6">
+          k-Means Clustering<br>
+          Hierarchical Clustering
+        </div>
+      </div>
+      <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:0.75rem">
+        <div style="font-weight:700; color:#b45309; margin-bottom:0.5rem">Task Type</div>
+        <div style="color:#78350f; font-size:0.8rem; line-height:1.6">
+          <strong>Regression</strong> → predict a number<br><br>
+          <strong>Classification</strong> → predict a category<br><br>
+          <strong>Clustering</strong> → find groups
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 1: Linear Regression ───────────── -->
+  <h2>1. Linear Regression</h2>
+
+  <p><strong>Task:</strong> Regression — predict a continuous number.</p>
+
+  <p>Linear regression finds the best straight line through your data points. Given input features (like house size), it predicts a numeric output (like house price).</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="40" y1="150" x2="320" y2="150" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="150" stroke="#e8e6e1" stroke-width="1.5"/>
+      <!-- Best-fit line -->
+      <line x1="50" y1="135" x2="310" y2="30" stroke="#2563eb" stroke-width="2.5"/>
+      <!-- Data points scattered around the line -->
+      <circle cx="70"  cy="128" r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="100" cy="115" r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="130" cy="100" r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="160" cy="95"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="185" cy="82"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="210" cy="75"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="240" cy="62"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="270" cy="55"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="295" cy="45"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <!-- Error lines (residuals) -->
+      <line x1="100" y1="115" x2="100" y2="108" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="210" y1="75"  x2="210" y2="83"  stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+      <!-- Labels -->
+      <text x="315" y="27" font-family="sans-serif" font-size="10" fill="#2563eb">best-fit line</text>
+      <text x="50"  y="170" font-family="sans-serif" font-size="10" fill="#6b6b63">Feature (e.g. house size)</text>
+      <text x="5"   y="90"  font-family="sans-serif" font-size="10" fill="#6b6b63" transform="rotate(-90,5,90)">Output (price)</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Red dashed = error (residual). Training minimizes the sum of squared errors.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">The formula</div>
+      <code>ŷ = w₁x₁ + w₂x₂ + … + b</code> — the model learns the <strong>weights</strong> (w) and <strong>bias</strong> (b). These are the parameters.
+    </div>
+    <div class="def-item">
+      <div class="def-term">When to use</div>
+      When you expect a roughly linear relationship between inputs and output. Fast, interpretable, and a great baseline.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Limitation</div>
+      Only captures straight-line relationships. Real-world data is often curved → need Polynomial Regression.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 2: Polynomial Regression ───────────── -->
+  <h2>2. Polynomial Regression</h2>
+
+  <p><strong>Task:</strong> Regression — predict a continuous number (with curves).</p>
+
+  <p>Polynomial Regression extends linear regression by adding <strong>squared, cubed, etc. versions of the features</strong>. This lets the model fit curves instead of just straight lines — but it's still a linear model under the hood (linear in its parameters).</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="40" y1="130" x2="320" y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <!-- Polynomial curve (parabola shape) -->
+      <path d="M 50 110 Q 170 10 310 100" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+      <!-- Data points -->
+      <circle cx="65"  cy="102" r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="100" cy="70"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="140" cy="38"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="180" cy="22"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="220" cy="36"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="260" cy="60"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="295" cy="94"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <!-- Labels -->
+      <text x="155" y="148" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Feature</text>
+      <text x="310" y="97"  font-family="sans-serif" font-size="10" fill="#2563eb">curve</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Polynomial regression fits curved relationships by adding x², x³… as extra features.</p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Linear Regression = straight line. Polynomial Regression = curved line. Higher-degree polynomials fit more complex curves but risk <strong>overfitting</strong> on small datasets.
+  </div>
+
+  <!-- ───────────── SECTION 3: Logistic Regression ───────────── -->
+  <h2>3. Logistic Regression</h2>
+
+  <p><strong>Task:</strong> Classification — predict a category (despite the name "regression").</p>
+
+  <p>Despite its name, Logistic Regression is a <strong>classification</strong> algorithm. It predicts the probability that something belongs to a class. The output is always between 0 and 1.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    You're predicting whether an email is spam (1) or not spam (0). Logistic Regression gives you "there's an 87% chance this is spam" — then you apply a threshold (e.g. > 50% = spam) to make the final decision.
+  </div>
+
+  <p>The key ingredient is the <strong>sigmoid function</strong> which squashes any number into the 0–1 range:</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="40" y1="80"  x2="320" y2="80"  stroke="#e8e6e1" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="180" y1="15" x2="180" y2="145" stroke="#e8e6e1" stroke-width="1"/>
+      <!-- Sigmoid curve -->
+      <path d="M 45 135 C 80 133 110 115 140 95 S 200 40 215 30 S 280 20 310 18" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+      <!-- 0.5 threshold line -->
+      <line x1="40" y1="80" x2="320" y2="80" stroke="#dc2626" stroke-width="1" stroke-dasharray="5,3"/>
+      <!-- Labels -->
+      <text x="28"  y="22"  font-family="sans-serif" font-size="10" fill="#6b6b63">1.0</text>
+      <text x="28"  y="84"  font-family="sans-serif" font-size="10" fill="#dc2626">0.5</text>
+      <text x="28"  y="142" font-family="sans-serif" font-size="10" fill="#6b6b63">0.0</text>
+      <text x="310" y="12"  font-family="sans-serif" font-size="10" fill="#2563eb">σ(x)</text>
+      <text x="150" y="155" font-family="sans-serif" font-size="10" fill="#6b6b63">Input value (x)</text>
+      <text x="195" y="75"  font-family="sans-serif" font-size="10" fill="#dc2626">threshold</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Sigmoid squashes all inputs into (0, 1) — readable as a probability.</p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Logistic Regression solves <strong>classification</strong>, not regression, despite its name. It uses the <strong>sigmoid function</strong> to output a probability between 0 and 1. Common use: binary classification (spam/not-spam, yes/no).
+  </div>
+
+  <!-- ───────────── SECTION 4: Decision Tree ───────────── -->
+  <h2>4. Decision Tree</h2>
+
+  <p><strong>Task:</strong> Both Classification and Regression.</p>
+
+  <p>A Decision Tree learns a series of <strong>if/else questions</strong> about the features and splits the data step by step. At each node, it asks the question that best separates the classes.</p>
+
+  <div class="diagram" style="padding:1.5rem">
+    <div style="font-family:sans-serif; font-size:0.82rem; text-align:center; position:relative">
+      <!-- Root -->
+      <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem; display:inline-block; margin-bottom:0.5rem">
+        Age &gt; 30?
+      </div>
+      <!-- Connectors -->
+      <div style="display:flex; justify-content:center; gap:6rem; margin-bottom:0.25rem">
+        <div style="color:#6b6b63; font-size:0.75rem">YES ↙</div>
+        <div style="color:#6b6b63; font-size:0.75rem">↘ NO</div>
+      </div>
+      <!-- Level 2 -->
+      <div style="display:flex; justify-content:center; gap:4rem; margin-bottom:0.5rem">
+        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem">
+          Income &gt; $50k?
+        </div>
+        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem">
+          Student?
+        </div>
+      </div>
+      <!-- Connectors level 2 -->
+      <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:0.25rem; font-size:0.75rem; color:#6b6b63">
+        <div style="width:7rem; text-align:right">YES ↙</div>
+        <div style="width:4rem; text-align:left">↘ NO</div>
+        <div style="width:6rem; text-align:right">YES ↙</div>
+        <div style="width:2rem; text-align:left">↘ NO</div>
+      </div>
+      <!-- Leaf nodes -->
+      <div style="display:flex; justify-content:center; gap:1rem">
+        <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#15803d; font-size:0.8rem">✓ Buys</div>
+        <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#dc2626; font-size:0.8rem">✗ No</div>
+        <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#15803d; font-size:0.8rem">✓ Buys</div>
+        <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#dc2626; font-size:0.8rem">✗ No</div>
+      </div>
+    </div>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.75rem; text-align:center">At each node, the tree picks the question that splits data most cleanly. Leaf nodes give the final answer.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Pros</div>
+      Highly interpretable — you can read the tree like a flowchart. No need to scale features.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Cons</div>
+      Prone to overfitting — trees can grow very deep and memorize training data. Solution: limit depth or use ensemble methods (see Random Forest below).
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 5: SVM ───────────── -->
+  <h2>5. Support Vector Machine (SVM)</h2>
+
+  <p><strong>Task:</strong> Classification (and Regression).</p>
+
+  <p>SVM finds the <strong>decision boundary that maximizes the margin</strong> — the gap between classes. It's not just any boundary; it's the one with the widest "no-man's-land" between the classes.</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Class 1 circles (left) -->
+      <circle cx="70"  cy="60"  r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="90"  cy="95"  r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="55"  cy="115" r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="105" cy="50"  r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="75"  cy="135" r="8" fill="#2563eb" opacity="0.7"/>
+      <!-- Class 2 squares (right) -->
+      <rect x="232" y="50"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <rect x="260" y="80"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <rect x="245" y="115" width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <rect x="280" y="55"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <rect x="270" y="130" width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <!-- Decision boundary (middle line) -->
+      <line x1="180" y1="20" x2="180" y2="160" stroke="#15803d" stroke-width="2.5"/>
+      <!-- Margin lines (dashed) -->
+      <line x1="145" y1="20" x2="145" y2="160" stroke="#15803d" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="215" y1="20" x2="215" y2="160" stroke="#15803d" stroke-width="1" stroke-dasharray="5,4"/>
+      <!-- Margin shading -->
+      <rect x="145" y="20" width="70" height="140" fill="#dcfce7" opacity="0.35"/>
+      <!-- Support vectors (highlighted) -->
+      <circle cx="105" cy="50" r="12" fill="none" stroke="#b45309" stroke-width="2"/>
+      <rect x="229" y="47" width="22" height="22" rx="3" fill="none" stroke="#b45309" stroke-width="2"/>
+      <!-- Labels -->
+      <text x="40"  y="170" font-family="sans-serif" font-size="10" fill="#2563eb">Class A</text>
+      <text x="255" y="170" font-family="sans-serif" font-size="10" fill="#dc2626">Class B</text>
+      <text x="155" y="15"  font-family="sans-serif" font-size="10" fill="#15803d">max margin</text>
+      <text x="90"  y="35"  font-family="sans-serif" font-size="9"  fill="#b45309">support vectors</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">SVM finds the widest possible gap between classes. Points closest to the boundary are "support vectors."</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Linear SVM</div>
+      Draws a straight-line (or flat hyperplane) boundary between classes. Works when data is <em>linearly separable</em> — the two classes can be separated by a straight line.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Non-Linear SVM (Kernel Trick)</div>
+      When a straight line can't separate the classes, SVM uses a <strong>kernel function</strong> to project the data into a higher dimension where a flat boundary <em>does</em> work. Common kernels: RBF (Radial Basis Function), Polynomial.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    SVM maximizes the <strong>margin</strong> between classes. Points closest to the boundary are called <strong>support vectors</strong>. Use <strong>kernel trick</strong> for non-linearly separable data. Know the difference between linear SVM and kernel SVM.
+  </div>
+
+  <!-- ───────────── SECTION 6: k-Nearest Neighbors ───────────── -->
+  <h2>6. k-Nearest Neighbors (k-NN)</h2>
+
+  <p><strong>Task:</strong> Classification and Regression.</p>
+
+  <p>k-NN is the simplest idea in ML: <strong>to classify a new point, look at the k closest points in the training data and take a vote</strong>. The new point gets the majority class.</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Blue class -->
+      <circle cx="120" cy="70"  r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="95"  cy="100" r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="140" cy="110" r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="80"  cy="60"  r="8" fill="#2563eb" opacity="0.7"/>
+      <!-- Red class -->
+      <circle cx="260" cy="80"  r="8" fill="#dc2626" opacity="0.7"/>
+      <circle cx="240" cy="110" r="8" fill="#dc2626" opacity="0.7"/>
+      <circle cx="275" cy="120" r="8" fill="#dc2626" opacity="0.7"/>
+      <circle cx="255" cy="50"  r="8" fill="#dc2626" opacity="0.7"/>
+      <!-- New unknown point -->
+      <circle cx="185" cy="95"  r="9" fill="#f59e0b" stroke="#92400e" stroke-width="2"/>
+      <text x="193" y="90" font-family="sans-serif" font-size="10" fill="#92400e">?</text>
+      <!-- k=3 circle -->
+      <circle cx="185" cy="95" r="65" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <!-- Lines to nearest 3 (k=3) -->
+      <line x1="185" y1="95" x2="140" y2="110" stroke="#15803d" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="185" y1="95" x2="120" y2="70"  stroke="#15803d" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="185" y1="95" x2="240" y2="110" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <!-- Labels -->
+      <text x="155" y="170" font-family="sans-serif" font-size="10" fill="#15803d" text-anchor="middle">k=3 search radius</text>
+      <text x="75"  y="45"  font-family="sans-serif" font-size="10" fill="#2563eb">Class A (×2)</text>
+      <text x="240" y="45"  font-family="sans-serif" font-size="10" fill="#dc2626">Class B (×1)</text>
+      <text x="148" y="92"  font-family="sans-serif" font-size="9"  fill="#15803d">→ Vote: A wins</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">With k=3, 2 neighbors are Class A and 1 is Class B → new point classified as Class A.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">The k hyperparameter</div>
+      Small k (e.g. k=1) → very sensitive to noise, overfits. Large k → smoother boundary, but may miss local patterns. Tune k with cross-validation.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Distance measures</div>
+      The most common is <strong>Euclidean distance</strong> (straight-line distance). You must <strong>scale your features</strong> before using k-NN — otherwise large-scale features dominate the distance calculation.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Lazy learner</div>
+      k-NN has no real "training phase" — it just memorizes all the data. Prediction is slow because it must compute distances to every training point.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 7: Naive Bayes ───────────── -->
+  <h2>7. Naive Bayes</h2>
+
+  <p><strong>Task:</strong> Classification.</p>
+
+  <p>Naive Bayes applies <strong>Bayes' theorem</strong> — a probability rule — to classify data. It calculates the probability of each class given the features, and picks the highest.</p>
+
+  <p>The "naive" part: it <strong>assumes all features are independent</strong> of each other. In reality this is rarely true, but the algorithm still works surprisingly well in practice.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy — Spam Filter</div>
+    You want to classify an email as spam. Naive Bayes says: "Given that this email contains the words 'free', 'win', and 'prize', what's the probability it's spam?" It multiplies the individual word probabilities together (the "naive" independence assumption), then picks the class with the highest probability. This is exactly how classic email spam filters work.
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">When it shines</div>
+      Text classification (spam detection, sentiment analysis, document categorization). Very fast to train and works well with small datasets and high-dimensional data.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Core assumption (the "naive" part)</div>
+      Features are conditionally independent given the class. This is almost never true in the real world, but the algorithm is robust enough that it works well anyway.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Naive Bayes is a <strong>probabilistic classifier</strong> based on Bayes' theorem. The "naive" assumption is <strong>feature independence</strong>. Classic use case: <strong>text classification / spam filtering</strong>.
+  </div>
+
+  <!-- ───────────── SECTION 8: Ensemble Learning ───────────── -->
+  <h2>8. Ensemble Learning — Random Forest & GBDT</h2>
+
+  <p><strong>Task:</strong> Classification and Regression.</p>
+
+  <p>The idea behind ensemble learning: <strong>combine many weak models to build one strong model</strong>. Individually, each model might make mistakes — but together, their errors cancel out.</p>
+
+  <div class="diagram" style="padding:1.2rem; text-align:center">
+    <div style="font-family:sans-serif; font-size:0.85rem">
+      <div style="display:flex; justify-content:space-around; margin-bottom:0.5rem">
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 1<br><span style="color:#dc2626">votes: A</span></div>
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 2<br><span style="color:#2563eb">votes: B</span></div>
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 3<br><span style="color:#dc2626">votes: A</span></div>
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 4<br><span style="color:#dc2626">votes: A</span></div>
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 5<br><span style="color:#dc2626">votes: A</span></div>
+      </div>
+      <div style="font-size:0.8rem; color:#6b6b63; margin-bottom:0.4rem">↓ majority vote</div>
+      <div style="background:#dcfce7; border:2px solid #15803d; border-radius:8px; padding:0.5rem 1.5rem; display:inline-block; font-weight:700; color:#15803d">Final answer: Class A (4/5 votes)</div>
+    </div>
+  </div>
+
+  <p>There are two main strategies for building ensembles:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Bagging (Bootstrap Aggregating)</div>
+      Train many models <em>in parallel</em>, each on a <strong>random subset</strong> of the training data. Combine their predictions by voting (classification) or averaging (regression). Each model is independent.<br><br>
+      Goal: reduces <strong>variance</strong> (overfitting). Models are diverse because they saw different data.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Boosting</div>
+      Train models <em>sequentially</em>. Each new model focuses on the <strong>mistakes</strong> the previous models made. Final answer is a weighted combination of all models.<br><br>
+      Goal: reduces <strong>bias</strong> (underfitting). Later models correct earlier models' errors.
+    </div>
+  </div>
+
+  <h3>Random Forest (Bagging-based)</h3>
+
+  <p>Random Forest trains many Decision Trees using bagging, with one extra twist: each tree also only sees a <strong>random subset of features</strong> at each split. This makes trees less correlated, which improves accuracy.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Why it beats a single Decision Tree</div>
+      A single tree overfits easily. Many diverse trees, each slightly wrong in different ways, average out their errors and produce a much more stable, accurate result.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Key hyperparameters</div>
+      Number of trees (n_estimators), max depth of each tree, number of features considered at each split.
+    </div>
+  </div>
+
+  <h3>Gradient Boosted Decision Tree (GBDT) — Boosting-based</h3>
+
+  <p>GBDT trains trees sequentially. Each new tree learns to predict the <strong>residual errors</strong> (the mistakes) of the previous ensemble. Famous implementations: <strong>XGBoost, LightGBM, CatBoost</strong>.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Why it's powerful</div>
+      GBDT consistently wins structured/tabular data competitions. It handles mixed feature types, missing values, and non-linear patterns extremely well.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Risk</div>
+      More prone to overfitting than Random Forest. Requires careful hyperparameter tuning (learning rate, number of trees, max depth).
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Bagging</strong> = parallel independent models, reduces variance. <strong>Boosting</strong> = sequential corrective models, reduces bias. <strong>Random Forest</strong> = bagging + random feature selection. <strong>GBDT</strong> = boosting with gradient descent on residuals.
+  </div>
+
+  <!-- ───────────── SECTION 9: k-Means ───────────── -->
+  <h2>9. k-Means Clustering</h2>
+
+  <p><strong>Task:</strong> Unsupervised — find natural groups with no labels.</p>
+
+  <p>k-Means divides data into <strong>k clusters</strong> by iteratively assigning each point to its nearest cluster center (centroid) and re-computing the centroids.</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.82rem">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0.5rem; text-align:center">
+        <!-- Step 1 -->
+        <div>
+          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 1: Init</div>
+          <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="30" cy="35" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="15" cy="45" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="55" cy="15" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="65" cy="30" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="60" cy="50" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="35" cy="60" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="50" cy="65" r="4" fill="#6b6b63" opacity="0.6"/>
+            <!-- Random centroids -->
+            <circle cx="25" cy="30" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+          </svg>
+          <div style="font-size:0.7rem; color:#6b6b63">Place k centroids randomly</div>
+        </div>
+        <!-- Step 2 -->
+        <div>
+          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 2: Assign</div>
+          <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="25" cy="30" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+          </svg>
+          <div style="font-size:0.7rem; color:#6b6b63">Assign each point to nearest centroid</div>
+        </div>
+        <!-- Step 3 -->
+        <div>
+          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 3: Update</div>
+          <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
+            <!-- New centroids (moved to center of clusters) -->
+            <circle cx="22" cy="40" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
+            <circle cx="58" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <!-- Old centroid ghost -->
+            <circle cx="25" cy="30" r="4" fill="none" stroke="#2563eb" stroke-dasharray="2,2" opacity="0.5"/>
+            <circle cx="60" cy="38" r="4" fill="none" stroke="#dc2626" stroke-dasharray="2,2" opacity="0.5"/>
+          </svg>
+          <div style="font-size:0.7rem; color:#6b6b63">Move centroids to cluster mean</div>
+        </div>
+        <!-- Step 4 -->
+        <div>
+          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 4: Repeat</div>
+          <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
+            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="22" cy="40" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
+            <circle cx="58" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <!-- Boundary -->
+            <line x1="40" y1="10" x2="40" y2="75" stroke="#6b6b63" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+          </svg>
+          <div style="font-size:0.7rem; color:#6b6b63">Repeat until centroids stop moving</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">You must choose k</div>
+      The number of clusters k is a hyperparameter you set in advance. Use the <strong>Elbow Method</strong>: plot the total within-cluster variance for different k values — pick k at the "elbow" where adding more clusters gives diminishing returns.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Limitation</div>
+      Sensitive to initial centroid placement. Results can vary. Run multiple times and pick the best. Also assumes clusters are roughly spherical and equal-sized.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    k-Means is <strong>unsupervised</strong>. The algorithm alternates between <strong>assigning points to nearest centroids</strong> and <strong>updating centroids to cluster means</strong>. You must choose k in advance. Use the Elbow Method to find a good k.
+  </div>
+
+  <!-- ───────────── SECTION 10: Hierarchical Clustering ───────────── -->
+  <h2>10. Hierarchical Clustering</h2>
+
+  <p><strong>Task:</strong> Unsupervised — find groups without specifying k in advance.</p>
+
+  <p>Hierarchical Clustering builds a <strong>tree of clusters (dendrogram)</strong>. Unlike k-Means, you don't need to choose the number of clusters beforehand.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Agglomerative (bottom-up) — most common</div>
+      Start with every point as its own cluster. Repeatedly <strong>merge the two closest clusters</strong> until only one big cluster remains. Cut the dendrogram at the desired level to get k clusters.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Divisive (top-down)</div>
+      Start with one big cluster containing all points. Repeatedly split until each point is its own cluster.
+    </div>
+  </div>
+
+  <div class="diagram" style="padding:1.2rem; text-align:center">
+    <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Data points at bottom -->
+      <circle cx="50"  cy="140" r="5" fill="#2563eb"/>
+      <circle cx="80"  cy="140" r="5" fill="#2563eb"/>
+      <circle cx="115" cy="140" r="5" fill="#15803d"/>
+      <circle cx="145" cy="140" r="5" fill="#15803d"/>
+      <circle cx="220" cy="140" r="5" fill="#dc2626"/>
+      <circle cx="250" cy="140" r="5" fill="#dc2626"/>
+      <circle cx="285" cy="140" r="5" fill="#dc2626"/>
+      <!-- Level 1 merges -->
+      <line x1="50"  y1="135" x2="50"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
+      <line x1="80"  y1="135" x2="80"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
+      <line x1="50"  y1="100" x2="80"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
+      <line x1="115" y1="135" x2="115" y2="100" stroke="#15803d" stroke-width="1.5"/>
+      <line x1="145" y1="135" x2="145" y2="100" stroke="#15803d" stroke-width="1.5"/>
+      <line x1="115" y1="100" x2="145" y2="100" stroke="#15803d" stroke-width="1.5"/>
+      <line x1="220" y1="135" x2="220" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="250" y1="135" x2="250" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="220" y1="100" x2="250" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+      <!-- Level 2 merges -->
+      <line x1="65"  y1="100" x2="65"  y2="65" stroke="#9333ea" stroke-width="1.5"/>
+      <line x1="130" y1="100" x2="130" y2="65" stroke="#9333ea" stroke-width="1.5"/>
+      <line x1="65"  y1="65"  x2="130" y2="65" stroke="#9333ea" stroke-width="1.5"/>
+      <line x1="235" y1="100" x2="235" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="285" y1="135" x2="285" y2="80" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="235" y1="100" x2="285" y2="80" stroke="#dc2626" stroke-width="1.5"/>
+      <!-- Level 3 merge -->
+      <line x1="97"  y1="65"  x2="97"  y2="30" stroke="#6b21a8" stroke-width="1.5"/>
+      <line x1="260" y1="80"  x2="260" y2="30" stroke="#6b21a8" stroke-width="1.5"/>
+      <line x1="97"  y1="30"  x2="260" y2="30" stroke="#6b21a8" stroke-width="1.5"/>
+      <!-- Cut line -->
+      <line x1="30" y1="55" x2="330" y2="55" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="295" y="52" font-family="sans-serif" font-size="9" fill="#b45309">cut here</text>
+      <text x="295" y="62" font-family="sans-serif" font-size="9" fill="#b45309">→ 3 clusters</text>
+      <!-- Point labels -->
+      <text x="40"  y="157" font-family="sans-serif" font-size="9" fill="#2563eb">A</text>
+      <text x="78"  y="157" font-family="sans-serif" font-size="9" fill="#2563eb">B</text>
+      <text x="110" y="157" font-family="sans-serif" font-size="9" fill="#15803d">C</text>
+      <text x="143" y="157" font-family="sans-serif" font-size="9" fill="#15803d">D</text>
+      <text x="218" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">E</text>
+      <text x="248" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">F</text>
+      <text x="283" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">G</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Dendrogram: cutting at different heights gives different numbers of clusters. The yellow line cuts for 3 clusters.</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Advantage over k-Means</div>
+      You don't need to choose k in advance — you can cut the dendrogram at any level. Also shows the full structure of how clusters relate to each other.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Disadvantage</div>
+      Computationally expensive for large datasets — doesn't scale well to millions of points.
+    </div>
+  </div>
+
+  <!-- ───────────── SUMMARY TABLE ───────────── -->
+  <h2>Quick Reference Summary</h2>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:500px">
+      <thead>
+        <tr style="background:#f3f4f6">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Algorithm</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Type</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Task</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key idea</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Linear Regression</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Regression</td>
+          <td style="padding:0.4rem 0.75rem">Best-fit straight line</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Polynomial Regression</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Regression</td>
+          <td style="padding:0.4rem 0.75rem">Curved fit using x², x³…</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Logistic Regression</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Classification</td>
+          <td style="padding:0.4rem 0.75rem">Sigmoid → probability</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Decision Tree</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Both</td>
+          <td style="padding:0.4rem 0.75rem">If/else splits on features</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">SVM</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Classification</td>
+          <td style="padding:0.4rem 0.75rem">Max-margin boundary</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">k-Nearest Neighbors</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Both</td>
+          <td style="padding:0.4rem 0.75rem">Vote from k closest points</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">Naive Bayes</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Classification</td>
+          <td style="padding:0.4rem 0.75rem">Bayes' theorem + independence assumption</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Random Forest</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Both</td>
+          <td style="padding:0.4rem 0.75rem">Bagging of Decision Trees</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">GBDT</td>
+          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem">Both</td>
+          <td style="padding:0.4rem 0.75rem">Boosting: correct previous errors</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">k-Means</td>
+          <td style="padding:0.4rem 0.75rem; color:#15803d">Unsupervised</td>
+          <td style="padding:0.4rem 0.75rem">Clustering</td>
+          <td style="padding:0.4rem 0.75rem">Assign to nearest centroid + update</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4rem 0.75rem">Hierarchical Clustering</td>
+          <td style="padding:0.4rem 0.75rem; color:#15803d">Unsupervised</td>
+          <td style="padding:0.4rem 0.75rem">Clustering</td>
+          <td style="padding:0.4rem 0.75rem">Build dendrogram, cut at desired level</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Knowledge Check · Question 1 of 4</div>
+    <div class="quiz-question">You want to predict the selling price of a car based on its age, mileage, and brand. Which algorithm type is the most natural first choice?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Logistic Regression, because you're using multiple input features</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Linear (or Polynomial) Regression, because the output is a continuous number</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">k-Means Clustering, because the data has multiple input features</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Naive Bayes, because car brands are categorical features in the data</button>
+    </div>
+    <div class="quiz-feedback" id="q1-feedback"></div>
+    <button class="quiz-next" onclick="show('q2')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Knowledge Check · Question 2 of 4</div>
+    <div class="quiz-question">What makes Naive Bayes "naive"?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It only works on simple datasets and cannot handle complex patterns</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It requires you to choose the number of clusters k before training</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">It assumes all input features are statistically independent of each other</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It uses a random initial state that changes every time you run it</button>
+    </div>
+    <div class="quiz-feedback" id="q2-feedback"></div>
+    <button class="quiz-next" onclick="show('q3')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Knowledge Check · Question 3 of 4</div>
+    <div class="quiz-question">Random Forest reduces overfitting compared to a single Decision Tree. What is the core strategy that makes this work?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">It boosts each tree sequentially so later trees fix errors from earlier ones</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">It applies the kernel trick to project features into a higher dimension</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">It trains many diverse trees on random data subsets and combines their votes</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">It limits each tree to a maximum depth of two levels to avoid deep branches</button>
+    </div>
+    <div class="quiz-feedback" id="q3-feedback"></div>
+    <button class="quiz-next" onclick="show('q4')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Knowledge Check · Question 4 of 4</div>
+    <div class="quiz-question">What is the key difference between k-Means and Hierarchical Clustering?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">k-Means is supervised while Hierarchical Clustering is unsupervised learning</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">k-Means requires you to specify k upfront; Hierarchical Clustering builds a full tree you cut at any level</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">k-Means finds clusters in text data while Hierarchical handles only numeric data</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Hierarchical Clustering is always faster and scales better to large datasets</button>
+    </div>
+    <div class="quiz-feedback" id="q4-feedback"></div>
+    <button class="quiz-next" onclick="showDone()">See results →</button>
+  </div>
+
+  <div id="done-box" style="display:none; background:var(--success-light); border:1.5px solid var(--success); border-radius:8px; padding:1.2rem 1.5rem; font-family:sans-serif; margin:2rem 0">
+    <div style="font-weight:700; color:var(--success); margin-bottom:0.4rem">Lesson Complete</div>
+    <div id="done-score" style="font-size:0.9rem; color:var(--text)"></div>
+  </div>
+
+  <nav class="lesson-nav">
+    <a href="0006-ml-key-concepts.html">← Lesson 06: Key ML Concepts</a>
+    <a class="nav-next" href="0008-deep-learning-intro.html">Lesson 08: Deep Learning Intro →</a>
+  </nav>
+
+</div>
+
+<script>
+  const feedback = {
+    q1: {
+      correct: "Correct. Predicting a price (a continuous number) is a regression task. Linear Regression is the natural starting point, with Polynomial Regression available if the relationship is curved.",
+      wrong: {
+        0: "Incorrect. Logistic Regression predicts class probabilities (classification), not continuous numbers. The number of input features doesn't determine the algorithm — the type of output does.",
+        2: "Incorrect. k-Means is unsupervised clustering — it finds groups with no labels, and doesn't predict a value at all.",
+        3: "Incorrect. Naive Bayes is a classification algorithm, not a regression one. Categorical input features don't determine which algorithm to use — the output type does."
+      }
+    },
+    q2: {
+      correct: "Correct. The 'naive' assumption is that all features are conditionally independent given the class. This is rarely true in reality, but the algorithm works well in practice anyway.",
+      wrong: {
+        0: "Incorrect. Naive Bayes handles complex real-world data (like text classification) very well. 'Naive' refers specifically to the independence assumption, not simplicity of use.",
+        1: "Incorrect. Choosing k upfront is a property of k-Means Clustering, not Naive Bayes. Naive Bayes doesn't cluster — it classifies.",
+        3: "Incorrect. Naive Bayes is deterministic given the training data — random initialization is a property of k-Means, not Naive Bayes."
+      }
+    },
+    q3: {
+      correct: "Correct. Random Forest uses bagging: each tree trains on a random subset of data and a random subset of features. Their diversity makes errors cancel out when you combine votes.",
+      wrong: {
+        0: "Incorrect. Sequential correction of errors is Boosting (used by GBDT), not Bagging. Random Forest uses Bagging — all trees train independently and in parallel.",
+        1: "Incorrect. The kernel trick is specific to SVM, not Random Forest. Random Forest uses only standard decision tree splits.",
+        3: "Incorrect. Random Forest doesn't artificially limit tree depth — each tree is grown deep on its data subset. The diversity from random subsets is what controls overfitting, not depth limits."
+      }
+    },
+    q4: {
+      correct: "Correct. k-Means requires you to choose k before training. Hierarchical Clustering builds a complete dendrogram — you choose how many clusters by where you 'cut' the tree afterward.",
+      wrong: {
+        0: "Incorrect. Both k-Means and Hierarchical Clustering are unsupervised — neither uses labels. The difference is in how you specify the number of clusters.",
+        2: "Incorrect. Both algorithms work on numeric data. Neither is restricted to text. The key difference is whether you must specify k before vs. after building the model.",
+        3: "Incorrect. The opposite is true. Hierarchical Clustering is computationally expensive and doesn't scale well to very large datasets. k-Means is much faster for large data."
+      }
+    }
+  };
+
+  let score = 0;
+  let answered = {};
+
+  function answer(btn, qid, correct) {
+    if (answered[qid]) return;
+    answered[qid] = true;
+    const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-option');
+    opts.forEach(o => o.disabled = true);
+    const fb = document.getElementById(qid + '-feedback');
+    const idx = Array.from(opts).indexOf(btn);
+    if (correct) {
+      btn.classList.add('correct');
+      fb.textContent = feedback[qid].correct;
+      fb.className = 'quiz-feedback correct';
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      fb.textContent = feedback[qid].wrong[idx];
+      fb.className = 'quiz-feedback wrong';
+      // highlight correct
+      opts.forEach(o => {
+        if (o.onclick.toString().includes('true')) o.classList.add('correct');
+      });
+    }
+    const nxt = btn.closest('.quiz').querySelector('.quiz-next');
+    nxt.style.display = 'inline-block';
+  }
+
+  function show(id) {
+    document.getElementById(id).style.display = 'block';
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showDone() {
+    const box = document.getElementById('done-box');
+    box.style.display = 'block';
+    const msgs = ['Keep reviewing — this is a lot of algorithms!', 'Good progress — review the ones you missed.', 'Solid — almost there!', 'Great work — you know your algorithms!', 'Perfect score — you\'re ready for the exam!'];
+    document.getElementById('done-score').textContent = `You got ${score} out of 4 correct. ${msgs[score]}`;
+    box.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</div>
+</body>
+</html>
