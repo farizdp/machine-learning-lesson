@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 01 — What is AI?</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 3%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 01 · Lesson 1 of 4 &nbsp;|&nbsp; AI Overview</div>
+    <h1>What Is AI — and Where Did It Come From?</h1>
+    <p class="subtitle">The big picture before the details. By the end, you'll be able to explain AI, Machine Learning, and Deep Learning in plain English.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1 ───────────── -->
+  <h2>1. What Is Intelligence?</h2>
+
+  <p>Before we can define <strong>Artificial Intelligence</strong>, we need to agree on what <em>intelligence</em> means. This turns out to be surprisingly tricky — even scientists debate it.</p>
+
+  <p>A working definition that most people accept:</p>
+
+  <div class="callout tip">
+    <div class="callout-title">Definition</div>
+    <strong>Intelligence</strong> is the ability to <em>acquire knowledge</em>, <em>reason</em> with it, and use it to <em>adapt</em> to new situations in order to achieve goals.
+  </div>
+
+  <p>Think about what you do when you learn a new game. You pick up the rules (acquire knowledge), figure out strategies (reason), and adjust when things don't go as planned (adapt). That's intelligence in action.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    A chess player is intelligent not because they memorize every possible game (impossible — there are more chess games than atoms in the universe), but because they <em>learn patterns</em> and apply them to <em>new positions they've never seen before</em>.
+  </div>
+
+  <!-- ───────────── SECTION 2 ───────────── -->
+  <h2>2. What Is Artificial Intelligence?</h2>
+
+  <p>Now that we have intelligence defined, <strong>Artificial Intelligence (AI)</strong> is simply:</p>
+
+  <div class="callout tip">
+    <div class="callout-title">Definition</div>
+    <strong>AI</strong> is the simulation of human intelligence by machines — especially computers — so that they can perform tasks that normally require human intelligence.
+  </div>
+
+  <p>These tasks include things like: recognizing your face in a photo, understanding spoken words, translating text, playing games, or diagnosing diseases from medical scans.</p>
+
+  <p>The core idea is this: instead of programming a machine with a list of explicit rules, we try to give it the <em>ability to learn</em>.</p>
+
+  <!-- ───────────── SECTION 3 ───────────── -->
+  <h2>3. The Relationship: AI → Machine Learning → Deep Learning</h2>
+
+  <p>This is one of the most commonly tested concepts. Think of three nested circles:</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 400 260" width="360" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+      <!-- AI (outermost) -->
+      <ellipse cx="200" cy="130" rx="190" ry="115" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <!-- ML (middle) -->
+      <ellipse cx="200" cy="145" rx="130" ry="80" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+      <!-- DL (innermost) -->
+      <ellipse cx="200" cy="158" rx="70" ry="45" fill="#93c5fd" stroke="#1e40af" stroke-width="2"/>
+
+      <!-- Labels -->
+      <text x="200" y="42" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1e3a8a" font-weight="600">Artificial Intelligence (AI)</text>
+      <text x="200" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e3a8a">Simulating human intelligence</text>
+
+      <text x="200" y="110" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1e3a8a" font-weight="600">Machine Learning (ML)</text>
+      <text x="200" y="127" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Learning from data</text>
+
+      <text x="200" y="155" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Deep Learning (DL)</text>
+      <text x="200" y="170" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1e3a8a">Neural networks</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.5rem">AI ⊃ Machine Learning ⊃ Deep Learning</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🧠 Artificial Intelligence (AI)</div>
+      The broad field of making machines smart. Any technique that lets a computer do something that seems intelligent. The biggest circle.
+    </div>
+    <div class="def-item">
+      <div class="def-term">📊 Machine Learning (ML)</div>
+      A <em>subset</em> of AI. Instead of writing explicit rules, we give the machine <em>data</em> and let it find the rules itself. The machine "learns" from examples.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🔮 Deep Learning (DL)</div>
+      A <em>subset</em> of ML. Uses structures called <em>neural networks</em> (inspired loosely by the brain) that have many layers. This is what powers image recognition, ChatGPT, etc.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Remember the containment order: <strong>AI ⊃ ML ⊃ DL</strong>. All Deep Learning is Machine Learning, and all Machine Learning is AI — but not the other way around. Exam questions often test this direction.
+  </div>
+
+  <!-- ───────────── SECTION 4 ───────────── -->
+  <h2>4. The Three Schools of AI Thought</h2>
+
+  <p>Historically, researchers have disagreed on <em>how</em> to make machines intelligent. Three major "schools" emerged:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🔣 Symbolism (Symbolic AI)</div>
+      Believes intelligence is about <em>symbols and logic</em>. Write down rules, facts, and logical relationships. Let the machine reason with them. Think: expert systems that encode a doctor's rules as "IF symptom X AND symptom Y THEN disease Z." <br><em>Strength:</em> Explainable. <em>Weakness:</em> Can't handle ambiguity or things you forgot to write rules for.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🕸 Connectionism</div>
+      Believes intelligence comes from <em>connections between many simple units</em> (like neurons). This is the basis of neural networks and deep learning — the dominant approach today. <br><em>Strength:</em> Learns from raw data without hand-crafted rules. <em>Weakness:</em> Hard to interpret why it made a decision.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🎮 Behaviorism</div>
+      Believes intelligence is about <em>behavior and interaction with the environment</em>. Reward good behavior, penalize bad. This is the basis of <em>Reinforcement Learning</em> (e.g., AlphaGo). <br><em>Strength:</em> Can discover superhuman strategies. <em>Weakness:</em> Needs enormous trial-and-error experience.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know all three schools by name and their core idea: <strong>Symbolism = rules & logic</strong>, <strong>Connectionism = neural networks</strong>, <strong>Behaviorism = reward-based learning</strong>.
+  </div>
+
+  <!-- ───────────── SECTION 5 ───────────── -->
+  <h2>5. Three Elements That Power AI Development</h2>
+
+  <p>Why did AI suddenly take off around 2012? Three things came together at once:</p>
+
+  <div class="diagram" style="text-align:left; padding: 1.5rem 2rem;">
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; font-family:sans-serif;">
+      <div style="flex:1; min-width:150px; background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:1rem; text-align:center;">
+        <div style="font-size:2rem">📦</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#15803d">Data</div>
+        <div style="font-size:0.8rem; color:#166534">The internet, smartphones, and sensors generated billions of labelled examples for AI to learn from.</div>
+      </div>
+      <div style="flex:1; min-width:150px; background:#eff6ff; border:1.5px solid #2563eb; border-radius:8px; padding:1rem; text-align:center;">
+        <div style="font-size:2rem">⚡</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#1d4ed8">Computing Power</div>
+        <div style="font-size:0.8rem; color:#1e3a8a">GPUs (and later AI chips like Huawei's Ascend) made training large neural networks affordable.</div>
+      </div>
+      <div style="flex:1; min-width:150px; background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:1rem; text-align:center;">
+        <div style="font-size:2rem">🧮</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#92400e">Algorithms</div>
+        <div style="font-size:0.8rem; color:#78350f">Breakthroughs in backpropagation, CNNs, attention, and transformers gave AI the right techniques.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The three elements are: <strong>Data, Computing Power, Algorithms</strong>. Memorize this triad — it appears frequently.
+  </div>
+
+  <!-- ───────────── SECTION 6 ───────────── -->
+  <h2>6. Weak AI vs. Strong AI</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🔵 Weak AI (Narrow AI)</div>
+      Can do <em>one specific thing</em> very well — but only that thing. Example: a chess-playing AI can't write poetry. A face-recognition system can't drive a car. <strong>Everything that exists today is Weak AI.</strong>
+    </div>
+    <div class="def-item">
+      <div class="def-term">🔴 Strong AI (Artificial General Intelligence — AGI)</div>
+      Can do <em>anything a human can do</em> — reason, plan, understand, learn across domains. <strong>This does not exist yet.</strong> It is the long-term goal of the field.
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">Quick check</div>
+    Is ChatGPT Weak AI or Strong AI? — It's <strong>Weak AI</strong>. It's extraordinarily capable at language tasks, but it can't drive a car, see the physical world, or act in it like a general-purpose agent.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+  <p>Answer these before moving on. Take your time — no peeking!</p>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 4</div>
+    <div class="quiz-question">Which of the following is the correct containment relationship?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">ML ⊃ DL ⊃ AI (ML is the biggest)</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">DL ⊃ ML ⊃ AI (DL is the biggest)</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">AI ⊃ ML ⊃ DL (AI is the biggest)</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">They are three separate fields with no overlap</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 4</div>
+    <div class="quiz-question">An AI system that defeats the world champion at Go but cannot write a single sentence of text is an example of…</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Strong AI (AGI)</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Weak AI (Narrow AI)</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Connectionism</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Symbolic AI</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 4</div>
+    <div class="quiz-question">A doctor's diagnostic system uses explicit rules: "IF fever > 38°C AND cough THEN likely flu." Which school of AI does this represent?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Behaviorism</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Connectionism</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Symbolism</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Reinforcement Learning</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 4</div>
+    <div class="quiz-question">Which three elements are credited with enabling the modern AI boom?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Rules, Logic, Symbols</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Data, Computing Power, Algorithms</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Neurons, Layers, Backpropagation</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Python, GPUs, the Internet</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Intelligence = acquire, reason, adapt</li>
+        <li>AI ⊃ ML ⊃ DL (containment hierarchy)</li>
+        <li>Three AI schools: Symbolism, Connectionism, Behaviorism</li>
+        <li>Three elements: Data, Computing Power, Algorithms</li>
+        <li>Weak AI (exists) vs. Strong AI (doesn't exist yet)</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready for the next lesson? <a href="0002-ai-technologies.html">Lesson 02 → AI Technologies & NLP/CV Overview</a></p>
+    </div>
+  </div>
+
+  <!-- ───────────── PRIMARY SOURCE ───────────── -->
+  <div class="source">
+    <strong>Primary source for this lesson:</strong>
+    <a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/" target="_blank">
+      A Visual Introduction to Machine Learning — R2D3
+    </a>
+    — Read this to see how machine learning actually works in a visual, animated format. It takes about 10 minutes.
+    <br><br>
+    <strong>Ask me anything</strong> about this lesson — I'm your teacher and I'm here to help. Type your question below.
+  </div>
+
+  <div class="lesson-nav">
+    <span style="color:#6b6b63">← Start of course</span>
+    <a href="0002-ai-technologies.html" class="nav-next">Next: AI Technologies →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! AI is the broadest field. ML is a subset of AI that uses data to learn. DL is a subset of ML that uses neural networks. Think of them as nested circles: AI ⊃ ML ⊃ DL.",
+    wrong:   "Not quite. Remember: AI is the BIGGEST circle, containing everything. ML is inside AI, and DL is inside ML. The order is AI ⊃ ML ⊃ DL."
+  },
+  q2: {
+    correct: "Correct! It can only play Go — nothing else. That makes it Narrow (Weak) AI, no matter how superhuman its performance in that one domain.",
+    wrong:   "Not quite. Strong AI (AGI) doesn't exist yet and would need to handle ANY task. This system only does one thing, so it's Weak (Narrow) AI."
+  },
+  q3: {
+    correct: "Correct! Writing out explicit IF-THEN rules is the hallmark of Symbolism (also called rule-based or expert systems). The machine doesn't learn — it follows the rules you wrote.",
+    wrong:   "Not quite. The key clue is the explicit IF-THEN rule. When a human writes out all the rules manually, that's Symbolism. Connectionism uses neural networks to learn rules automatically from data."
+  },
+  q4: {
+    correct: "Correct! Data (training examples), Computing Power (GPUs/AI chips), and Algorithms (techniques like backprop, attention) are the three pillars of modern AI.",
+    wrong:   "Not quite. The three standard elements cited in AI literature are: Data, Computing Power, and Algorithms. These three came together around 2012 and triggered the current AI era."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

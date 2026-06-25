@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 03 — DeepSeek, AI Applications & Huawei PanGu</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 10%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 01 · Lesson 3 of 4 &nbsp;|&nbsp; AI Overview</div>
+    <h1>DeepSeek, AI Applications & Huawei's PanGu</h1>
+    <p class="subtitle">Real-world AI in action — and the debates around it. This lesson finishes Chapter 01.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: DeepSeek ───────────── -->
+  <h2>1. DeepSeek — Why It Matters</h2>
+
+  <p><strong>DeepSeek</strong> is a Chinese AI company (founded 2023, part of the hedge fund High-Flyer) that released a series of large language models — most notably <strong>DeepSeek-R1</strong> — that stunned the AI world in early 2025.</p>
+
+  <p>Why the shock? Because DeepSeek achieved performance comparable to top US models (like GPT-4) at a <em>fraction of the cost</em> — reportedly trained for under $6 million, while comparable US models cost hundreds of millions.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">What Makes DeepSeek Special</div>
+      <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
+        <li><strong>Efficiency:</strong> Used a <em>Mixture of Experts (MoE)</em> architecture — only activates a small portion of the model per query, saving compute</li>
+        <li><strong>Reinforcement Learning:</strong> Used RL to teach the model to reason step-by-step without expensive human labelling</li>
+        <li><strong>Open weights:</strong> Released the model weights publicly, enabling anyone to run it locally</li>
+        <li><strong>Cost:</strong> Dramatically cheaper to train than equivalent Western models</li>
+      </ul>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Influence on AI Development</div>
+      <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
+        <li>Proved that <em>efficiency</em> matters as much as raw compute — the "bigger is always better" assumption was challenged</li>
+        <li>Accelerated open-source AI — more developers could now run capable models without expensive cloud services</li>
+        <li>Increased global competition in AI, pushing US labs to reconsider their approaches</li>
+        <li>Demonstrated that non-US companies could reach the AI frontier with smart engineering</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know: DeepSeek is significant because it achieved frontier performance at dramatically lower cost using <strong>efficiency innovations (MoE + RL)</strong>, not just brute-force compute. It influenced future AI by showing efficiency is a viable alternative to scale.
+  </div>
+
+  <!-- ───────────── SECTION 2: AI Application History ───────────── -->
+  <h2>2. AI Application History — From Perceiving to Creating</h2>
+
+  <p>AI applications have evolved through distinct eras. Understanding this arc helps you see <em>where we are now</em> and why Foundation Models are such a big deal:</p>
+
+  <div class="diagram" style="text-align:left; padding:1.5rem">
+    <div style="font-family:sans-serif; font-size:0.875rem; display:flex; flex-direction:column; gap:0.6rem">
+
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#e0f2fe; border:1.5px solid #0284c7; border-radius:6px; padding:0.5rem 0.8rem; min-width:90px; text-align:center; font-weight:700; color:#075985">Era 1</div>
+        <div>
+          <strong>Perception</strong> — AI learns to sense the world<br>
+          <span style="color:#6b6b63; font-size:0.8rem">Image recognition, speech-to-text, object detection. AI can see and hear.</span>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#d1fae5; border:1.5px solid #059669; border-radius:6px; padding:0.5rem 0.8rem; min-width:90px; text-align:center; font-weight:700; color:#065f46">Era 2</div>
+        <div>
+          <strong>Understanding</strong> — AI learns to interpret meaning<br>
+          <span style="color:#6b6b63; font-size:0.8rem">Sentiment analysis, translation, question answering. AI can read and understand.</span>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:1rem">
+        <div style="background:#fce7f3; border:1.5px solid #db2777; border-radius:6px; padding:0.5rem 0.8rem; min-width:90px; text-align:center; font-weight:700; color:#9d174d">Era 3 ★</div>
+        <div>
+          <strong>Creation & Generation</strong> — AI creates new things<br>
+          <span style="color:#6b6b63; font-size:0.8rem">ChatGPT, DALL-E, code generation, music. AI can write, paint, and code. <strong>We are here.</strong></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <p><strong>ChatGPT</strong> (launched Nov 2022) was the inflection point — the first AI product to demonstrate generation at scale to a mass audience. It reached 100 million users in 2 months, faster than any product in history. Other systems followed: Gemini, Claude, Copilot, Mistral, Qwen, and more.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the three phases: <strong>Perception → Understanding → Creation/Generation</strong>. Know that ChatGPT was the landmark application that made Generation-era AI mainstream.
+  </div>
+
+  <!-- ───────────── SECTION 3: AI Application Cases ───────────── -->
+  <h2>3. Real-World AI Application Cases</h2>
+
+  <p>The exam may test your awareness of how AI is applied in specific industries. Two cases worth knowing:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">⛏ Intelligent Mining</div>
+      AI is used in mining to monitor equipment health, predict failures before they happen, detect hazards, and optimize excavation routes. This reduces accidents and increases efficiency in environments too dangerous for constant human presence.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🦉 AI Helps Protect Nature (Shield of Sound — Greece)</div>
+      Microphones placed in nature parks record audio. AI models identify animal calls — including endangered species and poachers' equipment — in real time. Rangers are alerted to illegal activity and rare animal sightings without needing to patrol vast areas constantly.
+    </div>
+  </div>
+
+  <p>More broadly, AI powers <strong>AI-Powered Production</strong> — factories where AI monitors production lines, detects defects automatically, and adjusts processes in real time without human intervention.</p>
+
+  <!-- ───────────── SECTION 4: PanGu ───────────── -->
+  <h2>4. AI for Industries: Huawei's PanGu Model</h2>
+
+  <p>This section is <strong>heavily exam-weighted</strong> for Huawei certification. PanGu is Huawei's family of Foundation Models designed specifically for industry use.</p>
+
+  <h3>The Three-Layer Foundation Model Hierarchy</h3>
+
+  <p>PanGu introduced a three-tier structure that shows how a general model can be specialized step-by-step for real industry use:</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 400 200" width="380" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tier 1: Basic Model -->
+      <rect x="20" y="10" width="360" height="55" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="200" y="33" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">① Basic Model (LLM)</text>
+      <text x="200" y="52" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">General-purpose large language model — e.g. PanGu NL Model</text>
+      <!-- arrow -->
+      <text x="200" y="82" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#6b6b63">↓ industry fine-tuning</text>
+      <!-- Tier 2: Industry Model -->
+      <rect x="60" y="90" width="280" height="55" rx="6" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+      <text x="200" y="113" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">② Industry Model (Dialog)</text>
+      <text x="200" y="132" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Specialized for an industry — e.g. PanGu Government Model</text>
+      <!-- arrow -->
+      <text x="200" y="160" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#6b6b63">↓ scenario fine-tuning</text>
+      <!-- Tier 3: Scenario Model -->
+      <rect x="110" y="168" width="180" height="28" rx="6" fill="#93c5fd" stroke="#1e40af" stroke-width="2"/>
+      <text x="200" y="187" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">③ Scenario Model (Chatbot)</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.5rem">Basic → Industry → Scenario: each layer is more specialized</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">① Basic Model — PanGu Natural Language Model</div>
+      A massive general-purpose LLM trained on broad data. It has no industry specialization yet — it just has strong language understanding and generation ability. Think of it as the "raw intelligence."
+    </div>
+    <div class="def-item">
+      <div class="def-term">② Industry Model — PanGu Government Model</div>
+      The basic model is fine-tuned on government-specific data: laws, regulations, official documents, administrative processes. Now it understands government workflows, terminology, and compliance requirements. But it's still quite general within that industry.
+    </div>
+    <div class="def-item">
+      <div class="def-term">③ Scenario Model — Smart Government Chatbot</div>
+      The industry model is further tuned for a specific task: answering citizens' questions about government services. It knows exactly what documents you need to apply for a permit, what the processing time is, where to go — highly specific, highly practical.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Memorize the three tiers: <strong>Basic Model (LLM) → Industry Model (Dialog) → Scenario Model (Intelligent Chatbot)</strong>. Know the government example: PanGu NL Model → PanGu Government Model → Smart Government Chatbot. The direction is always: general → specialized.
+  </div>
+
+  <p>PanGu models are deployed across many sectors: industrial manufacturing, device inspection, process prediction, smart cities, marketing, legal knowledge, meeting assistance, film production, and public sector services.</p>
+
+  <!-- ───────────── SECTION 5: Huawei AI Solutions ───────────── -->
+  <h2>5. Huawei's AI Solutions: Ascend & ModelArts</h2>
+
+  <p>PanGu runs on Huawei's AI infrastructure. Know these four components:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🔲 Ascend AI Processors</div>
+      Huawei's custom AI chips — the hardware equivalent of NVIDIA's GPUs, but designed specifically for AI workloads. They enable large-scale intelligent computing. The Ascend series is Huawei's answer to GPU dependence.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🏗 Ascend AI Basic Software and Hardware Platform</div>
+      The full stack of hardware + software (drivers, compilers, runtime) that makes the Ascend chips useful. Software alone or hardware alone is not enough — you need the full platform.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🚀 Ascend AI Enables Innovative Foundation Models</div>
+      The Ascend platform is what powers PanGu and other large Huawei foundation models at scale. It's the "engine room" for Huawei AI.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🛠 ModelArts</div>
+      Huawei's one-stop AI development platform. It covers the full AI lifecycle: data labelling → model training → model deployment. It's built on top of Ascend chips and is designed for both beginners and experts. Think of it as Huawei's equivalent of AWS SageMaker or Google Vertex AI.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know: <strong>Ascend = AI chips (hardware)</strong>. <strong>ModelArts = full-lifecycle AI development platform (software)</strong>. ModelArts uses Ascend chips under the hood. This stack is Huawei's proprietary alternative to GPU-based cloud AI.
+  </div>
+
+  <!-- ───────────── SECTION 6: Debates & Future ───────────── -->
+  <h2>6. Debates and the Future of AI</h2>
+
+  <p>The exam may ask about the ethical debates and future directions of AI. Know these key tensions:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">👁 Is Seeing Still Believing?</div>
+      AI can generate realistic fake photos, videos (deepfakes), and audio. This breaks the assumption that visual evidence is trustworthy. Courts, journalism, and social media all face new challenges in verifying authenticity.
+    </div>
+    <div class="def-item">
+      <div class="def-term">⚖️ Ethical Issues in AI</div>
+      AI systems can amplify human bias (training data reflects historical inequalities), make life-affecting decisions (loan approval, parole, hiring) without human review, and lack accountability when things go wrong.
+    </div>
+    <div class="def-item">
+      <div class="def-term">💼 Will You Lose Your Job?</div>
+      AI automates routine cognitive tasks (data entry, basic analysis, code scaffolding). Jobs most at risk: repetitive, rule-based roles. Jobs least at risk (for now): those requiring physical dexterity, deep human relationships, and novel creative thinking. The consensus: AI changes jobs more than it eliminates them — but transitions can be painful.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🔒 Privacy & Data Security</div>
+      AI models are trained on vast amounts of data — some of which may have been collected without consent. Models can also memorize and leak private information. Regulations like GDPR attempt to address this.
+    </div>
+  </div>
+
+  <h3>The Future of AI</h3>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">📈 Value Dimension</div>
+      Wide application across industries, growing AI market, higher production efficiency. AI is projected to add trillions in economic value globally over the coming decade.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🧬 Technology: AGI</div>
+      <strong>Artificial General Intelligence</strong> — AI that can do anything a human can. The long-term moonshot. No timeline consensus; some researchers say decades away, some say never in current form.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🤖 Technology: Embodied AI</div>
+      AI that has a physical body and interacts with the physical world — robots that can see, move, and manipulate objects. This combines CV, NLP, motor control, and real-time decision-making. Examples: humanoid robots (Figure, Optimus), warehouse robots.
+    </div>
+    <div class="def-item">
+      <div class="def-term">📱 AI Devices</div>
+      AI running on end-user devices (phones, laptops, AR glasses) rather than in the cloud. Enables offline AI, lower latency, and better privacy. Huawei's Mate series and Apple's on-device AI features are examples.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the two future technology directions: <strong>AGI</strong> (general-purpose intelligence, doesn't exist yet) and <strong>Embodied AI</strong> (AI with a physical body that acts in the real world). These are distinct from each other.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">In Huawei's PanGu model hierarchy, which comes SECOND — after the basic model but before the scenario model?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">The Intelligent Chatbot</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">The Industry Model</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">The Ascend AI Processor</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">The Foundation LLM</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Which of the following best describes DeepSeek's key contribution to AI development?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It was the first AI to pass the Turing Test</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It invented the Transformer architecture</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">It achieved frontier AI performance at dramatically lower cost through efficiency innovations</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It created the first AI chip specifically for large language models</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">A humanoid robot that can see, walk, pick up objects, and respond to spoken instructions is an example of which future AI direction?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Artificial General Intelligence (AGI)</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">AI Devices</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Embodied AI</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Weak AI</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">What is Huawei ModelArts?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Huawei's AI chip, equivalent to an NVIDIA GPU</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The name of Huawei's large language model</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">A full-lifecycle AI development platform from data labelling to model deployment</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">An open-source deep learning framework like PyTorch</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">Which era of AI development are we currently in, according to the Perception → Understanding → Creation progression?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Perception — AI is still learning to see and hear</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Understanding — AI can now interpret meaning</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Creation & Generation — AI can now generate text, images, and code</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Embodiment — AI now has physical bodies</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Chapter 01 Complete!</div>
+      <strong>You've finished the entire AI Overview chapter. Key things locked in:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>DeepSeek: efficiency innovation, MoE + RL, frontier performance at low cost</li>
+        <li>AI eras: Perception → Understanding → Creation (we're in Creation now)</li>
+        <li>PanGu hierarchy: Basic LLM → Industry Model → Scenario Model</li>
+        <li>Ascend = hardware (AI chips); ModelArts = software platform (full lifecycle)</li>
+        <li>Future: AGI (general intelligence) and Embodied AI (AI with a body)</li>
+      </ul>
+      <p style="margin-top:0.75rem">Next up: <a href="0004-ml-overview.html">Lesson 04 → Chapter 02: Machine Learning Overview</a> — what ML actually is and how it works.</p>
+    </div>
+  </div>
+
+  <!-- ───────────── SOURCE ───────────── -->
+  <div class="source">
+    <strong>Primary source for this lesson:</strong>
+    <a href="https://www.deepseek.com/" target="_blank">DeepSeek official site</a> — read their model card and technical report for R1 to understand what efficiency innovations they made. ~10 min.
+    <br><br>
+    <strong>Questions about anything in this lesson?</strong> Ask me — I'm your teacher. Type in the chat.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0002-ai-technologies.html">← Lesson 02: AI Technologies</a>
+    <a href="0004-ml-overview.html" class="nav-next">Next: ML Overview →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! The hierarchy is: Basic Model (LLM) → Industry Model → Scenario Model. The Industry Model is the middle layer — it's the basic model fine-tuned for a specific sector like government, healthcare, or finance.",
+    wrong:   "Not quite. The three tiers in order are: ① Basic Model (LLM) → ② Industry Model → ③ Scenario Model (Chatbot). The Industry Model sits in the middle — more specialized than the basic model but less specific than a scenario chatbot."
+  },
+  q2: {
+    correct: "Correct! DeepSeek's key achievement was demonstrating that you don't need hundreds of millions of dollars and enormous compute to reach the AI frontier — smart architecture choices (MoE) and training techniques (RL) can get you there more efficiently.",
+    wrong:   "Not quite. DeepSeek did not invent Transformers (Google did, in 2017), did not pass the Turing Test, and did not create AI chips. Its contribution was achieving top-tier model performance at dramatically lower training cost through efficiency innovations."
+  },
+  q3: {
+    correct: "Correct! Embodied AI specifically means AI that exists in and interacts with the physical world through a body — perception, movement, manipulation. AGI is about general intelligence (not necessarily physical), and AI Devices are AI running on consumer hardware.",
+    wrong:   "Not quite. Embodied AI is the term for AI that has a physical form and acts in the real world — it's not just smart (AGI), it can also move and manipulate objects. A robot that walks, sees, and picks things up is the textbook example."
+  },
+  q4: {
+    correct: "Correct! ModelArts is Huawei's end-to-end AI development platform — it covers everything from data preparation and labelling through to model training, evaluation, and deployment. The AI chips underneath it are called Ascend.",
+    wrong:   "Not quite. Ascend is the chip (hardware). ModelArts is the software platform that runs on top — it's a one-stop service for the full AI development lifecycle, from data to deployment. Think: ModelArts is the workshop, Ascend is the engine."
+  },
+  q5: {
+    correct: "Correct! ChatGPT (Nov 2022) marked the shift into the Creation & Generation era — AI that can write essays, generate images, compose music, and write code. The previous eras (Perception, Understanding) haven't disappeared, but Generation is the current frontier.",
+    wrong:   "Not quite. We've already moved through Perception and Understanding. The current era — kicked off by ChatGPT and generative models — is Creation & Generation, where AI produces new content rather than just sensing or interpreting existing content."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

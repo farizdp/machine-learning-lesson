@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 04 — Machine Learning Overview</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 14%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 02 · Lesson 4 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <h1>What Is Machine Learning — and What Can It Solve?</h1>
+    <p class="subtitle">The four types of ML, three problem categories, and why ML beats writing rules by hand.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1 ───────────── -->
+  <h2>1. ML vs. Traditional Rule-Based Programming</h2>
+
+  <p>Before ML existed, programmers solved problems by writing explicit rules. Let's see why that falls short — and what ML does differently.</p>
+
+  <div class="diagram" style="text-align:left; padding:1.5rem">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-family:sans-serif; font-size:0.875rem;">
+      <div style="background:#fef3c7; border:1.5px solid #d97706; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#92400e; margin-bottom:0.5rem">🔧 Traditional Rule-Based</div>
+        <div style="color:#451a03">
+          <strong>Input:</strong> Data + Hand-written Rules<br>
+          <strong>Output:</strong> Answers<br><br>
+          A human expert studies the problem, writes IF-THEN rules, and programs them in. The machine just follows those rules.
+          <br><br>
+          <em>Works great when:</em> rules are simple and don't change.
+          <br><em>Breaks when:</em> rules are too complex or unknown (e.g. "what does a cat look like?").
+        </div>
+      </div>
+      <div style="background:#d1fae5; border:1.5px solid #059669; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#065f46; margin-bottom:0.5rem">🧠 Machine Learning</div>
+        <div style="color:#022c22">
+          <strong>Input:</strong> Data + Answers<br>
+          <strong>Output:</strong> Rules (learned automatically)<br><br>
+          You give the machine examples of inputs and correct outputs. It figures out the rules itself.
+          <br><br>
+          <em>Works great when:</em> you have lots of data but can't write the rules.
+          <br><em>Breaks when:</em> data is scarce, low quality, or biased.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Teaching a child to recognize dogs. <br>
+    <strong>Rule-based:</strong> "A dog has four legs, fur, a snout, a tail, ears…" — but a cat also fits! Rules can't capture everything. <br>
+    <strong>ML:</strong> Show the child 1,000 photos labelled "dog" and "not dog." They learn what a dog looks like without you ever defining it explicitly.
+  </div>
+
+  <h3>When Should You Use Machine Learning?</h3>
+  <p>ML is the right tool when <strong>at least one</strong> of these is true:</p>
+  <ul>
+    <li>The problem is too complex to write rules for (face recognition, spam filtering)</li>
+    <li>The rules change constantly and a human can't keep up (stock prices, fraud patterns)</li>
+    <li>You need to personalize for millions of users at once (recommendations, search ranking)</li>
+    <li>You want to discover patterns humans haven't thought to look for (drug discovery, anomaly detection)</li>
+  </ul>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the key difference: Traditional programming = <strong>Data + Rules → Answers</strong>. Machine Learning = <strong>Data + Answers → Rules</strong>. The direction of "rules" is flipped.
+  </div>
+
+  <!-- ───────────── SECTION 2 ───────────── -->
+  <h2>2. Three Main Problems ML Solves</h2>
+
+  <p>Almost every ML application falls into one of three categories. Learn to recognize them from a problem description.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">📂 Classification — "Which category does this belong to?"</div>
+      The output is a <em>discrete label</em> from a fixed set of categories.<br><br>
+      <strong>Examples:</strong>
+      <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
+        <li>Email → spam or not spam (2 categories)</li>
+        <li>Photo → cat, dog, or bird (3 categories)</li>
+        <li>Transaction → fraudulent or legitimate</li>
+        <li>Tumour → malignant or benign</li>
+      </ul>
+    </div>
+    <div class="def-item">
+      <div class="def-term">📈 Regression — "What number will this be?"</div>
+      The output is a <em>continuous numeric value</em>.<br><br>
+      <strong>Examples:</strong>
+      <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
+        <li>House → predicted sale price ($342,000)</li>
+        <li>Tomorrow → predicted temperature (23.5°C)</li>
+        <li>Ad → predicted click-through rate (3.7%)</li>
+        <li>Patient → predicted hospital stay (4.2 days)</li>
+      </ul>
+    </div>
+    <div class="def-item">
+      <div class="def-term">🔵 Clustering — "Which things are similar to each other?"</div>
+      There are <em>no labels</em> — the machine discovers natural groupings in the data.<br><br>
+      <strong>Examples:</strong>
+      <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
+        <li>Customers → group by purchasing behaviour (without pre-defined segments)</li>
+        <li>News articles → group by topic automatically</li>
+        <li>Genes → group by expression pattern</li>
+        <li>Documents → group by language or subject</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The key distinguisher: <strong>Classification</strong> → discrete label (one of a fixed set). <strong>Regression</strong> → continuous number. <strong>Clustering</strong> → no labels, discover groups. A common trick question: "predict tomorrow's temperature" is regression, not classification, because the answer is a number on a continuous scale.
+  </div>
+
+  <!-- ───────────── SECTION 3 ───────────── -->
+  <h2>3. Four Types of Machine Learning</h2>
+
+  <p>ML algorithms are classified by <em>how they learn</em> — specifically, what kind of feedback they get during training.</p>
+
+  <!-- Supervised -->
+  <h3>① Supervised Learning</h3>
+  <p>The training data is <strong>labelled</strong> — every input comes with the correct answer. The model learns by comparing its predictions to the known correct answers.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    A student learning from a textbook with an answer key. Every practice problem has a correct answer — the student checks their work and corrects their mistakes.
+  </div>
+
+  <p><strong>Used for:</strong> Classification and Regression tasks (when you have labelled data).</p>
+  <p><strong>Examples:</strong> Spam detection, house price prediction, image classification, medical diagnosis.</p>
+
+  <!-- Unsupervised -->
+  <h3>② Unsupervised Learning</h3>
+  <p>The training data is <strong>unlabelled</strong> — no correct answers given. The model must find its own structure in the data.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Sorting a pile of foreign coins you've never seen before. Nobody tells you the categories — you group them yourself by size, colour, and markings. You might make 3 groups or 5; there's no single "correct" answer.
+  </div>
+
+  <p><strong>Used for:</strong> Clustering, dimensionality reduction, anomaly detection.</p>
+  <p><strong>Examples:</strong> Customer segmentation, topic modelling, fraud anomaly detection, data compression.</p>
+
+  <!-- Semi-supervised -->
+  <h3>③ Semi-Supervised Learning</h3>
+  <p>Uses a <strong>small amount of labelled data</strong> plus a <strong>large amount of unlabelled data</strong>. The labelled data guides learning; the unlabelled data helps the model understand the structure.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    A student who has 10 solved examples and 1,000 unsolved ones. They use the 10 solved problems to understand the pattern, then apply it to make sense of the other 1,000.
+  </div>
+
+  <p><strong>Why it matters:</strong> Labelling data is expensive and slow (humans have to do it). In the real world, you often have millions of unlabelled data points but only thousands of labelled ones. Semi-supervised learning makes the most of both.</p>
+  <p><strong>Examples:</strong> Medical image analysis (few labelled scans, many unlabelled), web content classification, speech recognition.</p>
+
+  <!-- Reinforcement -->
+  <h3>④ Reinforcement Learning (RL)</h3>
+  <p>An <strong>agent</strong> takes actions in an <strong>environment</strong>, receives <strong>rewards</strong> for good actions and <strong>penalties</strong> for bad ones, and learns to maximise cumulative reward over time. There's no labelled dataset — only feedback from the environment.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Training a dog with treats. You don't explain the rules — you reward good behaviour and ignore or correct bad behaviour. Over many repetitions, the dog learns the optimal strategy.
+  </div>
+
+  <p><strong>Key terms:</strong></p>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Agent</div>The learner/decision-maker (e.g. the game-playing AI)
+    </div>
+    <div class="def-item">
+      <div class="def-term">Environment</div>The world the agent interacts with (e.g. the game board)
+    </div>
+    <div class="def-item">
+      <div class="def-term">Reward</div>A numerical signal indicating how good the last action was
+    </div>
+    <div class="def-item">
+      <div class="def-term">Policy</div>The strategy the agent follows — what action to take in each situation
+    </div>
+  </div>
+
+  <p><strong>Examples:</strong> AlphaGo (mastered Go), robot locomotion, game-playing agents (Atari, chess), recommendation systems, autonomous driving.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know all four types and their key traits:<br>
+    <strong>Supervised</strong> = labelled data, learns from correct answers<br>
+    <strong>Unsupervised</strong> = unlabelled data, finds structure itself<br>
+    <strong>Semi-supervised</strong> = small labelled + large unlabelled<br>
+    <strong>Reinforcement</strong> = agent + environment + reward signal (no dataset at all)
+  </div>
+
+  <!-- ───────────── COMPARISON TABLE ───────────── -->
+  <h2>4. Quick Comparison Table</h2>
+
+  <div class="diagram" style="text-align:left; padding:1rem 1.5rem">
+    <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:0.85rem;">
+      <thead>
+        <tr style="background:#dbeafe; color:#1e3a8a">
+          <th style="padding:0.6rem 0.8rem; text-align:left">Type</th>
+          <th style="padding:0.6rem 0.8rem; text-align:left">Training Data</th>
+          <th style="padding:0.6rem 0.8rem; text-align:left">Feedback Signal</th>
+          <th style="padding:0.6rem 0.8rem; text-align:left">Typical Problems</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.6rem 0.8rem; font-weight:700">Supervised</td>
+          <td style="padding:0.6rem 0.8rem">Labelled</td>
+          <td style="padding:0.6rem 0.8rem">Correct answers</td>
+          <td style="padding:0.6rem 0.8rem">Classification, Regression</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.6rem 0.8rem; font-weight:700">Unsupervised</td>
+          <td style="padding:0.6rem 0.8rem">Unlabelled</td>
+          <td style="padding:0.6rem 0.8rem">None — self-organised</td>
+          <td style="padding:0.6rem 0.8rem">Clustering, Compression</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.6rem 0.8rem; font-weight:700">Semi-supervised</td>
+          <td style="padding:0.6rem 0.8rem">Small labelled + large unlabelled</td>
+          <td style="padding:0.6rem 0.8rem">Partial correct answers</td>
+          <td style="padding:0.6rem 0.8rem">Classification (data-scarce)</td>
+        </tr>
+        <tr style="background:#fafaf8">
+          <td style="padding:0.6rem 0.8rem; font-weight:700">Reinforcement</td>
+          <td style="padding:0.6rem 0.8rem">No dataset — environment</td>
+          <td style="padding:0.6rem 0.8rem">Reward / penalty</td>
+          <td style="padding:0.6rem 0.8rem">Games, Robotics, Control</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A model is trained to predict the exact sale price of a house given its size, location, and age. What type of ML problem is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Classification</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Regression</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Clustering</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Reinforcement Learning</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">A company has 10 million customer transaction records with no labels. They want to discover natural segments of customer behaviour. Which ML type is most appropriate?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Reinforcement Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Semi-supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Unsupervised Learning</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">In traditional rule-based programming, what is the INPUT and what is the OUTPUT?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Input: Data + Answers → Output: Rules</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Input: Answers only → Output: Data and Rules</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Input: Data + Rules → Output: Answers</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Input: Rules only → Output: Data and Answers</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">AlphaGo learned to play Go by playing millions of games and receiving a win/loss signal. Which type of ML is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Unsupervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Semi-supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Reinforcement Learning</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">A hospital has 500 labelled MRI scans (tumour vs. healthy) and 50,000 unlabelled scans. Which ML type is designed exactly for this scenario?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Unsupervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Semi-supervised Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Reinforcement Learning</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>ML vs Rules: ML = Data + Answers → Rules (reversed from traditional programming)</li>
+        <li>3 problem types: Classification (label), Regression (number), Clustering (no labels)</li>
+        <li>Supervised: labelled data, learns correct answers</li>
+        <li>Unsupervised: unlabelled data, finds own structure</li>
+        <li>Semi-supervised: small labelled + large unlabelled</li>
+        <li>Reinforcement: agent + environment + reward signal</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready for the next step? <a href="0005-ml-process.html">Lesson 05 → The ML Process: From Raw Data to Deployed Model</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/" target="_blank">A Visual Introduction to Machine Learning — R2D3</a>
+    — If you haven't read this yet, do it now. It shows exactly how a decision tree learns from labelled data. ~10 min.
+    <br><br>
+    <strong>Got a question about any of this?</strong> Ask me — I'm here to help.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0003-deepseek-applications-pangu.html">← Lesson 03: DeepSeek & PanGu</a>
+    <a href="0005-ml-process.html" class="nav-next">Next: The ML Process →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Predicting a house price is Regression — the output is a continuous number ($342,500), not a category. If the question were 'is this house expensive or cheap?' that would be Classification.",
+    wrong:   "Not quite. When the output is a continuous number (like a price), that's Regression. Classification outputs a label from a fixed set of categories. Clustering doesn't use labelled data. RL uses a reward signal, not a price label."
+  },
+  q2: {
+    correct: "Correct! No labels + find natural groups = Unsupervised Learning. Clustering algorithms like k-Means are designed exactly for this: discover hidden structure in unlabelled data.",
+    wrong:   "Not quite. The key clues are: (1) no labels — so not Supervised. (2) discover natural segments — that's clustering, which is Unsupervised. Semi-supervised needs some labels. Reinforcement needs an environment to act in."
+  },
+  q3: {
+    correct: "Correct! Traditional programming takes Data (inputs) and Rules (the program) and produces Answers (outputs). ML flips this: you provide Data and Answers, and the model learns the Rules.",
+    wrong:   "Not quite. In traditional rule-based programming: you give the computer the DATA and the RULES, it gives you the ANSWERS. Machine Learning reverses this: you give DATA and ANSWERS, and it learns the RULES."
+  },
+  q4: {
+    correct: "Correct! AlphaGo used Reinforcement Learning. There's no labelled dataset of 'correct moves' — instead, the agent (AlphaGo) plays in an environment (the Go board) and receives a reward (win/loss) after each game. It learns by exploring and maximising that reward.",
+    wrong:   "Not quite. The giveaway is 'win/loss signal' — that's a reward. When an agent learns from interacting with an environment and receiving rewards or penalties, that's Reinforcement Learning. Supervised Learning would require labelled examples of correct moves."
+  },
+  q5: {
+    correct: "Correct! Semi-supervised Learning is designed precisely for this: a small pool of labelled data (500 scans) and a large pool of unlabelled data (50,000 scans). The model uses labels where available and learns structure from unlabelled data.",
+    wrong:   "Not quite. Pure Supervised Learning would ignore the 50,000 unlabelled scans. Pure Unsupervised ignores the 500 labels. Semi-supervised Learning is built for this exact situation: leverage both the small labelled set and the large unlabelled set."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

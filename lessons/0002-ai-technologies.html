@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 02 — AI Technologies: NLP, CV & Foundation Models</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 6%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 01 · Lesson 2 of 4 &nbsp;|&nbsp; AI Overview</div>
+    <h1>AI Technologies: NLP, Computer Vision & Foundation Models</h1>
+    <p class="subtitle">A map of what AI can actually do — the major technical fields you need to know for the exam.</p>
+  </header>
+
+  <!-- ───────────── INTRO ───────────── -->
+  <p>In the last lesson, you learned that AI is a broad field. But what does it actually <em>do</em>? In practice, AI research is divided into a handful of major technical directions. You need to know these — both their names and what they solve.</p>
+
+  <div class="callout tip">
+    <div class="callout-title">The Big Picture</div>
+    Think of AI as a toolbox. The toolbox has several compartments:
+    <strong>NLP</strong> (for language), <strong>Computer Vision</strong> (for images/video),
+    <strong>Speech Processing</strong> (for sound), <strong>Decision-making Systems</strong>,
+    and <strong>Big Data Analysis</strong>. Today we focus on the two most important for the exam: NLP and CV.
+  </div>
+
+  <!-- ───────────── SECTION 1 ───────────── -->
+  <h2>1. Natural Language Processing (NLP)</h2>
+
+  <p><strong>NLP</strong> is the branch of AI that deals with <em>human language</em> — text and speech. "Natural language" just means the language humans naturally speak and write (as opposed to programming languages).</p>
+
+  <p>NLP breaks down into four main task types:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">📂 Text Classification</div>
+      Assign a label to a piece of text. <br>
+      <em>Examples:</em> Is this email spam or not? Is this review positive or negative? What topic is this news article about?
+    </div>
+    <div class="def-item">
+      <div class="def-term">🏷 Sequence Labelling</div>
+      Tag <em>each word</em> in a sentence with a label. <br>
+      <em>Example:</em> In "Apple was founded by Steve Jobs in California" — tag "Apple" as <code>ORG</code>, "Steve Jobs" as <code>PERSON</code>, "California" as <code>LOCATION</code>. This is called <strong>Named Entity Recognition (NER)</strong>.
+    </div>
+    <div class="def-item">
+      <div class="def-term">✍️ Text Generation</div>
+      Produce new text given some input. <br>
+      <em>Examples:</em> Machine translation (English → Chinese), summarization, question answering, chatbots. <strong>ChatGPT is a text generation system.</strong>
+    </div>
+    <div class="def-item">
+      <div class="def-term">🕸 Knowledge Graph</div>
+      Build a structured map of facts and their relationships. <br>
+      <em>Example:</em> "Paris" → <em>is capital of</em> → "France" → <em>is in</em> → "Europe". Search engines use these to answer factual questions directly.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know all four NLP tasks: <strong>Text Classification, Sequence Labelling, Text Generation, Knowledge Graph</strong>. Know one real-world example for each.
+  </div>
+
+  <!-- ───────────── SECTION 2 ───────────── -->
+  <h2>2. Computer Vision (CV)</h2>
+
+  <p><strong>Computer Vision</strong> is the branch of AI that deals with <em>images and video</em> — giving machines the ability to "see" and interpret visual information.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🎯 Object Detection</div>
+      Find and locate objects in an image, drawing a box around each one. <br>
+      <em>Example:</em> A self-driving car detecting pedestrians, traffic lights, and other vehicles in real time.
+    </div>
+    <div class="def-item">
+      <div class="def-term">✂️ Image Segmentation</div>
+      Go beyond bounding boxes — colour every <em>pixel</em> according to what it belongs to. <br>
+      <em>Example:</em> In a medical scan, colour the tumour pixels red and healthy tissue blue so doctors can measure it precisely.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🎥 Object Tracking</div>
+      Follow a specific object across <em>multiple frames</em> of a video. <br>
+      <em>Example:</em> Tracking a footballer's movement across an entire match for performance analysis.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🔤 OCR (Optical Character Recognition)</div>
+      Read text from images. <br>
+      <em>Example:</em> Scanning a handwritten form and converting it to editable text; reading license plates from a camera.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🎨 Image Generation</div>
+      Create new images from scratch, or from a text description. <br>
+      <em>Example:</em> Stable Diffusion, DALL-E — type "a cat in a spacesuit" and get a realistic image.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know all five CV tasks: <strong>Object Detection, Image Segmentation, Object Tracking, OCR, Image Generation</strong>. The distinction between Object Detection (boxes around objects) and Image Segmentation (pixel-level labelling) is commonly tested.
+  </div>
+
+  <!-- ───────────── SECTION 3 ───────────── -->
+  <h2>3. Foundation Models — A Revolution in AI</h2>
+
+  <p>Until around 2020, most AI systems were <em>trained for one task</em>. An image classifier only classified images. A translation model only translated. Then something changed.</p>
+
+  <p><strong>Foundation Models</strong> are massive AI models trained on enormous amounts of diverse data, which can then be adapted to many different tasks. They are the basis of ChatGPT, DALL-E, and Huawei's PanGu.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Think of a Foundation Model like a university graduate with a broad education. They don't know everything about surgery, law, or engineering — but they have a <em>strong general foundation</em> that lets them be trained quickly for any of those specializations. Before Foundation Models, every AI was like someone who only ever studied one subject and couldn't switch.
+  </div>
+
+  <h3>Where Do Foundation Models Come From? The Transformer</h3>
+
+  <p>Foundation Models are built on an architecture called the <strong>Transformer</strong> (introduced by Google in 2017). The Transformer introduced the <strong>attention mechanism</strong> — a way for the model to figure out which parts of the input are most relevant to focus on. We'll cover this in detail in Chapter 03.</p>
+
+  <p>There are three flavours of Transformer architecture:</p>
+
+  <div class="diagram" style="text-align:left">
+    <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:0.875rem;">
+      <thead>
+        <tr style="background:#dbeafe; color:#1e3a8a">
+          <th style="padding:0.6rem 1rem; text-align:left; border-radius:4px 0 0 0">Type</th>
+          <th style="padding:0.6rem 1rem; text-align:left">What it does best</th>
+          <th style="padding:0.6rem 1rem; text-align:left; border-radius:0 4px 0 0">Example models</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.6rem 1rem; font-weight:700">Encoder-Only</td>
+          <td style="padding:0.6rem 1rem">Understanding text (classification, NER, search)</td>
+          <td style="padding:0.6rem 1rem; color:#6b6b63">BERT, RoBERTa</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.6rem 1rem; font-weight:700">Decoder-Only</td>
+          <td style="padding:0.6rem 1rem">Generating text (chat, code, completion)</td>
+          <td style="padding:0.6rem 1rem; color:#6b6b63">GPT-4, DeepSeek, LLaMA</td>
+        </tr>
+        <tr>
+          <td style="padding:0.6rem 1rem; font-weight:700">Encoder + Decoder</td>
+          <td style="padding:0.6rem 1rem">Transforming text (translation, summarization)</td>
+          <td style="padding:0.6rem 1rem; color:#6b6b63">T5, BART, original Transformer</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the three Transformer types and their use cases. Encoder-only = understanding. Decoder-only = generation. Both = transformation. BERT is Encoder-only; GPT is Decoder-only.
+  </div>
+
+  <h3>Emergence — The Surprise Property</h3>
+
+  <p>Something unexpected happens when you make Foundation Models <em>very large</em>: they develop abilities that nobody explicitly trained them for. This is called <strong>emergence</strong>.</p>
+
+  <p>A small language model might only finish sentences. A large one suddenly can do arithmetic, write code, translate languages, and reason about abstract problems — without being specifically trained on those tasks. These abilities "emerge" from scale.</p>
+
+  <div class="callout tip">
+    <div class="callout-title">Key idea</div>
+    Emergence means: <em>the whole is more than the sum of its parts</em>. Just adding more data and parameters produces qualitatively new capabilities, not just "more of the same."
+  </div>
+
+  <h3>Chain-of-Thought (CoT) — Teaching AI to Think Step by Step</h3>
+
+  <p>By default, a language model generates an answer in one shot. But if you prompt it to <em>show its reasoning</em> — "Think step by step" — it dramatically improves on complex tasks. This technique is called <strong>Chain-of-Thought (CoT)</strong>.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    If someone asks you "What is 17 × 23?", you probably can't do it instantly. But if you write it out: 17 × 20 = 340, 17 × 3 = 51, total = 391 — you get there. CoT is prompting the AI to do the same.
+  </div>
+
+  <!-- ───────────── SECTION 4 ───────────── -->
+  <h2>4. The AI Industry Stack</h2>
+
+  <p>The exam also expects you to understand how AI fits into a broader ecosystem. Think of it as four layers:</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 420 240" width="380" xmlns="http://www.w3.org/2000/svg">
+      <!-- Layer 4 -->
+      <rect x="20" y="10" width="380" height="48" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="210" y="30" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">AI Applications</text>
+      <text x="210" y="48" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Finance · Healthcare · Security · Education · Retail · Agriculture</text>
+      <!-- Layer 3 -->
+      <rect x="20" y="68" width="380" height="48" rx="6" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="1.5"/>
+      <text x="210" y="88" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">Technical Directions</text>
+      <text x="210" y="106" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">CV · NLP · Speech · Decision-making · Big Data Analysis</text>
+      <!-- Layer 2 -->
+      <rect x="20" y="126" width="380" height="48" rx="6" fill="#93c5fd" stroke="#1e40af" stroke-width="1.5"/>
+      <text x="210" y="147" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">AI Basic Elements</text>
+      <text x="210" y="165" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Data → Algorithms → Computing Power</text>
+      <!-- Layer 1 -->
+      <rect x="20" y="184" width="380" height="48" rx="6" fill="#60a5fa" stroke="#1d4ed8" stroke-width="1.5"/>
+      <text x="210" y="204" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">Infrastructure</text>
+      <text x="210" y="222" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Cloud Computing · Big Data Platforms · Servers · AI Chips · IoT</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.5rem">The AI industry ecosystem — from infrastructure up to applications</p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the five main AI technical directions: <strong>Computer Vision (CV), Speech Processing, Natural Language Processing (NLP), Decision-making Systems, Big Data Analysis</strong>. And know the industry application areas: Finance, Healthcare, Security, Entertainment, Education, Retail, Agriculture.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A hospital system automatically labels every pixel of an MRI scan as either "tumour" or "healthy tissue." This is an example of which CV task?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Object Detection</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Object Tracking</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Image Segmentation</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">OCR</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">You want to build a model to detect "positive" or "negative" sentiment in customer reviews. Which NLP task type is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Text Generation</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Text Classification</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Sequence Labelling</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Knowledge Graph</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">GPT-4 is a Decoder-Only Transformer. BERT is an Encoder-Only Transformer. Which pair of use cases matches them correctly?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">GPT-4 → text understanding; BERT → text generation</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">GPT-4 → text generation; BERT → text understanding</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Both → translation tasks only</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Both → text generation and understanding equally</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">A researcher notices that once a language model reaches a certain size, it suddenly gains the ability to do arithmetic — even though it was never trained on arithmetic problems. This phenomenon is called…</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Chain-of-Thought</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Transfer Learning</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Emergence</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Fine-tuning</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next question →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">Which of these is NOT listed as one of the five major AI technical directions?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Natural Language Processing</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Computer Vision</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Robotics Engineering</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Decision-making Systems</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>NLP tasks: Text Classification, Sequence Labelling, Text Generation, Knowledge Graph</li>
+        <li>CV tasks: Object Detection, Image Segmentation, Object Tracking, OCR, Image Generation</li>
+        <li>Foundation Models: large, general-purpose models adapted for many tasks</li>
+        <li>Transformer types: Encoder-only (BERT), Decoder-only (GPT), Encoder+Decoder (T5)</li>
+        <li>Emergence: new capabilities that appear from scale</li>
+        <li>Chain-of-Thought: prompting AI to reason step-by-step</li>
+        <li>The 4-layer AI industry stack</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready for the next lesson? <a href="0003-deepseek-and-ai-applications.html">Lesson 03 → DeepSeek, AI Applications & Huawei's PanGu</a></p>
+    </div>
+  </div>
+
+  <!-- ───────────── SOURCE ───────────── -->
+  <div class="source">
+    <strong>Primary source for this lesson:</strong>
+    <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank">
+      The Illustrated Transformer — Jay Alammar
+    </a>
+    — The clearest visual explanation of how Transformers work. Read sections 1–3 (stop before "Multi-Head Attention"). ~15 min.
+    <br><br>
+    <strong>Questions about anything in this lesson?</strong> Ask me — I'm your teacher. Type in the chat below.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0001-what-is-ai.html">← Lesson 01: What Is AI?</a>
+    <a href="0003-deepseek-and-ai-applications.html" class="nav-next">Next: DeepSeek & AI Applications →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Image Segmentation labels every individual pixel, not just draws boxes. Object Detection would draw a bounding box around the tumour — segmentation goes further and maps the exact shape pixel by pixel.",
+    wrong:   "Not quite. When the task is to classify every pixel (not just draw a bounding box), that's Image Segmentation. Object Detection draws boxes; Segmentation colours pixels."
+  },
+  q2: {
+    correct: "Correct! Assigning a single label (positive/negative) to an entire piece of text is Text Classification. It doesn't label individual words (that would be Sequence Labelling), it doesn't generate new text, and it doesn't build a knowledge graph.",
+    wrong:   "Not quite. Assigning one label to a whole piece of text — like 'positive' or 'negative' — is Text Classification. Sequence Labelling would tag each individual word. Text Generation would write new text."
+  },
+  q3: {
+    correct: "Correct! Decoder-only models (like GPT) excel at generating new text — they predict the next word. Encoder-only models (like BERT) excel at understanding and representing text — used for search, classification, NER.",
+    wrong:   "Not quite. Decoder = generation (GPT writes text). Encoder = understanding (BERT reads and represents text). The architecture is fundamentally different: decoders generate token by token; encoders build a full representation of the input."
+  },
+  q4: {
+    correct: "Correct! Emergence refers to capabilities that appear unexpectedly at scale — not from being explicitly trained on that task. It's one of the most surprising and debated phenomena in modern AI.",
+    wrong:   "Not quite. Chain-of-Thought is a prompting technique. Transfer learning is reusing a trained model. Emergence is specifically the phenomenon where new capabilities appear at scale without being directly trained. Remember: it 'emerges' from size."
+  },
+  q5: {
+    correct: "Correct! Robotics Engineering is a field, but it's not listed as one of the five AI technical directions. The five are: CV, Speech Processing, NLP, Decision-making Systems, Big Data Analysis.",
+    wrong:   "Not quite. The five technical directions from the syllabus are: Computer Vision, Speech Processing, Natural Language Processing, Decision-making Systems, and Big Data Analysis. Robotics Engineering is not on that list."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
