@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 11 — Convolutional Neural Networks (CNN)</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 46%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 03 · Lesson 11 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <h1>Convolutional Neural Networks (CNN)</h1>
+    <p class="subtitle">How AI learned to see — the architecture behind every image recognition system.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Why CNN? ───────────── -->
+  <h2>1. Why Not Just Use a Fully-Connected Network for Images?</h2>
+
+  <p>In Lesson 08 you learned about fully-connected (FC) networks where every neuron connects to every other. For images, this breaks down immediately:</p>
+
+  <div class="callout tip">
+    <div class="callout-title">The scale problem</div>
+    A small 224×224 colour image has 224 × 224 × 3 = <strong>150,528 input values</strong>. If the first hidden layer has 1,000 neurons, that's already <strong>150 million parameters</strong> — just for layer one. Untrainable, and the network ignores the spatial structure of the image entirely.
+  </div>
+
+  <p>CNNs solve both problems by exploiting two facts about images:</p>
+  <ul>
+    <li><strong>Local patterns matter</strong> — an edge or texture is defined by nearby pixels, not pixels across the image</li>
+    <li><strong>The same pattern appears anywhere</strong> — a "cat ear" detector should work in the top-left and bottom-right corner equally</li>
+  </ul>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Instead of asking "how does every pixel relate to every other pixel?", a CNN slides a small <em>magnifying glass</em> (the kernel) across the image and looks for local patterns — edges, curves, textures. The same glass is used everywhere, which massively reduces the number of parameters needed.
+  </div>
+
+  <!-- ───────────── SECTION 2: The Convolution Operation ───────────── -->
+  <h2>2. The Convolution Operation</h2>
+
+  <p>The core of a CNN is the <strong>convolution</strong>: slide a small grid called a <strong>kernel</strong> (or filter) across the input, compute a dot product at each position, and record the results in an <strong>output feature map</strong>.</p>
+
+  <div class="diagram" style="padding:1.5rem">
+    <div style="font-family:sans-serif; font-size:0.82rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; justify-content:center">
+
+      <!-- Input patch -->
+      <div>
+        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.4rem; text-align:center">Input (5×5)</div>
+        <svg viewBox="0 0 110 110" width="110" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <style>.cell { font-family:sans-serif; font-size:10px; text-anchor:middle; dominant-baseline:middle; }</style>
+          </defs>
+          <!-- Grid 5×5 -->
+          <rect x="2"  y="2"  width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="22" y="2"  width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="42" y="2"  width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="62" y="2"  width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="82" y="2"  width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+
+          <rect x="2"  y="22" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="22" y="22" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="42" y="22" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="62" y="22" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="82" y="22" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+
+          <rect x="2"  y="42" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="22" y="42" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="42" y="42" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="62" y="42" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="82" y="42" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+
+          <rect x="2"  y="62" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="22" y="62" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="42" y="62" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="62" y="62" width="20" height="20" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="82" y="62" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+
+          <rect x="2"  y="82" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="22" y="82" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="42" y="82" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="62" y="82" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+          <rect x="82" y="82" width="20" height="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+
+          <!-- Values -->
+          <text x="12"  y="12"  class="cell" fill="#1e3a8a">1</text><text x="32"  y="12"  class="cell" fill="#1e3a8a">0</text><text x="52"  y="12"  class="cell" fill="#1e3a8a">2</text><text x="72"  y="12"  class="cell" fill="#1e3a8a">1</text><text x="92"  y="12"  class="cell" fill="#1e3a8a">0</text>
+          <text x="12"  y="32"  class="cell" fill="#1e3a8a">0</text><text x="32"  y="32"  class="cell" fill="#92400e">1</text><text x="52"  y="32"  class="cell" fill="#92400e">0</text><text x="72"  y="32"  class="cell" fill="#92400e">1</text><text x="92"  y="32"  class="cell" fill="#1e3a8a">0</text>
+          <text x="12"  y="52"  class="cell" fill="#1e3a8a">1</text><text x="32"  y="52"  class="cell" fill="#92400e">2</text><text x="52"  y="52"  class="cell" fill="#92400e">1</text><text x="72"  y="52"  class="cell" fill="#92400e">0</text><text x="92"  y="52"  class="cell" fill="#1e3a8a">1</text>
+          <text x="12"  y="72"  class="cell" fill="#1e3a8a">0</text><text x="32"  y="72"  class="cell" fill="#92400e">0</text><text x="52"  y="72"  class="cell" fill="#92400e">1</text><text x="72"  y="72"  class="cell" fill="#92400e">2</text><text x="92"  y="72"  class="cell" fill="#1e3a8a">0</text>
+          <text x="12"  y="92"  class="cell" fill="#1e3a8a">1</text><text x="32"  y="92"  class="cell" fill="#1e3a8a">0</text><text x="52"  y="92"  class="cell" fill="#1e3a8a">0</text><text x="72"  y="92"  class="cell" fill="#1e3a8a">1</text><text x="92"  y="92"  class="cell" fill="#1e3a8a">1</text>
+        </svg>
+      </div>
+
+      <div style="font-size:1.5rem; color:#6b6b63">✕</div>
+
+      <!-- Kernel -->
+      <div>
+        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.4rem; text-align:center">Kernel (3×3)</div>
+        <svg viewBox="0 0 66 66" width="66" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2"  y="2"  width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="22" y="2"  width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="42" y="2"  width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="2"  y="22" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="22" y="22" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="42" y="22" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="2"  y="42" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="22" y="42" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="42" y="42" width="20" height="20" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <text x="12" y="12" class="cell" fill="#14532d">1</text><text x="32" y="12" class="cell" fill="#14532d">0</text><text x="52" y="12" class="cell" fill="#14532d">1</text>
+          <text x="12" y="32" class="cell" fill="#14532d">0</text><text x="32" y="32" class="cell" fill="#14532d">1</text><text x="52" y="32" class="cell" fill="#14532d">0</text>
+          <text x="12" y="52" class="cell" fill="#14532d">1</text><text x="32" y="52" class="cell" fill="#14532d">0</text><text x="52" y="52" class="cell" fill="#14532d">1</text>
+        </svg>
+      </div>
+
+      <div style="font-size:1.5rem; color:#6b6b63">=</div>
+
+      <!-- Output -->
+      <div>
+        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.4rem; text-align:center">Feature Map (3×3)</div>
+        <svg viewBox="0 0 66 66" width="66" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2"  y="2"  width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="22" y="2"  width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="42" y="2"  width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="2"  y="22" width="20" height="20" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="22" y="22" width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="42" y="22" width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="2"  y="42" width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="22" y="42" width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="42" y="42" width="20" height="20" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <text x="12" y="12" class="cell" fill="#4c1d95">4</text><text x="32" y="12" class="cell" fill="#4c1d95">3</text><text x="52" y="12" class="cell" fill="#4c1d95">4</text>
+          <text x="12" y="32" class="cell" fill="#4c1d95; font-weight:bold">5</text><text x="32" y="32" class="cell" fill="#4c1d95">3</text><text x="52" y="32" class="cell" fill="#4c1d95">3</text>
+          <text x="12" y="52" class="cell" fill="#4c1d95">1</text><text x="32" y="52" class="cell" fill="#4c1d95">2</text><text x="52" y="52" class="cell" fill="#4c1d95">3</text>
+        </svg>
+      </div>
+    </div>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.75rem; text-align:center">
+      The highlighted 3×3 yellow region of the input is multiplied element-wise with the kernel, summed → one output value (5 shown highlighted). Slide the kernel one step right and repeat.
+    </p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Kernel (Filter)</div>
+      A small grid of learnable weights (e.g. 3×3, 5×5). Each kernel learns to detect a specific pattern — one might detect horizontal edges, another vertical edges, another curves. A single convolutional layer uses <em>many</em> kernels in parallel.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Stride</div>
+      How many pixels the kernel moves at each step. Stride=1: move one pixel at a time (produces a large output). Stride=2: skip every other position (halves the output size).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Padding</div>
+      Adding a border of zeros around the input before convolving. <strong>Same padding</strong>: output is the same size as input. <strong>Valid padding</strong>: no border added, output shrinks.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Feature Map</div>
+      The output of applying one kernel to the entire input. If you have 32 kernels, you get 32 feature maps — one per kernel — stacked into a volume.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Output size formula for one dimension: <strong>(Input − Kernel + 2×Padding) / Stride + 1</strong>. For a 5×5 input, 3×3 kernel, stride 1, no padding: (5 − 3 + 0)/1 + 1 = <strong>3</strong>. This matches the diagram above.
+  </div>
+
+  <!-- ───────────── SECTION 3: CNN Architecture ───────────── -->
+  <h2>3. CNN Architecture</h2>
+
+  <p>A CNN is a sequence of three layer types, repeated and then followed by fully-connected layers for the final classification:</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <div style="display:flex; align-items:center; gap:0.3rem; min-width:560px; font-family:sans-serif; font-size:0.78rem; flex-wrap:nowrap">
+
+      <div style="text-align:center; flex:none">
+        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.6rem 0.4rem; color:#1e3a8a; font-weight:700; width:70px">Input<br><span style="font-weight:400; font-size:0.7rem">Image</span></div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+
+      <div style="text-align:center; flex:none">
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.6rem 0.4rem; color:#92400e; font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+      <div style="text-align:center; flex:none">
+        <div style="background:#fce7f3; border:1.5px solid #db2777; border-radius:6px; padding:0.6rem 0.4rem; color:#9d174d; font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+
+      <div style="text-align:center; flex:none">
+        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.6rem 0.4rem; color:#92400e; font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+      <div style="text-align:center; flex:none">
+        <div style="background:#fce7f3; border:1.5px solid #db2777; border-radius:6px; padding:0.6rem 0.4rem; color:#9d174d; font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+
+      <div style="text-align:center; flex:none">
+        <div style="background:#e0e7ff; border:1.5px solid #4f46e5; border-radius:6px; padding:0.6rem 0.4rem; color:#3730a3; font-weight:700; width:60px">Flatten</div>
+      </div>
+      <div style="color:#6b6b63">→</div>
+      <div style="text-align:center; flex:none">
+        <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.6rem 0.4rem; color:#15803d; font-weight:700; width:70px">FC Layer<br><span style="font-weight:400; font-size:0.7rem">+ Softmax</span></div>
+      </div>
+    </div>
+    <p style="color:#6b6b63; font-size:0.78rem; margin-top:0.75rem; text-align:center">Conv layers extract features → Pooling layers compress → FC layers classify</p>
+  </div>
+
+  <!-- ───────────── SECTION 4: Convolutional Layer ───────────── -->
+  <h2>4. Convolutional Layer</h2>
+
+  <p>The convolutional layer applies multiple kernels to the input simultaneously. Each kernel produces one feature map; together they form a 3D output volume.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Parameter sharing</div>
+      Every position in the input shares the same kernel weights. A 3×3 kernel applied to any size image has only 9 learnable weights — regardless of image size. This is why CNNs have vastly fewer parameters than FC networks.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Local connectivity</div>
+      Each output neuron only "sees" a small local region of the input (the receptive field of the kernel). Irrelevant distant pixels don't interfere.
+    </div>
+    <div class="def-item">
+      <div class="def-term">What kernels learn</div>
+      Early layers: low-level features (edges, corners, colour gradients). Middle layers: textures and shapes. Deep layers: high-level parts (eyes, wheels, words).
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Two key properties of convolutional layers: <strong>parameter sharing</strong> (same kernel weights used everywhere) and <strong>local connectivity</strong> (each neuron only sees a local region). These are what make CNNs efficient for images.
+  </div>
+
+  <!-- ───────────── SECTION 5: Pooling Layer ───────────── -->
+  <h2>5. Pooling Layer</h2>
+
+  <p>Pooling <strong>downsamples</strong> the feature maps — it reduces the spatial size while keeping the most important information. This reduces computation and builds some <strong>translation invariance</strong> (the same feature detected slightly shifted still gives the same pooled output).</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
+
+      <!-- Max pooling -->
+      <div style="text-align:center">
+        <div style="font-weight:700; color:#1d4ed8; margin-bottom:0.5rem">Max Pooling (2×2, stride 2)</div>
+        <svg viewBox="0 0 160 80" width="160" xmlns="http://www.w3.org/2000/svg">
+          <!-- Input 4x4 -->
+          <rect x="2"  y="2"  width="18" height="18" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+          <rect x="20" y="2"  width="18" height="18" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+          <rect x="2"  y="20" width="18" height="18" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+          <rect x="20" y="20" width="18" height="18" fill="#fed7aa" stroke="#b45309" stroke-width="1.5"/>
+
+          <rect x="38" y="2"  width="18" height="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+          <rect x="56" y="2"  width="18" height="18" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5"/>
+          <rect x="38" y="20" width="18" height="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+          <rect x="56" y="20" width="18" height="18" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+
+          <rect x="2"  y="38" width="18" height="18" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+          <rect x="20" y="38" width="18" height="18" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+          <rect x="2"  y="56" width="18" height="18" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+          <rect x="20" y="56" width="18" height="18" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+
+          <rect x="38" y="38" width="18" height="18" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+          <rect x="56" y="38" width="18" height="18" fill="#fbcfe8" stroke="#db2777" stroke-width="1.5"/>
+          <rect x="38" y="56" width="18" height="18" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+          <rect x="56" y="56" width="18" height="18" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+
+          <!-- Values -->
+          <text x="11" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#78350f">1</text>
+          <text x="29" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#78350f">3</text>
+          <text x="11" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#78350f">2</text>
+          <text x="29" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#92400e" font-weight="bold">4</text>
+
+          <text x="47" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#1e3a8a">5</text>
+          <text x="65" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#1e3a8a" font-weight="bold">7</text>
+          <text x="47" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#1e3a8a">1</text>
+          <text x="65" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#1e3a8a">6</text>
+
+          <text x="11" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#14532d">2</text>
+          <text x="29" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#14532d">0</text>
+          <text x="11" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#14532d">1</text>
+          <text x="29" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#15803d" font-weight="bold">8</text>
+
+          <text x="47" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#9d174d">3</text>
+          <text x="65" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#9d174d" font-weight="bold">9</text>
+          <text x="47" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#9d174d">4</text>
+          <text x="65" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#9d174d">2</text>
+
+          <!-- Arrow -->
+          <text x="90" y="40" font-family="sans-serif" font-size="14" fill="#6b6b63">→</text>
+
+          <!-- Output 2x2 -->
+          <rect x="110" y="12" width="22" height="22" fill="#fed7aa" stroke="#b45309" stroke-width="1.5"/>
+          <rect x="132" y="12" width="22" height="22" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5"/>
+          <rect x="110" y="34" width="22" height="22" fill="#bbf7d0" stroke="#15803d" stroke-width="1.5"/>
+          <rect x="132" y="34" width="22" height="22" fill="#fbcfe8" stroke="#db2777" stroke-width="1.5"/>
+
+          <text x="121" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#92400e" font-weight="bold">4</text>
+          <text x="143" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#1e3a8a" font-weight="bold">7</text>
+          <text x="121" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#15803d" font-weight="bold">8</text>
+          <text x="143" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#9d174d" font-weight="bold">9</text>
+        </svg>
+        <div style="font-size:0.75rem; color:#6b6b63; margin-top:0.3rem">Take the <strong>maximum</strong> value in each 2×2 region</div>
+      </div>
+
+      <!-- Average pooling -->
+      <div style="text-align:center; display:flex; flex-direction:column; justify-content:flex-start; align-items:center">
+        <div style="font-weight:700; color:#15803d; margin-bottom:0.5rem">Average Pooling (2×2, stride 2)</div>
+        <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:0.8rem 1rem; font-size:0.82rem; color:#14532d; margin-top:0.5rem; text-align:left; max-width:180px">
+          Takes the <strong>average</strong> of each 2×2 region instead of the maximum.<br><br>
+          Both reduce spatial size by 2× in each dimension when stride = pool size.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Max Pooling</div>
+      Takes the largest value in each region. Keeps the strongest feature response. Most commonly used. Helps the network be robust to small translations — if the feature shifts one pixel, the max in the region stays the same.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Average Pooling</div>
+      Takes the mean of each region. Smoother, retains more context. Used in some architectures (e.g. Global Average Pooling at the end of modern CNNs instead of a Flatten layer).
+    </div>
+    <div class="def-item">
+      <div class="def-term">No learnable parameters</div>
+      Pooling layers have no weights — they just downsample. This makes them cheap and they don't contribute to overfitting.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Max Pooling</strong> = take the maximum in each window (most common). <strong>Average Pooling</strong> = take the mean. Both reduce spatial dimensions without learnable parameters. Pooling adds <strong>translation invariance</strong>.
+  </div>
+
+  <!-- ───────────── SECTION 6: Fully-Connected Layer ───────────── -->
+  <h2>6. Fully-Connected Layer &amp; the Full Picture</h2>
+
+  <p>After the convolutional and pooling layers have extracted spatial features, the output is <strong>flattened</strong> into a 1D vector and fed into standard fully-connected layers for classification.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Flatten</div>
+      Convert the 3D feature volume (height × width × channels) into a single 1D vector. No computation — just reshaping.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Fully-Connected (Dense) Layer</div>
+      One or more FC layers combine the extracted features into a final prediction. Last layer uses Softmax for multi-class output.
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">The full CNN pipeline in one sentence</div>
+    Convolutional layers act as a <em>feature extractor</em> (learning what's in the image), and fully-connected layers act as a <em>classifier</em> (deciding which category based on those features).
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the three CNN layer types and their roles: <strong>Convolutional</strong> (extract features, has learnable kernels), <strong>Pooling</strong> (downsample, no learnable parameters), <strong>Fully-Connected</strong> (classify based on extracted features). The typical order is: Conv → ReLU → Pool → … → Flatten → FC → Softmax.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A 7×7 input is convolved with a 3×3 kernel using stride 1 and no padding. What is the size of the output feature map?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">7×7 — padding ensures the output matches the input size</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">6×6 — the kernel reduces each dimension by one</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">5×5 — computed as (7 − 3 + 0) / 1 + 1 = 5</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">3×3 — the output matches the kernel size</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">What property of convolutional layers means that the same 3×3 kernel is used at every spatial position in the image, keeping the parameter count small?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Translation invariance — the kernel output does not change when the input shifts</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Local connectivity — each neuron only connects to a small patch of the input</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Parameter sharing — one kernel's weights are reused at every position across the image</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Pooling invariance — downsampling removes sensitivity to exact feature positions</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">Max Pooling is applied with a 2×2 window to the values [3, 1, 2, 8]. What is the output?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">3.5 — the average of all four values in the window</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">3 — the first value in the top-left of the window</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">8 — the maximum value in the 2×2 window</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">14 — the sum of all values in the window</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">How many learnable parameters does a Max Pooling layer have?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">One per pooling window — the pool size determines the number of weights</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The same number as the convolutional layer before it</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">One per output channel — each channel learns its own pooling weights</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Zero — pooling layers have no learnable parameters</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">In a CNN, what is the role of the fully-connected layers that appear after the convolutional and pooling layers?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">To downsample the feature maps before classification</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">To detect low-level features like edges and corners in the input image</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">To combine the extracted spatial features and produce the final class prediction</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">To apply the convolutional kernels across the spatial dimensions of the input</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Why CNNs beat FC networks for images: parameter sharing + local connectivity</li>
+        <li>Convolution: slide a kernel across the input, compute dot products → feature map</li>
+        <li>Output size formula: (Input − Kernel + 2×Padding) / Stride + 1</li>
+        <li>Convolutional layer: many kernels, each learns a different feature detector</li>
+        <li>Max Pooling: take the maximum in each window, no learnable parameters</li>
+        <li>Average Pooling: take the mean in each window</li>
+        <li>FC layers at the end: classify based on extracted features</li>
+        <li>Full order: Conv → ReLU → Pool → … → Flatten → FC → Softmax</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0012-rnn-lstm.html">Lesson 12 → Recurrent Neural Networks &amp; LSTM</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://cs231n.github.io/convolutional-networks/" target="_blank">CS231n: Convolutional Neural Networks — Stanford University</a>
+    — The definitive free reference for CNNs. Read sections "Convolutional Layer" and "Pooling Layer." Excellent interactive visualizations included.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0010-optimizers-regularization.html">← Lesson 10: Optimizers &amp; Regularization</a>
+    <a href="0012-rnn-lstm.html" class="nav-next">Next: RNN &amp; LSTM →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Use the formula: (Input − Kernel + 2×Padding) / Stride + 1 = (7 − 3 + 0) / 1 + 1 = 5. So a 7×7 input with a 3×3 kernel, stride 1, no padding produces a 5×5 feature map.",
+    wrong:   "Not quite. The output size formula is: (Input − Kernel + 2×Padding) / Stride + 1. With a 7×7 input, 3×3 kernel, stride 1, no padding: (7 − 3 + 0) / 1 + 1 = 5. The output is 5×5. 'Same padding' would produce 7×7, but that requires adding a border of zeros."
+  },
+  q2: {
+    correct: "Correct! Parameter sharing means the same kernel weights are reused at every spatial location in the image. A 3×3 kernel always has just 9 weights no matter how large the image — the kernel slides across and applies those same 9 values everywhere.",
+    wrong:   "Not quite. Parameter sharing is the property where one set of kernel weights is applied at every position — this is what keeps CNNs so parameter-efficient. Local connectivity (each neuron sees only a patch) is a related but separate concept. Translation invariance is the result of pooling, not parameter sharing itself."
+  },
+  q3: {
+    correct: "Correct! Max Pooling takes the largest value in the window. In [3, 1, 2, 8], the maximum is 8. This preserves the strongest feature activation — if any part of the region detected the feature strongly, Max Pooling keeps that signal.",
+    wrong:   "Not quite. Max Pooling specifically selects the maximum value in each window — not the average, not the first value, not the sum. From [3, 1, 2, 8] the maximum is 8. Average Pooling would give (3+1+2+8)/4 = 3.5."
+  },
+  q4: {
+    correct: "Correct! Pooling layers perform a fixed mathematical operation (take max or average) with no learnable weights. They reduce spatial dimensions without adding any parameters, which is why they're computationally free and don't contribute to overfitting.",
+    wrong:   "Not quite. Pooling layers have zero learnable parameters — they apply a fixed rule (take the max, or the mean) with no weights to train. All learnable parameters in a CNN live in the convolutional and fully-connected layers."
+  },
+  q5: {
+    correct: "Correct! The Conv + Pooling layers act as a feature extractor — they produce a compact representation of what's in the image. The fully-connected layers then act as a classifier — they take that feature vector and map it to class probabilities via Softmax.",
+    wrong:   "Not quite. Downsampling is done by Pooling layers. Detecting low-level features is done by early Convolutional layers. Applying kernels is the Conv layer's job. The FC layers receive the final flat feature vector and produce the class prediction — they are the classifier."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
