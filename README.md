@@ -33,19 +33,26 @@ open lessons/0001-what-is-ai.html
 | Lesson | Topics |
 |--------|--------|
 | [04 — ML Overview](lessons/0004-ml-overview.html) | ML vs rule-based programming, Classification / Regression / Clustering, Supervised / Unsupervised / Semi-supervised / Reinforcement Learning |
+| [05 — The ML Process](lessons/0005-ml-process.html) | 7-stage ML pipeline, Training vs Test set, Data cleansing / Standardization / Dimensionality Reduction, Feature selection (Filter / Wrapper / Embedded), Overfitting vs Underfitting, Bias-Variance trade-off |
+| [06 — Key ML Concepts](lessons/0006-ml-key-concepts.html) | Gradient Descent (BGD / SGD / MBGD), Parameters vs Hyperparameters, Learning rate, Hyperparameter search (Grid / Random / Heuristic / Bayesian), K-Fold Cross-Validation |
+| [07 — Common ML Algorithms](lessons/0007-ml-algorithms.html) | Linear & Polynomial Regression, Logistic Regression, Decision Tree, SVM (Linear + Kernel), k-NN, Naive Bayes, Ensemble Learning (Bagging / Boosting, Random Forest, GBDT), k-Means, Hierarchical Clustering |
+
+### Chapter 03 — Deep Learning & Foundation Models
+
+| Lesson | Topics |
+|--------|--------|
+| [08 — Perceptrons & Neural Networks](lessons/0008-deep-learning-intro.html) | Perceptron anatomy, Why nonlinearity is essential, Multi-layer Perceptron (MLP), Deep Neural Networks, Forward pass, Feature hierarchy |
 
 ---
 
 ## What's Coming
 
-- **Lesson 05** — The ML Process: data prep, feature selection, overfitting, model evaluation
-- **Lesson 06** — Key ML Concepts: gradient descent, hyperparameters, cross-validation
-- **Lesson 07** — Common ML Algorithms Part 1: Linear Regression, Logistic Regression, Decision Trees, SVM
-- **Lesson 08** — Common ML Algorithms Part 2: KNN, Naive Bayes, Ensemble Learning, K-Means
-- **Lesson 09** — Deep Learning: Perceptrons, Neural Networks, Activation Functions
-- **Lesson 10** — CNNs, RNNs, LSTM
-- **Lesson 11** — Transformer Architecture & Attention
-- **Lesson 12** — AI Development Frameworks: PyTorch & MindSpore
+- **Lesson 09** — Activation Functions & Neural Network Training: Sigmoid, Tanh, ReLU, Leaky ReLU, Softmax, Loss functions, Backpropagation, Chain rule, Vanishing/exploding gradients
+- **Lesson 10** — Optimizers & Regularization: Momentum, AdaGrad, RMSProp, Adam, L1/L2 regularization, Dropout, Early stopping
+- **Lesson 11** — Convolutional Neural Networks (CNN): Convolution, Pooling, CNN architecture
+- **Lesson 12** — Recurrent Neural Networks (RNN): RNN, LSTM (Forget / Input / Output gates), Seq2Seq
+- **Lesson 13** — Transformer Architecture: Attention mechanism, Self-attention, GPT-1, BERT, MoE
+- **Lesson 14** — AI Development Frameworks: PyTorch, MindSpore, Computational graphs, LeNet implementation
 
 ---
 
