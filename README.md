@@ -43,12 +43,16 @@ open lessons/0001-what-is-ai.html
 |--------|--------|
 | [08 — Perceptrons & Neural Networks](lessons/0008-deep-learning-intro.html) | Perceptron anatomy, Why nonlinearity is essential, Multi-layer Perceptron (MLP), Deep Neural Networks, Forward pass, Feature hierarchy |
 | [09 — Activation Functions & Training](lessons/0009-activation-training.html) | Step / Sigmoid / Tanh / ReLU / Leaky ReLU / Swish / Softmax, Loss functions (MSE vs Cross-Entropy), Training loop, Backpropagation & Chain rule, Vanishing & Exploding gradients |
+| [10 — Optimizers & Regularization](lessons/0010-optimizers-regularization.html) | Momentum, AdaGrad, RMSProp, Adam (default ★), L1 regularization (sparse), L2 regularization (weight decay), Early Stopping, Dropout (training only) |
 
 ---
 
 ## What's Coming
 
-- **Lesson 10** — Optimizers & Regularization: Momentum, AdaGrad, RMSProp, Adam, L1/L2, Dropout, Early stopping
+- **Lesson 11** — Convolutional Neural Networks (CNN): Convolution, Pooling, CNN architecture
+- **Lesson 12** — Recurrent Neural Networks (RNN): RNN, LSTM (Forget / Input / Output gates), Seq2Seq
+- **Lesson 13** — Transformer Architecture & Attention: Self-attention, GPT-1, BERT, MoE
+- **Lesson 14** — AI Development Frameworks: PyTorch, MindSpore, Computational graphs
 - **Lesson 10** — Optimizers & Regularization: Momentum, AdaGrad, RMSProp, Adam, L1/L2 regularization, Dropout, Early stopping
 - **Lesson 11** — Convolutional Neural Networks (CNN): Convolution, Pooling, CNN architecture
 - **Lesson 12** — Recurrent Neural Networks (RNN): RNN, LSTM (Forget / Input / Output gates), Seq2Seq

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 10 — Optimizers & Regularization</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 42%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 03 · Lesson 10 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <h1>Optimizers &amp; Regularization</h1>
+    <p class="subtitle">Train faster with smarter optimizers — then prevent your model from memorizing noise.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Why Better Optimizers? ───────────── -->
+  <h2>1. Why Plain Gradient Descent Isn't Enough</h2>
+
+  <p>In Lesson 06 you learned about gradient descent: compute the gradient, step in the downhill direction, repeat. Simple — but in practice it has problems:</p>
+
+  <ul>
+    <li><strong>Slow convergence</strong> — the same learning rate is used for every weight, even if some weights need bigger or smaller steps</li>
+    <li><strong>Oscillation</strong> — the loss can bounce side-to-side in narrow valleys instead of heading straight toward the minimum</li>
+    <li><strong>Local minima and saddle points</strong> — the gradient points to zero but you haven't found the best solution</li>
+  </ul>
+
+  <p>Optimizers are improved algorithms that modify how gradient descent updates weights to avoid these problems.</p>
+
+  <!-- ───────────── SECTION 2: Optimizers ───────────── -->
+  <h2>2. The Optimizer Family</h2>
+
+  <!-- Momentum -->
+  <h3>① Momentum</h3>
+
+  <p>Momentum adds a "memory" of past gradients. Instead of taking a step based only on the <em>current</em> gradient, it accumulates a velocity vector — like a ball rolling downhill that builds up speed.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    A ball rolling down a hill doesn't stop and re-evaluate every millisecond. It builds momentum in the downhill direction and rolls past small bumps. Plain gradient descent is like a short-sighted person taking tiny cautious steps — Momentum is the ball that keeps rolling.
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">How it works</div>
+      Maintain a velocity <code>v</code>. Each step: <code>v ← β·v + (1−β)·∇L</code>, then update <code>w ← w − η·v</code>. The hyperparameter β (typically 0.9) controls how much past gradients influence the current step.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Advantages</div>
+      <ul style="margin:0.3rem 0 0 1rem; font-size:0.9rem">
+        <li>Accelerates learning in the consistent gradient direction</li>
+        <li>Dampens oscillations in narrow valleys (the side-to-side bouncing cancels out)</li>
+        <li>Can escape shallow local minima</li>
+      </ul>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Disadvantages</div>
+      <ul style="margin:0.3rem 0 0 1rem; font-size:0.9rem">
+        <li>Adds a new hyperparameter β to tune</li>
+        <li>Can overshoot the minimum if β is too large</li>
+        <li>Still uses one global learning rate for all weights</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AdaGrad -->
+  <h3>② AdaGrad (Adaptive Gradient)</h3>
+
+  <p>AdaGrad adapts the learning rate <em>per weight</em> — weights that have received large gradients in the past get a smaller learning rate; weights that have received small gradients get a larger one.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Key idea</div>
+      Accumulate the sum of squared past gradients for each weight. Divide the learning rate by the square root of this sum. Frequently updated weights slow down; rarely updated weights stay fast.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Best for</div>
+      Sparse data (like NLP, where most words appear rarely). Each word's embedding gets its own appropriate learning rate.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Weakness</div>
+      The accumulated squared gradients only grow — the learning rate shrinks monotonically and can reach near-zero long before training is done. The model stops learning too early. RMSProp fixes this.
+    </div>
+  </div>
+
+  <!-- RMSProp -->
+  <h3>③ RMSProp (Root Mean Square Propagation)</h3>
+
+  <p>RMSProp fixes AdaGrad's "learning rate dies" problem by using an <strong>exponential moving average</strong> of squared gradients instead of a running total. Old gradients fade out; only recent gradient magnitude matters.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Key idea</div>
+      <code>v ← β·v + (1−β)·(∇L)²</code>, then <code>w ← w − η/√v · ∇L</code>. The β parameter controls how quickly old gradients are forgotten (typically 0.9).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Advantage over AdaGrad</div>
+      The learning rate never permanently vanishes — it adapts to recent gradient history rather than all-time history.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Weakness</div>
+      Does not have a momentum term — does not build speed in consistent directions. Adam combines RMSProp with Momentum to get both benefits.
+    </div>
+  </div>
+
+  <!-- Adam -->
+  <h3>④ Adam (Adaptive Moment Estimation)</h3>
+
+  <p>Adam combines the best of both worlds: <strong>Momentum</strong> (builds speed in consistent directions) + <strong>RMSProp</strong> (per-weight adaptive learning rates). It is the <strong>most widely used optimizer</strong> in deep learning today.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">What it tracks</div>
+      Two moving averages per weight: <strong>m</strong> (first moment = mean of gradients, like Momentum) and <strong>v</strong> (second moment = mean of squared gradients, like RMSProp). Both are bias-corrected at the start of training to avoid cold-start under-estimates.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Why it dominates</div>
+      Works well out of the box across a wide range of problems. Rarely needs learning rate tuning. Handles sparse gradients and noisy data well. Default in PyTorch, TensorFlow, and MindSpore.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Hyperparameters</div>
+      Learning rate η (default 0.001), β₁ (default 0.9), β₂ (default 0.999), ε (small constant for numerical stability, default 1e-8).
+    </div>
+  </div>
+
+  <!-- Comparison -->
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:480px">
+      <thead>
+        <tr style="background:#f3f4f6">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Optimizer</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Adapts LR per weight?</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Has momentum?</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key weakness</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">SGD (plain)</td>
+          <td style="padding:0.4rem 0.75rem">✗</td>
+          <td style="padding:0.4rem 0.75rem">✗</td>
+          <td style="padding:0.4rem 0.75rem">Oscillates, slow</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">Momentum</td>
+          <td style="padding:0.4rem 0.75rem">✗</td>
+          <td style="padding:0.4rem 0.75rem">✓</td>
+          <td style="padding:0.4rem 0.75rem">Can overshoot; one global LR</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1">
+          <td style="padding:0.4rem 0.75rem">AdaGrad</td>
+          <td style="padding:0.4rem 0.75rem">✓</td>
+          <td style="padding:0.4rem 0.75rem">✗</td>
+          <td style="padding:0.4rem 0.75rem">LR decays to zero permanently</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+          <td style="padding:0.4rem 0.75rem">RMSProp</td>
+          <td style="padding:0.4rem 0.75rem">✓ (recent only)</td>
+          <td style="padding:0.4rem 0.75rem">✗</td>
+          <td style="padding:0.4rem 0.75rem">No momentum term</td>
+        </tr>
+        <tr style="background:#dbeafe">
+          <td style="padding:0.4rem 0.75rem; font-weight:700">Adam ★</td>
+          <td style="padding:0.4rem 0.75rem">✓ (recent only)</td>
+          <td style="padding:0.4rem 0.75rem">✓</td>
+          <td style="padding:0.4rem 0.75rem"><strong>Default choice — works well generally</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the progression: <strong>Momentum</strong> adds speed. <strong>AdaGrad</strong> adapts per-weight LR (but LR permanently decays). <strong>RMSProp</strong> fixes AdaGrad's decay with exponential moving average. <strong>Adam</strong> = Momentum + RMSProp = the default optimizer. AdaGrad's weakness (permanent LR decay) is a common exam question.
+  </div>
+
+  <!-- ───────────── SECTION 3: Regularization ───────────── -->
+  <h2>3. Regularization — Fighting Overfitting</h2>
+
+  <p>You learned in Lesson 05 that overfitting means the model memorizes training data but fails on new data. <strong>Regularization</strong> is the set of techniques that force the model to stay simpler and generalize better.</p>
+
+  <!-- L1 -->
+  <h3>① L1 Regularization (Lasso)</h3>
+
+  <p>Adds the <strong>sum of absolute values</strong> of all weights to the loss function: <code>Loss_total = Loss + λ·Σ|w|</code></p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Effect</div>
+      Pushes many weights exactly to <strong>zero</strong>. This produces a <strong>sparse model</strong> — most weights are inactive, only a few matter.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Best for</div>
+      Feature selection — L1 automatically discards irrelevant features by zeroing their weights. Useful when you suspect only a few features are actually important.
+    </div>
+  </div>
+
+  <!-- L2 -->
+  <h3>② L2 Regularization (Ridge / Weight Decay)</h3>
+
+  <p>Adds the <strong>sum of squared values</strong> of all weights to the loss: <code>Loss_total = Loss + λ·Σw²</code></p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Effect</div>
+      Pushes all weights toward zero but rarely exactly to zero — produces <strong>small, spread-out weights</strong>. Prevents any single weight from becoming dominant.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Best for</div>
+      General overfitting prevention. The most common regularization in neural networks (also called <strong>weight decay</strong> in this context). More stable than L1 when features are correlated.
+    </div>
+  </div>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+      <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#15803d; margin-bottom:0.4rem">L1 (Lasso)</div>
+        <div style="color:#14532d; font-size:0.82rem">Penalty: <code>λ·Σ|w|</code><br>Result: <strong>sparse</strong> — many weights = 0<br>Use: automatic feature selection</div>
+      </div>
+      <div style="background:#eff6ff; border:1.5px solid #2563eb; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#1d4ed8; margin-bottom:0.4rem">L2 (Ridge / Weight Decay)</div>
+        <div style="color:#1e3a8a; font-size:0.82rem">Penalty: <code>λ·Σw²</code><br>Result: <strong>small</strong> weights spread across all features<br>Use: general overfitting control</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:0.75rem; font-family:sans-serif; font-size:0.78rem; color:#6b6b63">λ (lambda) is the regularization strength hyperparameter — higher λ = stronger penalty = simpler model</div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>L1</strong> → sparse weights (many exactly zero) → feature selection. <strong>L2</strong> → small weights (spread out, rarely zero) → general regularization. Both work by adding a penalty to the loss that discourages large weights.
+  </div>
+
+  <!-- Early Stopping -->
+  <h3>③ Early Stopping</h3>
+
+  <p>During training, monitor the model's performance on a <strong>validation set</strong> (a small portion of data held out from training). Stop training when validation loss starts to <em>increase</em> even though training loss is still decreasing — that's the moment overfitting begins.</p>
+
+  <div class="diagram" style="padding:1.5rem; text-align:center">
+    <svg viewBox="0 0 380 160" width="360" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="40" y1="130" x2="350" y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <!-- Training loss (always decreasing) -->
+      <path d="M 45 110 C 80 90 120 70 165 55 S 240 38 310 25" stroke="#2563eb" stroke-width="2" fill="none"/>
+      <!-- Validation loss (U-shape) -->
+      <path d="M 45 112 C 80 88 120 68 160 58 S 210 58 240 65 S 280 82 310 100" stroke="#dc2626" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+      <!-- Best point marker -->
+      <line x1="195" y1="20" x2="195" y2="130" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <circle cx="195" cy="57" r="5" fill="#15803d"/>
+      <!-- Labels -->
+      <text x="285" y="22"  font-family="sans-serif" font-size="10" fill="#2563eb">Training loss</text>
+      <text x="270" y="108" font-family="sans-serif" font-size="10" fill="#dc2626">Validation loss</text>
+      <text x="162" y="18"  font-family="sans-serif" font-size="10" fill="#15803d">Stop here</text>
+      <text x="45"  y="148" font-family="sans-serif" font-size="10" fill="#6b6b63">Training epochs →</text>
+      <text x="5"   y="80"  font-family="sans-serif" font-size="10" fill="#6b6b63" transform="rotate(-90,5,80)">Loss</text>
+      <!-- Overfitting zone label -->
+      <text x="220" y="50"  font-family="sans-serif" font-size="9" fill="#dc2626">← overfitting zone</text>
+    </svg>
+    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Stop when validation loss bottoms out — before the overfitting gap widens</p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Advantage</div>No extra hyperparameters. Free regularization — just watch the validation curve and stop at the right moment.
+    </div>
+    <div class="def-item">
+      <div class="def-term">In practice</div>Use <strong>patience</strong>: stop only if validation loss has not improved for N consecutive epochs (e.g. N=10), to avoid stopping too early on a temporary spike.
+    </div>
+  </div>
+
+  <!-- Dropout -->
+  <h3>④ Dropout</h3>
+
+  <p>During each training step, randomly <strong>deactivate (drop) a fraction of neurons</strong> — typically 20–50% — so they contribute nothing to that forward pass. Different neurons are dropped each time.</p>
+
+  <div class="diagram" style="padding:1.2rem">
+    <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem; text-align:center">
+      <div>
+        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.5rem">Training (Dropout ON)</div>
+        <svg viewBox="0 0 120 100" width="120" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="25"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="20" cy="55"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="20" cy="85"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <!-- dropped neurons (grey X) -->
+          <circle cx="60" cy="20"  r="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="60" y="24" font-family="sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle">✕</text>
+          <circle cx="60" cy="50"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <circle cx="60" cy="80"  r="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="60" y="84" font-family="sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle">✕</text>
+          <circle cx="100" cy="35" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <circle cx="100" cy="70" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <!-- active connections only -->
+          <line x1="32" y1="25" x2="48" y2="50" stroke="#7c3aed" stroke-width="1"/>
+          <line x1="32" y1="55" x2="48" y2="50" stroke="#7c3aed" stroke-width="1"/>
+          <line x1="72" y1="50" x2="88" y2="35" stroke="#15803d" stroke-width="1"/>
+          <line x1="72" y1="50" x2="88" y2="70" stroke="#15803d" stroke-width="1"/>
+        </svg>
+        <div style="font-size:0.75rem; color:#6b6b63; margin-top:0.3rem">Grey ✕ = dropped this step</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.5rem">Inference (Dropout OFF)</div>
+        <svg viewBox="0 0 120 100" width="120" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="25"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="20" cy="55"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="20" cy="85"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+          <circle cx="60" cy="20"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <circle cx="60" cy="50"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <circle cx="60" cy="80"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+          <circle cx="100" cy="35" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <circle cx="100" cy="70" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <line x1="32" y1="25" x2="48" y2="20" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
+          <line x1="32" y1="25" x2="48" y2="50" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
+          <line x1="32" y1="55" x2="48" y2="50" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
+          <line x1="32" y1="55" x2="48" y2="80" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
+          <line x1="72" y1="20" x2="88" y2="35" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
+          <line x1="72" y1="50" x2="88" y2="35" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
+          <line x1="72" y1="50" x2="88" y2="70" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
+          <line x1="72" y1="80" x2="88" y2="70" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
+        </svg>
+        <div style="font-size:0.75rem; color:#6b6b63; margin-top:0.3rem">All neurons active — outputs scaled</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Why it prevents overfitting</div>
+      Neurons can't rely on any specific other neuron — they must learn robust, independent features. The network effectively trains many different sub-networks simultaneously and averages them.
+    </div>
+    <div class="def-item">
+      <div class="def-term">At inference time</div>
+      Dropout is <strong>turned off</strong>. All neurons are active. To compensate for the increased activation magnitude, outputs are scaled down by the dropout rate.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Typical dropout rates</div>
+      0.2–0.5 for hidden layers. Too high = underfitting (too much information lost). Too low = no regularization effect.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Four regularization techniques: <strong>L1</strong> (sparse, feature selection), <strong>L2</strong> (small weights, general), <strong>Early Stopping</strong> (monitor validation loss, stop before overfitting), <strong>Dropout</strong> (randomly drop neurons during training only — OFF at inference). Dropout is <em>only applied during training</em> — a common exam trap.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">AdaGrad adapts the learning rate per weight using accumulated squared gradients. What is its key weakness compared to RMSProp?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">AdaGrad has no momentum term, so it oscillates in narrow loss valleys</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">AdaGrad accumulates all past gradients, so the learning rate shrinks permanently and can reach near zero</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">AdaGrad uses a global learning rate for all weights, ignoring individual weight history</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">AdaGrad requires more hyperparameters than RMSProp and is harder to configure</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Which optimizer combines the benefits of both Momentum and RMSProp and is the most widely used default in deep learning?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">AdaGrad, because it adapts the learning rate for each weight independently</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Momentum SGD, because it efficiently handles consistent gradient directions</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Adam, because it tracks both a momentum term and a per-weight adaptive learning rate</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">RMSProp, because it fixes AdaGrad's decaying learning rate with an exponential average</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">You want regularization that automatically zeroes out irrelevant feature weights, effectively performing built-in feature selection. Which technique should you choose?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',true)">L1 Regularization, because it pushes many weights to exactly zero</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">L2 Regularization, because it shrinks all weights toward zero proportionally</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Dropout, because it randomly removes neurons during training</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Early Stopping, because it halts training before weights grow too large</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">A model's training loss continues to decrease after epoch 30, but its validation loss starts rising. What should you do — and what technique does this represent?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Continue training — the validation loss increase is temporary and will self-correct</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Apply L1 regularization — the rising validation loss means weights are becoming sparse</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Stop training at epoch 30 — this is Early Stopping, triggered when overfitting begins</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Increase the learning rate — the model needs to descend faster to avoid the validation loss rising</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">During inference (real-world prediction), how does Dropout behave compared to training?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Dropout uses a higher drop rate at inference to make predictions more conservative</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Dropout continues at the same rate but only affects the output layer neurons</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Dropout is turned off — all neurons are active and outputs are scaled to compensate</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Dropout is applied once during the first inference pass then permanently disabled</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Momentum → builds speed in consistent gradient directions</li>
+        <li>AdaGrad → per-weight LR, but LR permanently decays to zero</li>
+        <li>RMSProp → fixes AdaGrad decay with exponential moving average</li>
+        <li>Adam ★ → Momentum + RMSProp = default optimizer</li>
+        <li>L1 → sparse weights (zeros), feature selection</li>
+        <li>L2 → small weights (weight decay), general regularization</li>
+        <li>Early Stopping → halt when validation loss stops improving</li>
+        <li>Dropout → randomly drop neurons during training only; OFF at inference</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0011-cnn.html">Lesson 11 → Convolutional Neural Networks (CNN)</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://www.deeplearning.ai/courses/deep-learning-specialization/" target="_blank">Deep Learning Specialization — Andrew Ng (Coursera)</a>
+    — Course 2 "Improving Deep Neural Networks" covers all optimizers and regularization techniques with clear derivations. Free to audit.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0009-activation-training.html">← Lesson 09: Activation Functions &amp; Training</a>
+    <a href="0011-cnn.html" class="nav-next">Next: CNNs →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! AdaGrad accumulates the sum of ALL past squared gradients — this sum only grows, so the learning rate can only shrink over time and eventually approaches zero, stalling training. RMSProp fixes this with an exponential moving average that 'forgets' old gradients.",
+    wrong:   "Not quite. AdaGrad's defining weakness is that its accumulated gradient sum never decreases — the learning rate permanently decays toward zero, stopping learning prematurely. The 'no momentum' issue belongs to both AdaGrad and RMSProp. The 'global LR' issue describes plain SGD."
+  },
+  q2: {
+    correct: "Correct! Adam (Adaptive Moment Estimation) maintains both m (first moment = like momentum, tracks gradient direction) and v (second moment = like RMSProp, tracks gradient magnitude). This gives it fast convergence AND per-weight adaptive learning rates, making it the standard choice.",
+    wrong:   "Not quite. Adam is the answer because it combines both Momentum (first moment — builds speed) and RMSProp (second moment — adapts per-weight learning rate). RMSProp alone has no momentum. Momentum SGD has no per-weight adaptation. AdaGrad has no momentum and suffers from permanent LR decay."
+  },
+  q3: {
+    correct: "Correct! L1's penalty (sum of |w|) has a special mathematical property: it pushes weights to exactly zero during optimization. This creates a sparse model where only a few weights are non-zero — effectively selecting the most important features automatically.",
+    wrong:   "Not quite. L1 is the answer for feature selection because it uniquely drives weights to exactly zero. L2 shrinks weights but rarely to exactly zero (so all features stay 'a little active'). Dropout and Early Stopping don't zero out weights — they control capacity differently."
+  },
+  q4: {
+    correct: "Correct! When training loss decreases but validation loss increases, the model is starting to overfit — it's learning noise specific to the training data. Early Stopping says: save the model from epoch 30 (the best validation point) and stop training there.",
+    wrong:   "Not quite. The training loss still decreasing while validation loss rises is the textbook overfitting signature — the model has begun memorizing training data. The correct response is Early Stopping: stop at the epoch where validation loss was lowest and use that model."
+  },
+  q5: {
+    correct: "Correct! Dropout is a training-only technique. At inference, all neurons are active. To keep the expected output magnitude consistent with training, the neuron outputs are scaled down by the dropout rate (e.g. if 50% were dropped during training, inference outputs are multiplied by 0.5).",
+    wrong:   "Not quite. Dropout is only active during training — during inference it is completely turned off and all neurons contribute to the output. This is a common exam trap. The outputs are then scaled to maintain the same expected magnitude as during training."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
