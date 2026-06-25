@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 05 — The ML Process</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 18%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 02 · Lesson 5 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <h1>The ML Process: From Raw Data to Deployed Model</h1>
+    <p class="subtitle">How a machine learning project actually works — end to end. Plus: what makes a model good, and why models sometimes fail.</p>
+  </header>
+
+  <!-- ───────────── PIPELINE ───────────── -->
+  <h2>1. The ML Pipeline</h2>
+
+  <p>Building an ML model is not just "feed data → get model." It's a structured process with seven stages. In practice, you loop back through earlier stages constantly.</p>
+
+  <div class="diagram" style="padding: 1.2rem 1rem; overflow-x:auto">
+    <div style="display:flex; align-items:center; gap:0; flex-wrap:nowrap; font-family:sans-serif; font-size:0.78rem; min-width:560px">
+      <!-- each step -->
+      <div style="flex:1; background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">📦</div>
+        <div style="font-weight:700; margin-top:0.2rem">Data<br>Preparation</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">🧹</div>
+        <div style="font-weight:700; margin-top:0.2rem">Data<br>Pre-processing</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">🔍</div>
+        <div style="font-weight:700; margin-top:0.2rem">Feature<br>Selection</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#bfdbfe; border:1.5px solid #1d4ed8; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">🏋️</div>
+        <div style="font-weight:700; margin-top:0.2rem">Model<br>Training</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#bfdbfe; border:1.5px solid #1d4ed8; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">📊</div>
+        <div style="font-weight:700; margin-top:0.2rem">Model<br>Evaluation</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#93c5fd; border:1.5px solid #1e40af; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">🚀</div>
+        <div style="font-weight:700; margin-top:0.2rem">Deployment<br>& Integration</div>
+      </div>
+      <div style="color:#6b6b63; font-size:1rem; padding:0 0.2rem">→</div>
+      <div style="flex:1; background:#93c5fd; border:1.5px solid #1e40af; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#1e3a8a">
+        <div style="font-size:1.1rem">🔁</div>
+        <div style="font-weight:700; margin-top:0.2rem">Feedback<br>& Iteration</div>
+      </div>
+    </div>
+    <p style="color:#6b6b63; font-size:0.78rem; margin-top:0.75rem; text-align:center">Real projects loop back constantly — especially from Evaluation back to Data or Features</p>
+  </div>
+
+  <!-- ───────────── SECTION 2: Dataset ───────────── -->
+  <h2>2. Dataset: Training Set vs. Test Set</h2>
+
+  <p>When you have a labelled dataset, you do <strong>not</strong> train the model on all of it. You split it into two separate parts:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🏋️ Training Set (~70–80% of data)</div>
+      The model <em>learns</em> from this data. It sees the inputs and the correct outputs, and adjusts its internal parameters to get better at predicting the right answers.
+    </div>
+    <div class="def-item">
+      <div class="def-term">🧪 Test Set (~20–30% of data)</div>
+      The model has <strong>never seen</strong> this data during training. After training is complete, you use the test set to measure how well the model actually performs on new, unseen examples — simulating real-world use.
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Think of exam preparation. You study from a practice question book (training set). The real exam questions (test set) are different — you've never seen them before. Your exam score measures whether you truly learned the material, or just memorized the practice questions.
+  </div>
+
+  <p>Why the split matters: a model could memorize all its training examples and score 100% on training — but fail completely on new data. Keeping the test set hidden gives you an honest measure of real performance.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know what each set is for: <strong>Training set = the model learns from it. Test set = measures real-world performance on unseen data.</strong> The test set must never be used during training.
+  </div>
+
+  <!-- ───────────── SECTION 3: Data Processing ───────────── -->
+  <h2>3. Data Processing</h2>
+
+  <p>Real-world data is messy. Before training, you must clean and transform it. There are three sub-steps:</p>
+
+  <h3>① Data Cleansing</h3>
+  <p>Fix problems in the raw data:</p>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Filtering</div>Remove irrelevant or duplicate records (e.g. remove entries with obviously impossible values like age = -5).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Missing Value Handling</div>What to do when a field is blank: fill with the average (imputation), or remove the row entirely.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Abnormal / Error Value Handling</div>Detect and fix outliers — values so extreme they are probably errors (e.g. a house price of $1 in a normal neighbourhood).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Merging & Data Consolidation</div>Combine data from multiple sources into one consistent dataset (e.g. merging customer records from two different databases).
+    </div>
+  </div>
+
+  <h3>② Data Standardization (Conversion)</h3>
+  <p>Models work best when all numerical features are on a similar scale. If one feature ranges from 0–1 (e.g. a probability) and another ranges from 0–1,000,000 (e.g. income), the large-scale feature will dominate unfairly.</p>
+
+  <p>Two common techniques:</p>
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Min-Max Normalization</div>Rescale every value to fit between 0 and 1. Formula: <code>(x − min) / (max − min)</code>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Z-score Standardization</div>Rescale so the data has mean = 0 and standard deviation = 1. Formula: <code>(x − mean) / std</code>
+    </div>
+  </div>
+
+  <h3>③ Dimensionality Reduction</h3>
+  <p>Sometimes your data has hundreds or thousands of features (columns). Many are redundant or irrelevant. <strong>Dimensionality reduction</strong> compresses the data into fewer features while keeping the important information.</p>
+  <p><strong>Why it matters:</strong> fewer features = faster training, less overfitting, easier to visualize.</p>
+  <p><strong>Key technique:</strong> PCA (Principal Component Analysis) — finds the directions of maximum variation and projects the data onto them.</p>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Data processing has three stages: <strong>Cleansing</strong> (fix bad data), <strong>Standardization</strong> (rescale to same range), <strong>Dimensionality Reduction</strong> (fewer features, same information). Know what each stage solves.
+  </div>
+
+  <!-- ───────────── SECTION 4: Feature Selection ───────────── -->
+  <h2>4. Feature Selection</h2>
+
+  <p>A <strong>feature</strong> is one input variable — one column in your dataset. For a house price model: size, age, number of bedrooms, distance to school — each of these is a feature.</p>
+
+  <p>Not all features are useful. Some are irrelevant noise. Feature selection picks the best subset to use for training. Three methods:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">① Filter Method</div>
+      Evaluate each feature <em>independently</em>, without involving any model. Score each feature by how well it correlates with the target (e.g. using statistical tests). Fast, but ignores how features interact with each other.
+      <br><br>
+      <em>Analogy:</em> Screening job applicants by looking at their CV score alone, before any interview.
+    </div>
+    <div class="def-item">
+      <div class="def-term">② Wrapper Method</div>
+      Use the actual model to test different <em>subsets</em> of features. Try all combinations (or smart subsets), train a model on each, and pick the subset that performs best. Slow but accurate.
+      <br><br>
+      <em>Analogy:</em> Interviewing every possible team combination to find the best group chemistry.
+    </div>
+    <div class="def-item">
+      <div class="def-term">③ Embedded Method</div>
+      Feature selection happens <em>during</em> model training itself — the model learns which features are important as part of its optimization. Efficient: one step instead of two.
+      <br><br>
+      <em>Example:</em> Decision trees and LASSO regression naturally ignore irrelevant features during training.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know all three: <strong>Filter</strong> = independent of model (fastest), <strong>Wrapper</strong> = tests feature subsets using a model (most accurate, slowest), <strong>Embedded</strong> = happens inside model training (balanced). A common question gives a scenario and asks which method is being used.
+  </div>
+
+  <!-- ───────────── SECTION 5: What Makes a Good Model ───────────── -->
+  <h2>5. What Makes a Good Model?</h2>
+
+  <p>A model isn't just judged by its accuracy score. Three qualities define a truly good model:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">🌍 Generalization</div>
+      Performs well on <em>new, unseen data</em> — not just the training data. This is the most important quality. A model that memorizes training examples but fails on new ones is useless in production.
+    </div>
+    <div class="def-item">
+      <div class="def-term">💡 Explainability</div>
+      Humans can understand <em>why</em> the model made a decision. Critical in high-stakes domains: a bank must explain why it denied a loan; a doctor must understand why an AI flagged a tumour. Not all models are equally explainable — decision trees are very explainable; deep neural networks are not.
+    </div>
+    <div class="def-item">
+      <div class="def-term">⚡ Prediction Speed</div>
+      Makes predictions fast enough for real-world use. A model that takes 30 seconds to classify one image is useless for a real-time security camera. Speed matters most at deployment, not just during training.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 6: Overfitting & Underfitting ───────────── -->
+  <h2>6. Overfitting, Underfitting, and the Bias-Variance Trade-off</h2>
+
+  <p>The most common failure mode in ML is building a model that doesn't <em>generalize</em>. There are two opposite ways this happens:</p>
+
+  <div class="diagram" style="text-align:left; padding:1.5rem">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; font-family:sans-serif; font-size:0.83rem;">
+
+      <div style="background:#fef3c7; border:1.5px solid #d97706; border-radius:8px; padding:1rem; text-align:center">
+        <div style="font-size:1.5rem; margin-bottom:0.4rem">😴</div>
+        <div style="font-weight:700; color:#92400e; margin-bottom:0.4rem">Underfitting</div>
+        <div style="color:#451a03">Model too simple. Doesn't learn the patterns even from training data. Bad on training AND test sets.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:#78350f"><strong>High Bias</strong><br>Low Variance</div>
+      </div>
+
+      <div style="background:#dcfce7; border:1.5px solid #16a34a; border-radius:8px; padding:1rem; text-align:center">
+        <div style="font-size:1.5rem; margin-bottom:0.4rem">✅</div>
+        <div style="font-weight:700; color:#15803d; margin-bottom:0.4rem">Just Right</div>
+        <div style="color:#14532d">Model captures the real pattern. Good on both training AND test sets.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:#166534"><strong>Low Bias</strong><br>Low Variance</div>
+      </div>
+
+      <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:8px; padding:1rem; text-align:center">
+        <div style="font-size:1.5rem; margin-bottom:0.4rem">🧠</div>
+        <div style="font-weight:700; color:#991b1b; margin-bottom:0.4rem">Overfitting</div>
+        <div style="color:#7f1d1d">Model memorizes training data, including noise. Great on training, poor on test set.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:#9b1c1c">Low Bias<br><strong>High Variance</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    Imagine studying for an exam:
+    <ul style="margin:0.4rem 0 0 1rem">
+      <li><strong>Underfitting:</strong> You barely studied. You can't even answer the practice questions.</li>
+      <li><strong>Overfitting:</strong> You memorized every single practice question word-for-word. On the real exam — with different wording — you fail completely.</li>
+      <li><strong>Just right:</strong> You understood the concepts. You can answer practice <em>and</em> new exam questions.</li>
+    </ul>
+  </div>
+
+  <h3>Bias and Variance — The Root Cause</h3>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Bias — "wrong assumptions"</div>
+      Error from the model being <em>too simple</em> and making wrong assumptions about the data. High bias → underfitting. The model consistently gets things wrong in the same way.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Variance — "too sensitive"</div>
+      Error from the model being <em>too complex</em> and reacting to noise in the training data. High variance → overfitting. Small changes in training data lead to wildly different models.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The bias-variance trade-off: <br>
+    <strong>High Bias = Underfitting</strong> (too simple, wrong on everything) <br>
+    <strong>High Variance = Overfitting</strong> (too complex, memorizes noise) <br>
+    Good models have <strong>low bias AND low variance</strong> — they generalize well.
+  </div>
+
+  <h3>How to Fix Overfitting</h3>
+  <ul>
+    <li><strong>Get more training data</strong> — the most effective fix</li>
+    <li><strong>Simplify the model</strong> — fewer parameters, shallower tree depth</li>
+    <li><strong>Regularization</strong> — penalize model complexity (covered in deep learning lessons)</li>
+    <li><strong>Dropout</strong> — randomly disable neurons during training (for neural networks)</li>
+    <li><strong>Early stopping</strong> — stop training before the model starts memorizing noise</li>
+  </ul>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A model scores 99% accuracy on training data but only 52% on test data. What problem does this describe?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Underfitting — the model is too simple</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Overfitting — the model memorized training data</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Good generalization — test accuracy will improve</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">High bias — the model makes wrong assumptions</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">You want to select features for your model. You score each feature independently using a statistical correlation test — without training any model. Which feature selection method is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Filter Method</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Wrapper Method</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Embedded Method</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Dimensionality Reduction</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">Which of the three qualities of a good model is MOST important in a medical diagnosis AI that helps doctors make life-or-death decisions?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Prediction Speed — decisions must be instantaneous</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Explainability — doctors must understand why the AI flagged a result</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Generalization — the model must work on all patients equally</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Training Accuracy — a high training score proves reliability</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">Why must the test set never be seen by the model during training?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Because test data is always lower quality than training data</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Because using all data at once would be too slow to compute</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Because it simulates unseen real-world data and gives an honest performance measure</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Because the test set contains the labels the model is trying to predict</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">A model that is too simple fails to capture the real patterns — it gets things wrong even on training data. What is the technical term for this problem?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Overfitting — the model has high variance</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Underfitting — the model has high bias</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Overfitting — the model has low variance</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Underfitting — the model has high variance</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>The 7-stage ML pipeline: Data Preparation → Pre-processing → Feature Selection → Training → Evaluation → Deployment → Feedback</li>
+        <li>Training set (model learns) vs. Test set (unseen, measures real performance)</li>
+        <li>Data processing: Cleansing → Standardization → Dimensionality Reduction</li>
+        <li>Feature selection: Filter (independent, fast), Wrapper (subset testing, slow), Embedded (inside training)</li>
+        <li>A good model: Generalization, Explainability, Prediction Speed</li>
+        <li>Overfitting = high variance (memorizes noise); Underfitting = high bias (too simple)</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0006-ml-key-concepts.html">Lesson 06 → Key ML Concepts: Gradient Descent, Hyperparameters & Cross-Validation</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://www.coursera.org/specializations/machine-learning-introduction" target="_blank">Machine Learning Specialization — Andrew Ng (Coursera)</a>
+    — Week 2 of Course 1 covers overfitting, bias, and variance brilliantly with visuals. Free to audit.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0004-ml-overview.html">← Lesson 04: ML Overview</a>
+    <a href="0006-ml-key-concepts.html" class="nav-next">Next: Key ML Concepts →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! 99% training, 52% test is the classic overfitting signature — the model memorized the training data (including its noise and quirks) rather than learning the underlying pattern. It fails on new data it hasn't seen.",
+    wrong:   "Not quite. The giveaway is the huge gap: near-perfect on training, terrible on test. That gap is overfitting. Underfitting would be bad on BOTH sets. High bias causes underfitting, not this gap."
+  },
+  q2: {
+    correct: "Correct! Evaluating each feature independently using a statistical test — without training a model at all — is the Filter method. It's the fastest approach, though it ignores how features might interact.",
+    wrong:   "Not quite. The key clue is 'without training any model' and 'independently.' That's the Filter method. Wrapper tests subsets by actually training a model. Embedded happens during training. Dimensionality reduction is a pre-processing step, not feature selection."
+  },
+  q3: {
+    correct: "Correct! In high-stakes domains like medicine, doctors and regulators need to understand WHY the AI flagged something. 'The AI said so' is not sufficient justification for surgery. Explainability is critical when decisions are life-affecting.",
+    wrong:   "Not quite. While generalization and speed matter, the defining constraint in medical diagnosis is accountability — doctors must be able to audit and justify decisions. That requires Explainability. Training accuracy is irrelevant once the model is deployed."
+  },
+  q4: {
+    correct: "Correct! The test set simulates real-world data the model has never encountered. If the model trained on it, the 'test' score would be artificially inflated — it would be measuring memorization, not generalization.",
+    wrong:   "Not quite. The reason is about honest evaluation: the test set represents unseen real-world data. If you train on it, the resulting score measures how well the model memorized the test examples — not how well it will perform on truly new data."
+  },
+  q5: {
+    correct: "Correct! Too simple → can't learn even the training patterns → high bias → underfitting. Remember: Bias = wrong assumptions = underfitting. Variance = sensitivity to noise = overfitting.",
+    wrong:   "Not quite. Watch the bias/variance pairing carefully: High Bias = Underfitting (too simple, wrong on everything). High Variance = Overfitting (too complex, memorizes noise). A model failing even on training data is too simple → high bias → underfitting."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
