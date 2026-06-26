@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 17 — Model Evaluation Metrics</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 70%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Advanced · Lesson 17 &nbsp;|&nbsp; Model Evaluation</div>
+    <h1>Model Evaluation Metrics</h1>
+    <p class="subtitle">Accuracy alone can lie. These are the numbers that actually tell you whether your model is good — and good for what.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Why accuracy isn't enough ───────────── -->
+  <h2>1. Why Accuracy Can Be Misleading</h2>
+
+  <p>Suppose you build a cancer screening model. The dataset has 990 healthy patients and 10 cancer patients. A model that predicts "healthy" for every single person gets <strong>99% accuracy</strong> — yet it misses every cancer case and is completely useless.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">The class imbalance trap</div>
+    Accuracy = (correct predictions) / (all predictions). When one class vastly outnumbers another, a model can score high accuracy by ignoring the minority class entirely. In medical, fraud detection, and security tasks, the minority class is usually the one that matters most.
+  </div>
+
+  <p>You need metrics that distinguish between <strong>different types of errors</strong>. That starts with the confusion matrix.</p>
+
+  <!-- ───────────── SECTION 2: Confusion matrix ───────────── -->
+  <h2>2. The Confusion Matrix</h2>
+
+  <p>For a binary classifier (Positive = disease, Negative = healthy), every prediction falls into one of four cells:</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 420 200" width="420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+
+      <!-- Axis labels -->
+      <text x="240" y="18" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6b6b63" font-weight="700">Predicted</text>
+      <text x="155" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">Positive</text>
+      <text x="325" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">Negative</text>
+
+      <text x="28" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6b6b63" font-weight="700" transform="rotate(-90 28 110)">Actual</text>
+      <text x="58" y="95" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">Positive</text>
+      <text x="58" y="155" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63">Negative</text>
+
+      <!-- TP -->
+      <rect x="80" y="40" width="160" height="60" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+      <text x="160" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#14532d" font-weight="700">TP</text>
+      <text x="160" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d">True Positive</text>
+      <text x="160" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">Sick → predicted sick ✓</text>
+
+      <!-- FN -->
+      <rect x="248" y="40" width="160" height="60" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+      <text x="328" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#991b1b" font-weight="700">FN</text>
+      <text x="328" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#991b1b">False Negative</text>
+      <text x="328" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#991b1b">Sick → predicted healthy ✗</text>
+
+      <!-- FP -->
+      <rect x="80" y="108" width="160" height="60" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+      <text x="160" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#92400e" font-weight="700">FP</text>
+      <text x="160" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#92400e">False Positive</text>
+      <text x="160" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#92400e">Healthy → predicted sick ✗</text>
+
+      <!-- TN -->
+      <rect x="248" y="108" width="160" height="60" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="328" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#1e3a8a" font-weight="700">TN</text>
+      <text x="328" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">True Negative</text>
+      <text x="328" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">Healthy → predicted healthy ✓</text>
+
+      <!-- Danger label for FN -->
+      <text x="370" y="56" font-family="sans-serif" font-size="8" fill="#dc2626" font-weight="700">⚠ Most</text>
+      <text x="370" y="67" font-family="sans-serif" font-size="8" fill="#dc2626" font-weight="700">dangerous</text>
+      <text x="370" y="78" font-family="sans-serif" font-size="8" fill="#dc2626" font-weight="700">in medicine</text>
+    </svg>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">TP — True Positive</div>
+      Model said Positive, reality is Positive. Correct detection. (Sick patient correctly flagged.)
+    </div>
+    <div class="def-item">
+      <div class="def-term">TN — True Negative</div>
+      Model said Negative, reality is Negative. Correct rejection. (Healthy patient correctly cleared.)
+    </div>
+    <div class="def-item">
+      <div class="def-term">FP — False Positive (Type I Error)</div>
+      Model said Positive, reality is Negative. False alarm. (Healthy patient incorrectly flagged — causes unnecessary anxiety and follow-up tests.)
+    </div>
+    <div class="def-item">
+      <div class="def-term">FN — False Negative (Type II Error)</div>
+      Model said Negative, reality is Positive. Missed detection. (Sick patient incorrectly cleared — often the most dangerous error in medical and security contexts.)
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Memorise the four cells: <strong>TP</strong> (correct positive), <strong>TN</strong> (correct negative), <strong>FP</strong> (wrong alarm), <strong>FN</strong> (missed detection). All other metrics are derived from these four numbers.
+  </div>
+
+  <!-- ───────────── SECTION 3: Metrics ───────────── -->
+  <h2>3. The Core Metrics</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Accuracy</div>
+      <strong>(TP + TN) / (TP + TN + FP + FN)</strong> — fraction of all predictions that were correct. Only reliable when classes are balanced.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Precision</div>
+      <strong>TP / (TP + FP)</strong> — of all the times the model said "Positive", how often was it right? Answers: <em>"When you raise an alarm, how trustworthy is it?"</em> High precision = few false alarms.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Recall (Sensitivity)</div>
+      <strong>TP / (TP + FN)</strong> — of all actual Positives, how many did the model catch? Answers: <em>"Of all real cases, how many did you find?"</em> High recall = few missed detections.
+    </div>
+    <div class="def-item">
+      <div class="def-term">F1 Score</div>
+      <strong>2 × (Precision × Recall) / (Precision + Recall)</strong> — the harmonic mean of Precision and Recall. Use this as a single number when you care about both. It punishes extreme imbalances between the two (a model with 100% Precision and 0% Recall gets F1 = 0).
+    </div>
+  </div>
+
+  <!-- Precision-Recall trade-off -->
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 460 130" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+
+      <!-- Low threshold scenario -->
+      <rect x="10" y="10" width="200" height="110" rx="8" fill="#fffbeb" stroke="#b45309" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="110" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#b45309" font-weight="700">Low threshold → "say Positive more often"</text>
+      <text x="110" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#15803d">↑ Recall (catch more real cases)</text>
+      <text x="110" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#dc2626">↓ Precision (more false alarms too)</text>
+      <text x="110" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">Use when missing a positive is</text>
+      <text x="110" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">the worst outcome.</text>
+      <text x="110" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6b6b63">Example: cancer screening</text>
+      <text x="110" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6b6b63">(miss no sick patient)</text>
+
+      <!-- Arrow between -->
+      <text x="230" y="70" font-family="sans-serif" font-size="18" fill="#6b6b63" text-anchor="middle">⇄</text>
+      <text x="230" y="84" font-family="sans-serif" font-size="7.5" fill="#6b6b63" text-anchor="middle">trade-off</text>
+
+      <!-- High threshold scenario -->
+      <rect x="250" y="10" width="200" height="110" rx="8" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="350" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#15803d" font-weight="700">High threshold → "only say Positive when sure"</text>
+      <text x="350" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#15803d">↑ Precision (few false alarms)</text>
+      <text x="350" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#dc2626">↓ Recall (miss more real cases)</text>
+      <text x="350" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">Use when a false alarm is</text>
+      <text x="350" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">costly or disruptive.</text>
+      <text x="350" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6b6b63">Example: spam filter</text>
+      <text x="350" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6b6b63">(don't block real emails)</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.4rem">
+      Adjusting the classification threshold shifts the Precision–Recall trade-off. F1 balances both.
+    </p>
+  </div>
+
+  <!-- Numeric example -->
+  <div class="callout tip">
+    <div class="callout-title">Worked example — 10 patients</div>
+    <p style="margin:0">Confusion matrix: <strong>TP=8, FN=2, FP=1, TN=89</strong> (100 patients total, 10 sick)</p>
+    <ul style="margin:0.5rem 0 0">
+      <li><strong>Accuracy</strong> = (8+89)/100 = <strong>97%</strong> — looks great</li>
+      <li><strong>Precision</strong> = 8/(8+1) = <strong>88.9%</strong> — when we flag someone, we're right 89% of the time</li>
+      <li><strong>Recall</strong> = 8/(8+2) = <strong>80%</strong> — we caught 8 of the 10 sick patients</li>
+      <li><strong>F1</strong> = 2×(0.889×0.8)/(0.889+0.8) = <strong>84.2%</strong></li>
+    </ul>
+    <p style="margin:0.5rem 0 0">The 97% accuracy hides that we missed 2 sick patients (FN=2). Recall reveals this directly.</p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Four formulas to memorise:
+    <ul style="margin:0.4rem 0 0">
+      <li><strong>Accuracy</strong> = (TP+TN) / (TP+TN+FP+FN)</li>
+      <li><strong>Precision</strong> = TP / (TP+FP)</li>
+      <li><strong>Recall</strong> = TP / (TP+FN)</li>
+      <li><strong>F1</strong> = 2 × Precision × Recall / (Precision + Recall)</li>
+    </ul>
+  </div>
+
+  <!-- ───────────── SECTION 4: ROC and AUC ───────────── -->
+  <h2>4. ROC Curve and AUC</h2>
+
+  <p>Precision and Recall depend on the classification threshold you choose. The <strong>ROC curve</strong> (Receiver Operating Characteristic) shows the model's performance across <em>all possible thresholds</em> at once, so you can evaluate the model independent of any single threshold choice.</p>
+
+  <p>The ROC curve plots:</p>
+  <ul>
+    <li><strong>X-axis: False Positive Rate (FPR)</strong> = FP / (FP + TN) — how often does the model falsely alarm on negatives?</li>
+    <li><strong>Y-axis: True Positive Rate (TPR)</strong> = TP / (TP + FN) — this is just Recall</li>
+  </ul>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 320 240" width="320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="rc" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0 0,6 3,0 6" fill="#6b6b63"/>
+        </marker>
+      </defs>
+
+      <!-- Axes -->
+      <line x1="44" y1="10" x2="44" y2="205" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#rc)"/>
+      <line x1="44" y1="200" x2="290" y2="200" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#rc)"/>
+
+      <!-- Axis labels -->
+      <text x="10" y="105" font-family="sans-serif" font-size="8.5" fill="#6b6b63" text-anchor="middle" transform="rotate(-90 10 105)">True Positive Rate (Recall)</text>
+      <text x="167" y="220" font-family="sans-serif" font-size="8.5" fill="#6b6b63" text-anchor="middle">False Positive Rate</text>
+      <text x="44" y="207" font-family="sans-serif" font-size="7.5" fill="#6b6b63" text-anchor="middle">0</text>
+      <text x="285" y="207" font-family="sans-serif" font-size="7.5" fill="#6b6b63" text-anchor="middle">1</text>
+      <text x="36" y="202" font-family="sans-serif" font-size="7.5" fill="#6b6b63" text-anchor="end">0</text>
+      <text x="36" y="18" font-family="sans-serif" font-size="7.5" fill="#6b6b63" text-anchor="end">1</text>
+
+      <!-- Random classifier diagonal -->
+      <line x1="44" y1="200" x2="285" y2="15" stroke="#d4d4c8" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="210" y="120" font-family="sans-serif" font-size="7.5" fill="#9ca3af">random (AUC=0.5)</text>
+
+      <!-- Good model curve -->
+      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="90" y="55" font-family="sans-serif" font-size="8" fill="#1e3a8a" font-weight="700">Good model</text>
+      <text x="90" y="66" font-family="sans-serif" font-size="7.5" fill="#1e3a8a">AUC ≈ 0.92</text>
+
+      <!-- Perfect model curve -->
+      <path d="M 44 200 L 44 15 L 285 15" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="50" y="40" font-family="sans-serif" font-size="7.5" fill="#15803d">perfect (AUC=1.0)</text>
+
+      <!-- AUC shading -->
+      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15 L 285 200 Z" fill="#dbeafe" opacity="0.4"/>
+      <text x="180" y="170" font-family="sans-serif" font-size="9" fill="#2563eb" text-anchor="middle" font-weight="700">AUC</text>
+      <text x="180" y="183" font-family="sans-serif" font-size="8" fill="#2563eb" text-anchor="middle">(area under</text>
+      <text x="180" y="194" font-family="sans-serif" font-size="8" fill="#2563eb" text-anchor="middle">the curve)</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.3rem">
+      A curve hugging the top-left corner means high TPR at low FPR — a good model. AUC summarises the whole curve as one number.
+    </p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">AUC (Area Under the Curve)</div>
+      A single number from 0 to 1 summarising the entire ROC curve. Interpretation: the probability that the model ranks a random positive example higher than a random negative example.<br>
+      <strong>AUC = 0.5</strong>: no better than random guessing.<br>
+      <strong>AUC = 1.0</strong>: perfect classifier.<br>
+      <strong>AUC &gt; 0.9</strong>: excellent; <strong>0.7–0.9</strong>: acceptable; <strong>&lt; 0.7</strong>: poor.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>ROC curve</strong>: plots TPR (Y) vs FPR (X) at all thresholds. <strong>AUC</strong>: area under the ROC curve, ranges 0–1. AUC = 0.5 is random; AUC = 1.0 is perfect. AUC is threshold-independent — it evaluates the model's overall discriminating power regardless of where you set the decision boundary.
+  </div>
+
+  <!-- ───────────── SECTION 5: Which metric when? ───────────── -->
+  <h2>5. Choosing the Right Metric</h2>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.87rem">
+    <thead>
+      <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+        <th style="padding:0.6rem 0.8rem; text-align:left">Situation</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Metric to prioritise</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Why</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem">Balanced classes, general use</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700">Accuracy</td>
+        <td style="padding:0.5rem 0.8rem">Fair summary when both classes are equally represented</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem">Missing a positive is costly (cancer, fraud)</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700; color:#dc2626">Recall ↑</td>
+        <td style="padding:0.5rem 0.8rem">Minimise FN (missed real cases)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem">False alarms are costly (spam filter, legal action)</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700; color:#b45309">Precision ↑</td>
+        <td style="padding:0.5rem 0.8rem">Minimise FP (false accusations)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem">Imbalanced classes, both errors matter</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700">F1 Score</td>
+        <td style="padding:0.5rem 0.8rem">Harmonic mean punishes extreme imbalance between P and R</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem 0.8rem">Comparing models regardless of threshold</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700">AUC-ROC</td>
+        <td style="padding:0.5rem 0.8rem">Summarises performance across all thresholds in one number</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ───────────── SECTION 6: Multi-class extension ───────────── -->
+  <h2>6. Multi-class Extension</h2>
+
+  <p>The confusion matrix extends naturally to more than two classes — it becomes an N×N grid where cell (i, j) is the count of examples from class i predicted as class j. The diagonal is always correct predictions.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Macro-average</div>
+      Compute the metric (Precision, Recall, F1) for each class independently, then average them equally. Treats every class as equally important regardless of how many examples it has.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Weighted average</div>
+      Same as macro, but weights each class's metric by how many examples it has. Better when class sizes differ greatly — large classes contribute more to the final number.
+    </div>
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A fraud detection model has TP=50, FP=10, FN=5, TN=935. What is the Precision?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">90.9% — computed as TP / (TP + FN) = 50 / 55</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">98.5% — computed as (TP + TN) / total = 985 / 1000</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">83.3% — computed as TP / (TP + FP) = 50 / 60</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">50.0% — computed as TP / (TP + TN) = 50 / 985</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Using the same data (TP=50, FP=10, FN=5, TN=935), what is the Recall?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">83.3% — computed as TP / (TP + FP) = 50 / 60</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">90.9% — computed as TP / (TP + FN) = 50 / 55</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">98.5% — computed as (TP + TN) / total = 985 / 1000</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">98.0% — computed as TN / (TN + FP) = 935 / 945</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">A hospital wants a cancer screening model that misses as few real cancer cases as possible, even if it raises some false alarms. Which metric should they optimise?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Precision — ensures the model only flags cases it is very confident about</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Accuracy — gives the clearest overall picture of how often the model is correct</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Recall — maximises the fraction of real cancer cases that are detected</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">AUC-ROC — summarises performance at all thresholds and ignores false negatives specifically</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">What does an AUC of 0.5 indicate about a binary classifier?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The model achieves 50% accuracy, which is poor for a binary task</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The model is correct on exactly half of all positive examples</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">The model performs no better than randomly guessing the class label</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">The model's precision and recall are both exactly 50%, perfectly balanced</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">A dataset has 950 negatives and 50 positives. A model predicts "Negative" for every single sample. What is its accuracy, and why is that misleading?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">50% accurate — it correctly classifies half the samples, which is the chance baseline</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">5% accurate — it only correctly predicts the 50 positive samples in the dataset</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">95% accurate — but its Recall is 0% because it never detects any positive cases</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">100% accurate — it classifies all samples, but the precision cannot be calculated</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Confusion matrix: TP (correct positive), TN (correct negative), FP (false alarm), FN (missed detection)</li>
+        <li>Accuracy = (TP+TN)/(TP+TN+FP+FN) — misleading when classes are imbalanced</li>
+        <li>Precision = TP/(TP+FP) — how trustworthy are the positive predictions?</li>
+        <li>Recall = TP/(TP+FN) — how many real positives were found?</li>
+        <li>F1 = 2×P×R/(P+R) — balanced single score for imbalanced classes</li>
+        <li>High Recall: use when missing a positive is costly (cancer, fraud)</li>
+        <li>High Precision: use when false alarms are costly (spam filter)</li>
+        <li>ROC curve: TPR vs FPR at all thresholds</li>
+        <li>AUC: area under ROC curve; 0.5 = random, 1.0 = perfect</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0018-ai-ethics.html">Lesson 18 → AI Ethics &amp; Responsible AI</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc" target="_blank">Google ML Crash Course — Classification: ROC and AUC</a>
+    — Interactive ROC curve tool where you can drag the threshold and watch TPR/FPR update in real time. The best way to build intuition for what AUC actually measures.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0016-transfer-learning.html">← Lesson 16: Transfer Learning</a>
+    <a href="0018-ai-ethics.html" class="nav-next">Next: AI Ethics →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Precision = TP / (TP + FP) = 50 / (50 + 10) = 50/60 = 83.3%. It answers: of the 60 times the model raised a fraud alert, 50 were real fraud cases and 10 were false alarms. 83.3% of the alarms were correct.",
+    wrong:   "Not quite. Precision = TP / (TP + FP) — it measures how reliable the positive predictions are. TP/(TP+FN) is Recall. (TP+TN)/total is Accuracy. With TP=50 and FP=10: Precision = 50/(50+10) = 50/60 = 83.3%."
+  },
+  q2: {
+    correct: "Correct! Recall = TP / (TP + FN) = 50 / (50 + 5) = 50/55 = 90.9%. It answers: of the 55 actual fraud transactions (50 caught + 5 missed), the model caught 90.9% of them. 5 real fraud cases slipped through undetected.",
+    wrong:   "Not quite. Recall = TP / (TP + FN) — it measures how many real positives were detected. TP/(TP+FP) is Precision. (TP+TN)/total is Accuracy. With TP=50 and FN=5: Recall = 50/(50+5) = 50/55 = 90.9%."
+  },
+  q3: {
+    correct: "Correct! Recall = TP/(TP+FN) measures how many real cancer cases are caught. Maximising Recall minimises FN (missed detections). In cancer screening, a missed diagnosis (FN) is far more harmful than a false alarm (FP) — a false alarm leads to more tests, but a missed case could be fatal. High Recall = few sick patients slip through.",
+    wrong:   "Not quite. The goal is to miss as few real cancer cases as possible — that means minimising False Negatives (FN). Recall = TP/(TP+FN) is the metric that directly captures this. High Precision means few false alarms (not the priority here). Accuracy is misleading with imbalanced classes. AUC summarises threshold performance but doesn't specifically target FN."
+  },
+  q4: {
+    correct: "Correct! AUC = 0.5 means the model's ROC curve is the diagonal line — it is no better than randomly assigning class labels. The model has zero discriminating power: it cannot separate positives from negatives at any threshold. AUC = 1.0 is a perfect classifier. A useful model should have AUC well above 0.5.",
+    wrong:   "Not quite. AUC is not the same as accuracy. AUC = 0.5 means the model performs exactly like random guessing — its ROC curve follows the diagonal. This is the worst meaningful result for AUC. It means the model cannot distinguish positives from negatives at any threshold. It does not mean 50% accuracy or that precision and recall are both 50%."
+  },
+  q5: {
+    correct: "Correct! The 'always predict Negative' model scores 950/1000 = 95% accuracy because the dataset is heavily imbalanced. But its Recall = TP/(TP+FN) = 0/50 = 0% — it never detects a single positive. Precision is undefined (0/0, no positive predictions). F1 = 0. Accuracy hides the complete failure to detect the minority class.",
+    wrong:   "Not quite. The model that always says Negative gets TP=0, FP=0, FN=50, TN=950. Accuracy = (0+950)/1000 = 95% — deceptively high. But Recall = 0/(0+50) = 0% — it catches zero actual positives. This is the classic class imbalance trap: high accuracy masks complete failure on the class that matters most."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
