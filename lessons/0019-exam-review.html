@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 19 — HCIA-AI Exam Review</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 80%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Advanced · Lesson 19 &nbsp;|&nbsp; Exam Preparation</div>
+    <h1>HCIA-AI Exam Review</h1>
+    <p class="subtitle">20 mock questions across all four chapters. Same format, same difficulty, same topic distribution as the real exam.</p>
+  </header>
+
+  <!-- ───────────── EXAM FORMAT ───────────── -->
+  <div class="callout tip">
+    <div class="callout-title">About the HCIA-AI Exam (H13-311)</div>
+    <ul style="margin:0.4rem 0 0">
+      <li><strong>Format:</strong> ~60 questions — single-choice, multiple-choice, and true/false</li>
+      <li><strong>Duration:</strong> 90 minutes</li>
+      <li><strong>Pass score:</strong> 600/1000</li>
+      <li><strong>Topic weight:</strong> Chapter 03 (Deep Learning) carries the most questions; Chapter 04 (Frameworks &amp; MindSpore) is heavily tested</li>
+      <li><strong>This mock:</strong> 20 single-choice questions, 5 per chapter group, time yourself — aim for under 45 minutes</li>
+    </ul>
+  </div>
+
+  <!-- ───────────── QUICK REFERENCE CARD ───────────── -->
+  <h2>Quick Reference Card</h2>
+  <p>The facts below are most commonly tested. Read through before the mock exam.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-size:0.82rem">
+
+    <div style="background:#f0f9ff; border:1.5px solid #0ea5e9; border-radius:8px; padding:0.9rem">
+      <div style="font-weight:700; color:#0369a1; margin-bottom:0.5rem">Chapter 1 — AI Overview</div>
+      <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
+        <li>3 AI schools: <strong>Symbolism, Connectionism, Behaviorism</strong></li>
+        <li>3 elements: <strong>Data, Computing Power, Algorithms</strong></li>
+        <li>Transformer types: Encoder-only (BERT), Decoder-only (GPT), Both (T5)</li>
+        <li>PanGu tiers: <strong>Base LLM → Industry → Scenario</strong></li>
+        <li>Emergence: unexpected capability from scale alone</li>
+        <li>AI eras: Perception → Understanding → <strong>Creation &amp; Generation</strong></li>
+      </ul>
+    </div>
+
+    <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:0.9rem">
+      <div style="font-weight:700; color:#15803d; margin-bottom:0.5rem">Chapter 2 — Machine Learning</div>
+      <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
+        <li>Feature selection: <strong>Filter (statistics), Wrapper (trains model), Embedded (L1/tree)</strong></li>
+        <li>GD variants: BGD (all), <strong>SGD (one sample)</strong>, MBGD (mini-batch)</li>
+        <li>Overfitting → high variance; Underfitting → high bias</li>
+        <li>k-Means, Hierarchical = <strong>unsupervised</strong></li>
+        <li>Random Forest = Bagging; GBDT = Boosting</li>
+        <li>Cross-validation: prevents overfitting to one train/val split</li>
+      </ul>
+    </div>
+
+    <div style="background:#fefce8; border:1.5px solid #ca8a04; border-radius:8px; padding:0.9rem">
+      <div style="font-weight:700; color:#92400e; margin-bottom:0.5rem">Chapter 3 — Deep Learning</div>
+      <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
+        <li>ReLU: solves vanishing gradient; default activation</li>
+        <li>CNN output: <strong>(Input − Kernel + 2P) / Stride + 1</strong></li>
+        <li>Max Pooling: no learnable parameters</li>
+        <li>LSTM gates: <strong>Forget, Input, Output</strong> + Cell State</li>
+        <li>Attention: <strong>softmax(QKᵀ / √dₖ) · V</strong></li>
+        <li>BERT = bidirectional encoder; GPT = left-to-right decoder</li>
+        <li>Adam = Momentum + RMSProp (default optimiser)</li>
+        <li>Dropout: ON during training, <strong>OFF during inference</strong></li>
+        <li>MoE: router activates top-k experts per token</li>
+      </ul>
+    </div>
+
+    <div style="background:#fdf4ff; border:1.5px solid #a855f7; border-radius:8px; padding:0.9rem">
+      <div style="font-weight:700; color:#7c3aed; margin-bottom:0.5rem">Chapter 4 &amp; Advanced</div>
+      <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
+        <li>MindSpore base class: <strong>nn.Cell</strong>; forward method: <strong>construct()</strong></li>
+        <li>MindSpore modes: <strong>Graph (static)</strong>, PyNative (dynamic)</li>
+        <li>LeNet: Conv→Pool→Conv→Pool→FC→FC→Output (10 classes)</li>
+        <li>6-stage pipeline: Req → Env → <strong>Data</strong> → Network → Train → Deploy</li>
+        <li>Federated Learning: only <strong>weight updates</strong> (not raw data) shared</li>
+        <li>Transfer: small data → <strong>feature extraction</strong> (freeze backbone)</li>
+        <li>Precision = TP/(TP+FP); Recall = TP/(TP+FN)</li>
+        <li>AUC = 0.5 (random), 1.0 (perfect)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───────────── SCORE TRACKER ───────────── -->
+  <div id="scoreboard" style="margin-top:1.5rem; padding:0.9rem 1.2rem; background:#f0f0ec; border-radius:8px; font-family:sans-serif; font-size:0.88rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap">
+    <span style="font-weight:700; color:#333">Mock Exam Progress</span>
+    <span>Answered: <strong id="answered-count">0</strong> / 20</span>
+    <span>Correct: <strong id="correct-count" style="color:#15803d">0</strong></span>
+    <span>Score: <strong id="score-pct" style="color:#2563eb">—</strong></span>
+  </div>
+
+  <!-- ───────────── CHAPTER 1 QUESTIONS ───────────── -->
+  <h2 style="margin-top:1.8rem">Chapter 1 — AI Overview &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6b6b63">(Questions 1–5)</span></h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Question 1 of 20</div>
+    <div class="quiz-question">Which of the three major AI schools believes intelligence emerges from learned connections between neurons, modelled on the biological brain?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Symbolism — uses logic rules and knowledge graphs to represent intelligence</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Connectionism — models intelligence as patterns in networks of connected units</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Behaviorism — focuses on reward and punishment signals to shape behaviour</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Probabilism — uses Bayesian inference to reason under uncertainty</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Question 2 of 20</div>
+    <div class="quiz-question">In the Transformer architecture, BERT uses only the encoder stack and GPT uses only the decoder stack. What key difference does this create in how each model processes text?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">BERT generates text one token at a time; GPT reads the whole sentence at once</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">BERT sees left and right context simultaneously; GPT only sees left context (past tokens)</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">BERT can only do classification; GPT can only do translation between languages</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">BERT uses dynamic graphs; GPT uses static graphs for faster inference</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Question 3 of 20</div>
+    <div class="quiz-question">The three essential elements for AI development, according to the HCIA-AI syllabus, are:</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Models, Frameworks, and Deployment infrastructure</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Supervised learning, Reinforcement learning, and Unsupervised learning</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Data, Computing Power, and Algorithms</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Python, PyTorch, and Cloud computing platforms</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Question 4 of 20</div>
+    <div class="quiz-question">Huawei's PanGu model uses a three-tier hierarchy. Starting from the most general, the correct order is:</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Scenario Model → Industry Model → Basic Model (LLM)</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Industry Model → Basic Model (LLM) → Scenario Model</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Basic Model (LLM) → Industry Model → Scenario Model</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Basic Model (LLM) → Scenario Model → Industry Model</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Question 5 of 20</div>
+    <div class="quiz-question">Which AI technology is described as a model pre-trained on vast general data that can be adapted to many downstream tasks, exhibiting unexpected new capabilities that emerge from scale?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">A Convolutional Neural Network — the standard architecture for large-scale image tasks</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">A Knowledge Graph — a symbolic AI structure encoding world knowledge as linked entities</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">A Foundation Model — a large pre-trained model with emergent capabilities adapted via fine-tuning</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">An Ensemble Model — multiple models combined to produce more robust predictions</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="show('q6')">Next →</button>
+  </div>
+
+  <!-- ───────────── CHAPTER 2 QUESTIONS ───────────── -->
+  <h2 style="display:none" id="ch2-header">Chapter 2 — Machine Learning &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6b6b63">(Questions 6–10)</span></h2>
+
+  <div class="quiz" id="q6" style="display:none">
+    <div class="quiz-title">Question 6 of 20</div>
+    <div class="quiz-question">A data scientist evaluates multiple subsets of features by training and testing a model on each subset, then selecting the best-performing subset. Which feature selection method is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q6',false)">Filter method — ranks features by statistical correlation with the label before training</button>
+      <button class="quiz-option" onclick="answer(this,'q6',true)">Wrapper method — trains a model on each candidate feature subset and uses performance to select</button>
+      <button class="quiz-option" onclick="answer(this,'q6',false)">Embedded method — integrates feature selection into the training process using L1 regularisation</button>
+      <button class="quiz-option" onclick="answer(this,'q6',false)">Projection method — reduces dimensions by transforming features into a lower-dimensional space</button>
+    </div>
+    <div class="quiz-feedback" id="q6-fb"></div>
+    <button class="quiz-next" onclick="show('q7')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q7" style="display:none">
+    <div class="quiz-title">Question 7 of 20</div>
+    <div class="quiz-question">A model achieves 100% accuracy on the training set but only 60% on the test set. This is a symptom of:</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q7',false)">High bias (underfitting) — the model is too simple to capture patterns in the data</button>
+      <button class="quiz-option" onclick="answer(this,'q7',true)">High variance (overfitting) — the model memorised training data and cannot generalise</button>
+      <button class="quiz-option" onclick="answer(this,'q7',false)">Data leakage — test set labels were accidentally included in the training data</button>
+      <button class="quiz-option" onclick="answer(this,'q7',false)">Class imbalance — the test set has a different class distribution than the training set</button>
+    </div>
+    <div class="quiz-feedback" id="q7-fb"></div>
+    <button class="quiz-next" onclick="show('q8')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q8" style="display:none">
+    <div class="quiz-title">Question 8 of 20</div>
+    <div class="quiz-question">Random Forest and Gradient Boosted Decision Tree (GBDT) are both ensemble methods. What is the key structural difference between them?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q8',true)">Random Forest builds trees in parallel (Bagging); GBDT builds trees sequentially, each correcting the last (Boosting)</button>
+      <button class="quiz-option" onclick="answer(this,'q8',false)">Random Forest uses Boosting; GBDT uses Bagging with random feature subsets at each node</button>
+      <button class="quiz-option" onclick="answer(this,'q8',false)">Random Forest uses one decision tree; GBDT combines multiple different algorithm types</button>
+      <button class="quiz-option" onclick="answer(this,'q8',false)">Random Forest is supervised; GBDT is a semi-supervised method that also uses unlabelled data</button>
+    </div>
+    <div class="quiz-feedback" id="q8-fb"></div>
+    <button class="quiz-next" onclick="show('q9')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q9" style="display:none">
+    <div class="quiz-title">Question 9 of 20</div>
+    <div class="quiz-question">In K-Fold Cross-Validation, the dataset is split into K equal parts. During each of the K rounds, which data is used for validation?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q9',false)">All K folds are used for both training and validation simultaneously in each round</button>
+      <button class="quiz-option" onclick="answer(this,'q9',false)">A randomly sampled 20% of the full dataset, independent of the K folds</button>
+      <button class="quiz-option" onclick="answer(this,'q9',true)">One fold is held out for validation while the remaining K−1 folds are used for training</button>
+      <button class="quiz-option" onclick="answer(this,'q9',false)">The same fold is always used for validation across all K rounds for consistency</button>
+    </div>
+    <div class="quiz-feedback" id="q9-fb"></div>
+    <button class="quiz-next" onclick="show('q10')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q10" style="display:none">
+    <div class="quiz-title">Question 10 of 20</div>
+    <div class="quiz-question">Which gradient descent variant updates model weights using one randomly selected training sample per step, making it noisy but fast and capable of escaping local minima?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q10',false)">Batch Gradient Descent (BGD) — uses the entire dataset for each weight update</button>
+      <button class="quiz-option" onclick="answer(this,'q10',false)">Mini-batch Gradient Descent (MBGD) — uses a small subset (e.g. 32 samples) per update</button>
+      <button class="quiz-option" onclick="answer(this,'q10',true)">Stochastic Gradient Descent (SGD) — uses exactly one randomly chosen training sample per update</button>
+      <button class="quiz-option" onclick="answer(this,'q10',false)">Adam — uses momentum and adaptive learning rates, not individual samples</button>
+    </div>
+    <div class="quiz-feedback" id="q10-fb"></div>
+    <button class="quiz-next" onclick="show('q11')">Next →</button>
+  </div>
+
+  <!-- ───────────── CHAPTER 3 QUESTIONS ───────────── -->
+  <h2 style="display:none" id="ch3-header">Chapter 3 — Deep Learning &amp; Foundation Models &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6b6b63">(Questions 11–15)</span></h2>
+
+  <div class="quiz" id="q11" style="display:none">
+    <div class="quiz-title">Question 11 of 20</div>
+    <div class="quiz-question">A 6×6 feature map is convolved with a 3×3 kernel using stride 2 and no padding. What is the size of the output feature map?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q11',false)">4×4 — subtracting the kernel size from the input without accounting for stride</button>
+      <button class="quiz-option" onclick="answer(this,'q11',false)">6×6 — same padding preserves the spatial dimensions by adding a zero border</button>
+      <button class="quiz-option" onclick="answer(this,'q11',true)">2×2 — computed as (6 − 3 + 0) / 2 + 1 = 2</button>
+      <button class="quiz-option" onclick="answer(this,'q11',false)">3×3 — the output always matches the kernel size when no padding is used</button>
+    </div>
+    <div class="quiz-feedback" id="q11-fb"></div>
+    <button class="quiz-next" onclick="show('q12')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q12" style="display:none">
+    <div class="quiz-title">Question 12 of 20</div>
+    <div class="quiz-question">In an LSTM, the Forget Gate outputs a value close to 0 for a particular element of the cell state. What does this mean?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q12',false)">That element of the cell state will be passed through unchanged to the next time step</button>
+      <button class="quiz-option" onclick="answer(this,'q12',false)">New information from the Input Gate will be written to that cell state element at full strength</button>
+      <button class="quiz-option" onclick="answer(this,'q12',true)">That element of the cell state will be erased — multiplying by ~0 removes the stored memory</button>
+      <button class="quiz-option" onclick="answer(this,'q12',false)">The Output Gate will block that element from appearing in the hidden state output</button>
+    </div>
+    <div class="quiz-feedback" id="q12-fb"></div>
+    <button class="quiz-next" onclick="show('q13')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q13" style="display:none">
+    <div class="quiz-title">Question 13 of 20</div>
+    <div class="quiz-question">The Adam optimiser is described as combining two earlier optimisers. Which two does it combine?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q13',false)">SGD and BGD — it alternates between single-sample and full-batch gradient updates</button>
+      <button class="quiz-option" onclick="answer(this,'q13',false)">AdaGrad and BGD — it uses AdaGrad's per-parameter LR with full-batch gradients</button>
+      <button class="quiz-option" onclick="answer(this,'q13',true)">Momentum and RMSProp — it keeps a moving average of gradients and of squared gradients</button>
+      <button class="quiz-option" onclick="answer(this,'q13',false)">Momentum and AdaGrad — it adds momentum to AdaGrad's accumulated squared gradient sum</button>
+    </div>
+    <div class="quiz-feedback" id="q13-fb"></div>
+    <button class="quiz-next" onclick="show('q14')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q14" style="display:none">
+    <div class="quiz-title">Question 14 of 20</div>
+    <div class="quiz-question">During inference (predicting on new data), a model that was trained with Dropout should:</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q14',false)">Apply the same dropout rate as training, so the model behaviour is consistent</button>
+      <button class="quiz-option" onclick="answer(this,'q14',false)">Double the dropout rate to reduce the risk of overfitting on new data</button>
+      <button class="quiz-option" onclick="answer(this,'q14',true)">Disable dropout entirely so all neurons contribute to the prediction</button>
+      <button class="quiz-option" onclick="answer(this,'q14',false)">Use dropout only on the output layer, keeping all hidden layer neurons active</button>
+    </div>
+    <div class="quiz-feedback" id="q14-fb"></div>
+    <button class="quiz-next" onclick="show('q15')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q15" style="display:none">
+    <div class="quiz-title">Question 15 of 20</div>
+    <div class="quiz-question">In the Transformer's self-attention mechanism, what is the purpose of dividing the dot product QKᵀ by √dₖ before applying softmax?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q15',false)">To normalise the attention weights so they sum to the dimension dₖ rather than to 1</button>
+      <button class="quiz-option" onclick="answer(this,'q15',false)">To convert the dot product into a probability by applying the softmax temperature</button>
+      <button class="quiz-option" onclick="answer(this,'q15',true)">To prevent dot products from becoming very large in high dimensions, which would saturate softmax</button>
+      <button class="quiz-option" onclick="answer(this,'q15',false)">To add positional information to the attention scores before the softmax is applied</button>
+    </div>
+    <div class="quiz-feedback" id="q15-fb"></div>
+    <button class="quiz-next" onclick="show('q16')">Next →</button>
+  </div>
+
+  <!-- ───────────── CHAPTER 4 + ADVANCED QUESTIONS ───────────── -->
+  <h2 style="display:none" id="ch4-header">Chapter 4 &amp; Advanced Topics &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6b6b63">(Questions 16–20)</span></h2>
+
+  <div class="quiz" id="q16" style="display:none">
+    <div class="quiz-title">Question 16 of 20</div>
+    <div class="quiz-question">A developer writes a MindSpore model class that inherits from nn.Cell. She names her forward computation method forward() instead of construct(). What will happen?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q16',false)">The model will work correctly — MindSpore accepts both forward() and construct() as valid names</button>
+      <button class="quiz-option" onclick="answer(this,'q16',false)">MindSpore will raise a NameError immediately when the class is defined</button>
+      <button class="quiz-option" onclick="answer(this,'q16',true)">The forward computation will never be called — MindSpore only invokes construct(), so the model produces no output</button>
+      <button class="quiz-option" onclick="answer(this,'q16',false)">MindSpore will automatically rename forward() to construct() and warn the developer</button>
+    </div>
+    <div class="quiz-feedback" id="q16-fb"></div>
+    <button class="quiz-next" onclick="show('q17')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q17" style="display:none">
+    <div class="quiz-title">Question 17 of 20</div>
+    <div class="quiz-question">In the AI Application Development Process, a team spends most of their time collecting, cleaning, labelling, and splitting data. Which of the six stages are they in?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q17',false)">② Environment Setup — preparing the software and hardware before training begins</button>
+      <button class="quiz-option" onclick="answer(this,'q17',false)">④ Network Building — designing the architecture that will process the data</button>
+      <button class="quiz-option" onclick="answer(this,'q17',true)">③ Data Preparation — cleaning, labelling, and splitting the dataset (typically 60–70% of project time)</button>
+      <button class="quiz-option" onclick="answer(this,'q17',false)">① Requirement Analysis — determining what data will be needed and from which sources</button>
+    </div>
+    <div class="quiz-feedback" id="q17-fb"></div>
+    <button class="quiz-next" onclick="show('q18')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q18" style="display:none">
+    <div class="quiz-title">Question 18 of 20</div>
+    <div class="quiz-question">A researcher has 50,000 labelled images of a task that is very similar to ImageNet (natural photos of objects). Which transfer learning approach will most likely give the best results?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q18',false)">Feature extraction — freeze all backbone layers and train only a new classifier head</button>
+      <button class="quiz-option" onclick="answer(this,'q18',false)">Train from scratch — with 50,000 images and a similar domain, pre-training is not needed</button>
+      <button class="quiz-option" onclick="answer(this,'q18',true)">Full fine-tuning — large dataset + similar domain = unfreeze all layers and train at a low learning rate</button>
+      <button class="quiz-option" onclick="answer(this,'q18',false)">Freeze only the early layers and fine-tune deep layers at a standard learning rate</button>
+    </div>
+    <div class="quiz-feedback" id="q18-fb"></div>
+    <button class="quiz-next" onclick="show('q19')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q19" style="display:none">
+    <div class="quiz-title">Question 19 of 20</div>
+    <div class="quiz-question">A fraud detection model makes 80 correct fraud detections (TP), misses 20 fraud cases (FN), raises 5 false fraud alarms (FP), and correctly clears 895 non-fraud transactions (TN). What is the F1 score?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q19',false)">80.0% — computed as TP / (TP + FN + FP) = 80 / 105</button>
+      <button class="quiz-option" onclick="answer(this,'q19',false)">94.1% — computed as (TP + TN) / total = 975 / 1000</button>
+      <button class="quiz-option" onclick="answer(this,'q19',true)">86.5% — Precision=94.1%, Recall=80.0%; F1 = 2×(0.941×0.8)/(0.941+0.8)</button>
+      <button class="quiz-option" onclick="answer(this,'q19',false)">87.1% — computed as 2×TP / (2×TP + FP + FN) treated as equal to Precision alone</button>
+    </div>
+    <div class="quiz-feedback" id="q19-fb"></div>
+    <button class="quiz-next" onclick="show('q20')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q20" style="display:none">
+    <div class="quiz-title">Question 20 of 20</div>
+    <div class="quiz-question">Which of the following correctly describes the key privacy benefit of Federated Learning compared to centralised model training?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q20',false)">The model is encrypted on the server, so only authorised users can access the trained weights</button>
+      <button class="quiz-option" onclick="answer(this,'q20',false)">Each device trains an independent model, so no server is involved and there is no data risk</button>
+      <button class="quiz-option" onclick="answer(this,'q20',true)">Raw training data never leaves each device — only model weight updates are shared and aggregated</button>
+      <button class="quiz-option" onclick="answer(this,'q20',false)">Differential privacy noise is automatically added to the training data before it is collected</button>
+    </div>
+    <div class="quiz-feedback" id="q20-fb"></div>
+    <button class="quiz-next" onclick="showFinalScore()">See my score →</button>
+  </div>
+
+  <!-- ───────────── FINAL SCORE ───────────── -->
+  <div id="final-score" style="display:none; margin-top:1.5rem">
+    <div class="callout tip">
+      <div class="callout-title">🎓 Mock Exam Complete!</div>
+      <p style="font-size:1.1rem; margin:0.5rem 0">Your score: <strong id="final-num" style="font-size:1.4rem; color:#2563eb"></strong> / 20 &nbsp;(<span id="final-pct" style="color:#2563eb"></span>)</p>
+      <div id="score-band" style="margin-top:0.5rem; padding:0.6rem 0.9rem; border-radius:6px; font-size:0.88rem"></div>
+      <div style="margin-top:1rem; font-size:0.88rem">
+        <strong>Wrong answers:</strong> go back to the lesson for that topic (the chapter header tells you which one).
+        <br>
+        <strong>Next step:</strong> redo any questions you got wrong without looking at the options — if you can recall the answer from memory, you own it.
+      </div>
+    </div>
+
+    <h2 style="margin-top:1.5rem">Exam Day Tips</h2>
+    <div class="def-list">
+      <div class="def-item">
+        <div class="def-term">Know the MindSpore vocabulary cold</div>
+        The exam tests <code>nn.Cell</code> vs <code>nn.Module</code>, <code>construct()</code> vs <code>forward()</code>, Graph Mode vs PyNative, and MindSpore Serving vs Lite. These are easy marks if memorised.
+      </div>
+      <div class="def-item">
+        <div class="def-term">Use the output size formula on any CNN question</div>
+        Write it out: (Input − Kernel + 2P) / Stride + 1. Plug in the numbers. Don't guess.
+      </div>
+      <div class="def-item">
+        <div class="def-term">LSTM: know all three gate names and what each does</div>
+        Forget = erase old memory. Input + Candidate = write new memory. Output = expose cell state as hidden state. Any question mentioning "cell state" or "long-range dependency" is about LSTM.
+      </div>
+      <div class="def-item">
+        <div class="def-term">Match metric to scenario instantly</div>
+        Miss a cancer case = worst → Recall. False alarm is costly → Precision. Imbalanced classes → F1. Comparing models → AUC.
+      </div>
+      <div class="def-item">
+        <div class="def-term">Three AI schools, three elements</div>
+        Schools: Symbolism / Connectionism / Behaviorism. Elements: Data / Computing Power / Algorithms. These appear in early Chapter 1 questions — don't lose easy marks here.
+      </div>
+      <div class="def-item">
+        <div class="def-term">Flag and skip, don't get stuck</div>
+        90 minutes for ~60 questions = 90 seconds each. If a question requires long mental arithmetic, flag it, move on, come back. The scoring is equal per question.
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-nav" style="margin-top:2rem">
+    <a href="0018-ai-ethics.html">← Lesson 18: AI Ethics</a>
+    <a href="0001-what-is-ai.html" class="nav-next">Back to Lesson 01 →</a>
+  </div>
+
+</div>
+
+<script>
+let correct = 0;
+let answered = 0;
+
+const answers = {
+  q1:  { correct: false, rightText: "Connectionism — models intelligence as patterns in networks of connected units" },
+  q2:  { correct: false, rightText: "BERT sees left and right context simultaneously; GPT only sees left context (past tokens)" },
+  q3:  { correct: false, rightText: "Data, Computing Power, and Algorithms" },
+  q4:  { correct: false, rightText: "Basic Model (LLM) → Industry Model → Scenario Model" },
+  q5:  { correct: false, rightText: "A Foundation Model — a large pre-trained model with emergent capabilities adapted via fine-tuning" },
+  q6:  { correct: false, rightText: "Wrapper method — trains a model on each candidate feature subset and uses performance to select" },
+  q7:  { correct: false, rightText: "High variance (overfitting) — the model memorised training data and cannot generalise" },
+  q8:  { correct: false, rightText: "Random Forest builds trees in parallel (Bagging); GBDT builds trees sequentially, each correcting the last (Boosting)" },
+  q9:  { correct: false, rightText: "One fold is held out for validation while the remaining K−1 folds are used for training" },
+  q10: { correct: false, rightText: "Stochastic Gradient Descent (SGD) — uses exactly one randomly chosen training sample per update" },
+  q11: { correct: false, rightText: "2×2 — computed as (6 − 3 + 0) / 2 + 1 = 2" },
+  q12: { correct: false, rightText: "That element of the cell state will be erased — multiplying by ~0 removes the stored memory" },
+  q13: { correct: false, rightText: "Momentum and RMSProp — it keeps a moving average of gradients and of squared gradients" },
+  q14: { correct: false, rightText: "Disable dropout entirely so all neurons contribute to the prediction" },
+  q15: { correct: false, rightText: "To prevent dot products from becoming very large in high dimensions, which would saturate softmax" },
+  q16: { correct: false, rightText: "The forward computation will never be called — MindSpore only invokes construct(), so the model produces no output" },
+  q17: { correct: false, rightText: "③ Data Preparation — cleaning, labelling, and splitting the dataset (typically 60–70% of project time)" },
+  q18: { correct: false, rightText: "Full fine-tuning — large dataset + similar domain = unfreeze all layers and train at a low learning rate" },
+  q19: { correct: false, rightText: "86.5% — Precision=94.1%, Recall=80.0%; F1 = 2×(0.941×0.8)/(0.941+0.8)" },
+  q20: { correct: false, rightText: "Raw training data never leaves each device — only model weight updates are shared and aggregated" }
+};
+
+const feedback = {
+  q1:  ["Correct! Connectionism — the school behind neural networks and deep learning — holds that intelligence emerges from adjustable weighted connections between simple units, inspired by biological neurons.", "Not quite. Connectionism is the school that models intelligence through networks of connected units (neurons). Symbolism uses logic and rules. Behaviorism uses reward/punishment signals (the basis of Reinforcement Learning). There is no 'Probabilism' school in the HCIA-AI syllabus."],
+  q2:  ["Correct! BERT's encoder self-attention has no causal mask, so every token attends to every other token in both directions simultaneously. GPT's decoder uses a causal (left-to-right) mask, so each token only attends to previous tokens — enabling auto-regressive text generation.", "Not quite. BERT = bidirectional (sees all context), best for understanding tasks. GPT = left-to-right (sees only past tokens), best for generation. BERT doesn't generate text token by token — that's GPT's job. Neither uses dynamic vs static graphs as a defining difference."],
+  q3:  ["Correct! The three essential elements for AI development according to the HCIA-AI syllabus are Data (the fuel), Computing Power (the engine), and Algorithms (the brain). These appear in the very first chapter and are fundamental exam vocabulary.", "Not quite. The three elements are Data, Computing Power, and Algorithms — not specific tools, frameworks, or learning paradigms. This is a Chapter 1 definition that the exam tests directly. Memorise it."],
+  q4:  ["Correct! The PanGu hierarchy goes from most general to most specific: Basic Model (large general-purpose LLM pre-trained on vast data) → Industry Model (fine-tuned for a specific industry like government or mining) → Scenario Model (fine-tuned for a specific task like a smart government chatbot). This is the transfer learning hierarchy applied at industrial scale.", "Not quite. The correct order from most general to most specific is: Basic Model (LLM) → Industry Model → Scenario Model. The basic model is the largest and most general; scenario models are the smallest and most task-specific. This mirrors the transfer learning concept: each tier fine-tunes from the tier above."],
+  q5:  ["Correct! A Foundation Model is pre-trained on massive general data and shows emergent capabilities — abilities that weren't explicitly trained for but arise from scale. It can be fine-tuned for many downstream tasks. Examples: GPT, BERT, PanGu, DALL-E.", "Not quite. Foundation Models are defined by three properties: (1) pre-trained on vast general data, (2) adaptable to many tasks via fine-tuning, (3) exhibit emergence — unexpected capabilities from scale. CNNs are task-specific architectures. Knowledge Graphs are symbolic AI. Ensemble models combine predictions, not pre-training."],
+  q6:  ["Correct! The Wrapper method evaluates feature subsets by training and testing a model on each one. It is expensive (trains many models) but finds the subset that actually maximises model performance. Filter uses statistics without training. Embedded integrates selection into training (e.g. L1 drives weights to zero).", "Not quite. Training a model on each candidate feature subset is the Wrapper method. Filter methods rank features by statistical measures (correlation, mutual information) without training any model. Embedded methods integrate feature selection into the training itself — L1 regularisation is the classic example, driving unimportant weights to exactly zero."],
+  q7:  ["Correct! High training accuracy + low test accuracy = overfitting (high variance). The model memorised the training examples — their specific noise and quirks — rather than learning the underlying pattern. The solution: more training data, simpler model, or regularisation (Dropout, L1/L2, Early Stopping).", "Not quite. Perfect training accuracy but poor test accuracy is the classic signature of overfitting (high variance). Underfitting (high bias) would cause poor accuracy on both training and test. Data leakage would inflate test accuracy, not reduce it. Class imbalance could cause misleading accuracy numbers but wouldn't produce a near-100% training score."],
+  q8:  ["Correct! Random Forest uses Bagging: many trees are grown in parallel on random bootstrap samples of the data, and their predictions are averaged. GBDT uses Boosting: trees are added sequentially, each one trained to correct the errors of all previous trees. Parallel vs sequential is the fundamental structural difference.", "Not quite. Random Forest uses Bagging (parallel trees on bootstrap samples, averaged). GBDT uses Boosting (sequential trees, each correcting prior errors). They're the opposite of what option B states. Random Forest uses many trees, not one. Both are supervised — they use labelled training data."],
+  q9:  ["Correct! In each of the K rounds, one different fold is used as the validation set and the remaining K−1 folds form the training set. After K rounds, every sample has been in the validation set exactly once. The K performance scores are averaged for a more reliable estimate than a single train/val split.", "Not quite. In K-Fold CV, each round uses one fold for validation and K−1 folds for training. Every fold gets its turn as the validation set exactly once across K rounds. It is not random 20% sampling, not training and validating on all folds simultaneously, and not always the same validation fold."],
+  q10: ["Correct! SGD (Stochastic Gradient Descent) uses exactly one randomly selected sample per weight update. 'Stochastic' means random — one sample at a time. This makes each update noisy (the gradient from one sample is a rough estimate of the true gradient), but also makes SGD fast per step and able to escape shallow local minima.", "Not quite. SGD = one random sample per update (stochastic = random). BGD = entire dataset per update. MBGD = a small batch (32–256 samples) per update. Adam is a sophisticated adaptive optimiser, not a description of batch size. The key word 'stochastic' means single sample."],
+  q11: ["Correct! Apply the formula: (Input − Kernel + 2×Padding) / Stride + 1 = (6 − 3 + 0) / 2 + 1 = 3/2 + 1 = 1.5 + 1 = 2.5 → floor to 2. Output is 2×2. The stride of 2 causes aggressive spatial reduction.", "Not quite. Use the formula: (Input − Kernel + 2P) / Stride + 1 = (6 − 3 + 0) / 2 + 1 = 1.5 + 1 = 2.5, floored to 2. Output is 2×2. A stride of 2 roughly halves the spatial dimensions. 4×4 would be from stride 1. 6×6 would require same padding and stride 1. The output never equals the kernel size."],
+  q12: ["Correct! The Forget Gate outputs values between 0 and 1 for each element of the cell state. These values are multiplied element-wise with the cell state: ×0 ≈ erase, ×1 = keep unchanged. A value near 0 erases that memory element — useful when the context changes, for example when the model moves to a new sentence subject.", "Not quite. The Forget Gate multiplies the cell state element-wise. Output ≈ 0 means that element of the cell state is erased (0 × anything ≈ 0). Output ≈ 1 means keep it unchanged. It doesn't affect what the Input Gate writes, and it's not the same as the Output Gate (which controls the hidden state, not the cell state)."],
+  q13: ["Correct! Adam = Adaptive Moment Estimation. It keeps: (1) a moving average of gradients — this is Momentum (first moment), and (2) a moving average of squared gradients — this is RMSProp (second moment). The learning rate is adapted per parameter. This is why Adam usually outperforms both Momentum and RMSProp individually.", "Not quite. Adam combines Momentum (exponential moving average of gradients → first moment) and RMSProp (exponential moving average of squared gradients → second moment). It does not combine SGD and BGD, or AdaGrad and BGD. The key distinction from Momentum+AdaGrad is that Adam uses an exponential moving average of squared gradients (RMSProp), not a sum (AdaGrad)."],
+  q14: ["Correct! Dropout randomly disables neurons during training to prevent co-adaptation and overfitting. At inference time, all neurons must be active so the model produces a stable, full-capacity output. If dropout were applied at inference, predictions would be random — different every time you run the same input. Frameworks disable it automatically when you call model.eval().", "Not quite. Dropout is only active during training. At inference (evaluation) time, all neurons are enabled. The model's prediction must be deterministic and use the full network capacity. Most frameworks handle this automatically: PyTorch's model.eval() and MindSpore's model.set_train(False) both disable dropout."],
+  q15: ["Correct! In high dimensions (large dₖ), the dot product QKᵀ can grow very large. Feeding large values into softmax pushes the output into extremely small gradient regions (the function saturates near 0 and 1), making learning slow. Dividing by √dₖ scales the dot products to a reasonable magnitude and keeps the softmax gradient healthy.", "Not quite. Dividing by √dₖ is a scaling trick to prevent the dot products from becoming too large in high-dimensional spaces, which would cause softmax to saturate and gradients to vanish. It does not change what softmax outputs to — they still sum to 1. It has nothing to do with positional information."],
+  q16: ["Correct! MindSpore's training and inference engine specifically looks for and calls a method named construct() on nn.Cell subclasses. A method named forward() is simply an ordinary Python method from MindSpore's perspective — it will never be automatically called. The model object is callable, but calling it invokes construct(), not forward().", "Not quite. MindSpore only invokes construct() as the forward computation method. A method named forward() is treated as an ordinary Python method and will never be automatically called by the framework. No automatic renaming or error at class definition occurs — the class is valid Python, but the forward computation simply never runs. This is one of the most-tested MindSpore facts."],
+  q17: ["Correct! Data Preparation (Stage 3) is where the team collects, cleans, labels, and splits the dataset. It is explicitly noted in the HCIA-AI syllabus as the most time-consuming stage — typically 60–70% of the total project duration. Stage 1 defines requirements; Stage 2 sets up the environment; Stage 4 builds the network.", "Not quite. Collecting, cleaning, labelling, and splitting data = Stage 3: Data Preparation. This is the most time-consuming stage (60–70% of total project time). Requirement Analysis (Stage 1) defines the task and metrics. Environment Setup (Stage 2) installs frameworks and hardware. Network Building (Stage 4) designs the model architecture."],
+  q18: ["Correct! Large dataset + similar domain = full fine-tuning is the optimal strategy. With 50,000 images of a similar domain, you have enough data to avoid overfitting even when all layers are updated. Use a low learning rate (not standard LR) to gently adapt the pre-trained features rather than overwriting them.", "Not quite. Large dataset + similar domain = full fine-tuning (unfreeze all layers, low LR). Feature extraction (freeze backbone) is for small datasets or very different domains. Training from scratch throws away valuable pre-trained knowledge — 50,000 images is not enough to match ImageNet-scale pre-training from scratch. Freezing only early layers at a standard LR risks destroying the pre-trained deep-layer features."],
+  q19: ["Correct! Precision = 80/(80+5) = 80/85 = 94.1%. Recall = 80/(80+20) = 80/100 = 80.0%. F1 = 2 × (0.941 × 0.8) / (0.941 + 0.8) = 2 × 0.753 / 1.741 = 1.506/1.741 ≈ 86.5%. The F1 is lower than Precision because Recall is dragging it down — 20 missed fraud cases is a significant problem.", "Not quite. F1 = 2×Precision×Recall / (Precision+Recall). First compute: Precision = TP/(TP+FP) = 80/85 = 94.1%. Recall = TP/(TP+FN) = 80/100 = 80.0%. Then: F1 = 2×(0.941×0.8)/(0.941+0.8) = 1.506/1.741 ≈ 86.5%. Accuracy = 975/1000 = 97.5% (a different metric). The formula 2×TP/(2×TP+FP+FN) is mathematically equivalent and gives the same answer."],
+  q20: ["Correct! In Federated Learning, each device trains the model locally on its own private data. Only the weight updates (gradients) — not the raw data — are sent to the central server. The server aggregates these updates to improve the global model. The privacy benefit is that private data never leaves the device.", "Not quite. The privacy benefit of Federated Learning is that raw data stays on the device — only weight updates are shared. The model is not encrypted on the server (that's a different technique). Devices do not train fully independent models (they all update the same global model). Differential Privacy is a separate technique that adds noise to updates — it is compatible with Federated Learning but is not built into it by default."]
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const nextBtn = quiz.querySelector('.quiz-next');
+
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+
+  const [correctMsg, wrongMsg] = feedback[qid];
+  fb.textContent = isCorrect ? correctMsg : wrongMsg;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  nextBtn.style.display = 'inline-block';
+
+  answers[qid].correct = isCorrect;
+  answered++;
+  if (isCorrect) correct++;
+
+  document.getElementById('answered-count').textContent = answered;
+  document.getElementById('correct-count').textContent = correct;
+  document.getElementById('score-pct').textContent =
+    Math.round((correct / answered) * 100) + '%';
+}
+
+function show(qid) {
+  const el = document.getElementById(qid);
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Show chapter headers
+  if (qid === 'q6') document.getElementById('ch2-header').style.display = 'block';
+  if (qid === 'q11') document.getElementById('ch3-header').style.display = 'block';
+  if (qid === 'q16') document.getElementById('ch4-header').style.display = 'block';
+}
+
+function showFinalScore() {
+  const pct = Math.round((correct / 20) * 100);
+  document.getElementById('final-num').textContent = correct;
+  document.getElementById('final-pct').textContent = pct + '%';
+
+  const band = document.getElementById('score-band');
+  if (pct >= 90) {
+    band.style.background = '#dcfce7'; band.style.border = '1px solid #15803d';
+    band.style.color = '#14532d';
+    band.textContent = '🎉 Excellent! You are very likely to pass the real exam. Focus on reviewing any questions you got wrong.';
+  } else if (pct >= 70) {
+    band.style.background = '#fef3c7'; band.style.border = '1px solid #b45309';
+    band.style.color = '#78350f';
+    band.textContent = '👍 Good. Above the 60% pass threshold. Review wrong answers carefully, then redo this mock in 2 days.';
+  } else if (pct >= 60) {
+    band.style.background = '#fce7f3'; band.style.border = '1px solid #db2777';
+    band.style.color = '#9d174d';
+    band.textContent = '⚠️ Close to passing. Review the lessons for every chapter where you dropped marks, then redo this mock.';
+  } else {
+    band.style.background = '#fee2e2'; band.style.border = '1px solid #dc2626';
+    band.style.color = '#991b1b';
+    band.textContent = '📚 More review needed. Go back to the lessons where you lost marks. Focus on Chapter 3 and Chapter 4 — they carry the most exam weight.';
+  }
+
+  document.getElementById('final-score').style.display = 'block';
+  document.getElementById('final-score').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
