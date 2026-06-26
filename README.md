@@ -54,7 +54,7 @@ open lessons/0001-what-is-ai.html
 
 | Lesson | Topics |
 |--------|--------|
-| [16 — Transfer Learning &amp; Fine-tuning](lessons/0016-transfer-learning.html) | *(coming soon)* |
+| [16 — Transfer Learning &amp; Fine-tuning](lessons/0016-transfer-learning.html) | Why training from scratch fails on small data, Feature extraction vs Fine-tuning, Data size × domain similarity quadrant, Freezing layers with requires_grad, ResNet / BERT / PanGu-α, MindSpore fine-tuning pattern |
 | [17 — Model Evaluation Metrics](lessons/0017-evaluation-metrics.html) | *(coming soon)* |
 | [18 — AI Ethics &amp; Responsible AI](lessons/0018-ai-ethics.html) | *(coming soon)* |
 | [19 — HCIA-AI Exam Review](lessons/0019-exam-review.html) | *(coming soon)* |

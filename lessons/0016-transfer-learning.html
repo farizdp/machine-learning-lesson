@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 16 — Transfer Learning &amp; Fine-tuning</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 66%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Advanced · Lesson 16 &nbsp;|&nbsp; Transfer Learning</div>
+    <h1>Transfer Learning &amp; Fine-tuning</h1>
+    <p class="subtitle">How to build powerful models with little data by borrowing knowledge from models already trained on millions of examples.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: The problem ───────────── -->
+  <h2>1. The Problem Transfer Learning Solves</h2>
+
+  <p>Training a deep network from scratch requires:</p>
+  <ul>
+    <li>Millions of labelled examples (ImageNet has 1.2 million images)</li>
+    <li>Weeks of compute time on many GPUs or NPUs</li>
+    <li>Expert knowledge to design and tune the architecture</li>
+  </ul>
+
+  <p>Most real projects have none of these. A hospital might have 500 labelled X-rays. A startup might need a product photo classifier with only 200 images per category. Training from scratch on this data would massively overfit — the model would memorise those few examples and fail on anything new.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    You already know how to drive a car. Learning to drive a truck doesn't mean forgetting everything and starting from scratch — you transfer your knowledge of steering, braking, and road rules, then learn only what's different (a larger vehicle, different mirrors, air brakes). Transfer learning does the same: reuse knowledge from a large task, adapt only what needs to change.
+  </div>
+
+  <!-- ───────────── SECTION 2: How it works ───────────── -->
+  <h2>2. Why Learned Features Transfer</h2>
+
+  <p>In Lesson 11 you learned that a CNN's layers learn a hierarchy of features: early layers detect edges and colours, middle layers detect textures and shapes, deep layers detect high-level object parts. These low- and mid-level features are <strong>general</strong> — an edge detector useful for dogs is equally useful for cats, cars, or medical images.</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 560 130" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="tf" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#6b6b63"/>
+        </marker>
+      </defs>
+
+      <!-- Pre-trained model layers -->
+      <text x="0" y="14" font-family="sans-serif" font-size="9" fill="#b45309" font-weight="700">Pre-trained on ImageNet (1.2M images, 1000 classes)</text>
+
+      <rect x="0"   y="20" width="80" height="50" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="40"  y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1e3a8a" font-weight="700">Early Layers</text>
+      <text x="40"  y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">edges, colours</text>
+      <text x="40"  y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">gradients</text>
+
+      <line x1="80" y1="45" x2="92" y2="45" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+
+      <rect x="92"  y="20" width="80" height="50" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="132" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1e3a8a" font-weight="700">Middle Layers</text>
+      <text x="132" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">textures, shapes</text>
+      <text x="132" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">object parts</text>
+
+      <line x1="172" y1="45" x2="184" y2="45" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+
+      <rect x="184" y="20" width="80" height="50" rx="6" fill="#c7d2fe" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="224" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#3730a3" font-weight="700">Deep Layers</text>
+      <text x="224" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#3730a3">high-level features</text>
+      <text x="224" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#3730a3">(more task-specific)</text>
+
+      <line x1="264" y1="45" x2="276" y2="45" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+
+      <rect x="276" y="20" width="80" height="50" rx="6" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="316" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#9d174d" font-weight="700">Classifier Head</text>
+      <text x="316" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">FC → Softmax</text>
+      <text x="316" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">1000 ImageNet classes</text>
+
+      <!-- Transfer arrow -->
+      <line x1="360" y1="45" x2="390" y2="45" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#tf)" stroke-dasharray="6,3"/>
+      <text x="374" y="38" font-family="sans-serif" font-size="8" fill="#b45309" text-anchor="middle" font-weight="700">transfer</text>
+
+      <!-- New model -->
+      <text x="395" y="14" font-family="sans-serif" font-size="9" fill="#15803d" font-weight="700">Fine-tuned for your task (e.g. 5 flower types)</text>
+
+      <rect x="390" y="20" width="80" height="50" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="430" y="45" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">Frozen layers</text>
+      <text x="430" y="57" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#1e3a8a">(same weights)</text>
+
+      <line x1="470" y1="45" x2="480" y2="45" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+
+      <rect x="480" y="20" width="76" height="50" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+      <text x="518" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#14532d" font-weight="700">New Head</text>
+      <text x="518" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">FC → Softmax</text>
+      <text x="518" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">5 flower classes</text>
+
+      <!-- Legends -->
+      <rect x="0"   y="86" width="12" height="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+      <text x="16"  y="97" font-family="sans-serif" font-size="8" fill="#6b6b63">General features — safe to freeze</text>
+      <rect x="180" y="86" width="12" height="12" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+      <text x="196" y="97" font-family="sans-serif" font-size="8" fill="#6b6b63">Task-specific — replaced</text>
+      <rect x="380" y="86" width="12" height="12" fill="#dcfce7" stroke="#15803d" stroke-width="1"/>
+      <text x="396" y="97" font-family="sans-serif" font-size="8" fill="#6b6b63">Newly trained on your data</text>
+    </svg>
+  </div>
+
+  <!-- ───────────── SECTION 3: Two strategies ───────────── -->
+  <h2>3. Two Strategies: Feature Extraction vs Fine-tuning</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Strategy 1 — Feature Extraction (Freeze everything)</div>
+      Keep all pre-trained weights unchanged. Remove the original classifier head and attach a new one. Only the new head is trained.<br><br>
+      <strong>When to use:</strong> Your dataset is small (&lt;1,000 examples per class) <em>or</em> your domain is very different from the pre-training domain (e.g. ImageNet → medical scans).<br>
+      <strong>Risk if you don't freeze:</strong> With little data, updating all weights causes overfitting — the model memorises your few examples.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Strategy 2 — Fine-tuning (Unfreeze some or all layers)</div>
+      After training the new head, unfreeze the last few layers (or all layers) and continue training at a <strong>very low learning rate</strong> (10–100× smaller than usual). This gently nudges the pre-trained weights toward your task.<br><br>
+      <strong>When to use:</strong> You have enough data to avoid overfitting, and your task domain is similar to the pre-training domain.<br>
+      <strong>Why low LR:</strong> A high learning rate would destroy the general features already learned — you only want to fine-tune, not re-learn from scratch.
+    </div>
+  </div>
+
+  <!-- Quadrant diagram -->
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 460 200" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Axes -->
+      <line x1="30" y1="10" x2="30" y2="190" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+      <line x1="30" y1="190" x2="450" y2="190" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#tf)"/>
+      <text x="12" y="100" font-family="sans-serif" font-size="9" fill="#6b6b63" text-anchor="middle" transform="rotate(-90 12 100)">Dataset size →</text>
+      <text x="240" y="200" font-family="sans-serif" font-size="9" fill="#6b6b63" text-anchor="middle">Domain similarity to pre-training →</text>
+
+      <!-- Quadrant labels -->
+      <text x="33" y="180" font-family="sans-serif" font-size="7.5" fill="#6b6b63">small</text>
+      <text x="33" y="30"  font-family="sans-serif" font-size="7.5" fill="#6b6b63">large</text>
+      <text x="35" y="180" font-family="sans-serif" font-size="7.5" fill="#6b6b63">diff.</text>
+      <text x="400" y="200" font-family="sans-serif" font-size="7.5" fill="#6b6b63">similar</text>
+
+      <!-- Q1: small + different -->
+      <rect x="34" y="100" width="202" height="88" rx="4" fill="#fce7f3" stroke="#db2777" stroke-width="1" opacity="0.7"/>
+      <text x="135" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9d174d" font-weight="700">Feature extraction only</text>
+      <text x="135" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d">Freeze ALL layers.</text>
+      <text x="135" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d">Train only the new head.</text>
+
+      <!-- Q2: small + similar -->
+      <rect x="238" y="100" width="210" height="88" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1" opacity="0.7"/>
+      <text x="343" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#92400e" font-weight="700">Feature extraction</text>
+      <text x="343" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#92400e">Freeze most layers.</text>
+      <text x="343" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#92400e">May lightly fine-tune top layers.</text>
+
+      <!-- Q3: large + different -->
+      <rect x="34" y="14" width="202" height="84" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1" opacity="0.7"/>
+      <text x="135" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a" font-weight="700">Careful fine-tuning</text>
+      <text x="135" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">Unfreeze all layers, very low LR.</text>
+      <text x="135" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">Or train from scratch.</text>
+
+      <!-- Q4: large + similar -->
+      <rect x="238" y="14" width="210" height="84" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1" opacity="0.7"/>
+      <text x="343" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Full fine-tuning</text>
+      <text x="343" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">Unfreeze all layers, low LR.</text>
+      <text x="343" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">Best results when you have data.</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.4rem">
+      Choose your strategy based on how much data you have and how similar your task is to the source domain.
+    </p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Two transfer learning strategies: <strong>Feature Extraction</strong> — freeze all pre-trained layers, train new head only (for small datasets). <strong>Fine-tuning</strong> — unfreeze some/all layers and train at a very low learning rate (for larger datasets or when you need maximum performance). Fine-tuning at a high LR destroys the pre-trained features.
+  </div>
+
+  <!-- ───────────── SECTION 4: Common pre-trained models ───────────── -->
+  <h2>4. Common Pre-trained Models</h2>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.87rem">
+    <thead>
+      <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+        <th style="padding:0.6rem 0.8rem; text-align:left">Model</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Domain</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Architecture</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Transfer use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">ResNet-50</td>
+        <td style="padding:0.5rem 0.8rem">Images</td>
+        <td style="padding:0.5rem 0.8rem">50-layer CNN with residual connections</td>
+        <td style="padding:0.5rem 0.8rem">Most image classification and detection tasks</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">VGG-16</td>
+        <td style="padding:0.5rem 0.8rem">Images</td>
+        <td style="padding:0.5rem 0.8rem">16-layer CNN, simple and uniform</td>
+        <td style="padding:0.5rem 0.8rem">Style transfer, feature visualisation</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">BERT</td>
+        <td style="padding:0.5rem 0.8rem">Text (English)</td>
+        <td style="padding:0.5rem 0.8rem">Transformer encoder, 110M params</td>
+        <td style="padding:0.5rem 0.8rem">Classification, NER, question answering</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">PanGu-α</td>
+        <td style="padding:0.5rem 0.8rem">Text (Chinese)</td>
+        <td style="padding:0.5rem 0.8rem">GPT-style decoder, 200B params</td>
+        <td style="padding:0.5rem 0.8rem">Huawei industry fine-tuning (government, mining…)</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem 0.8rem; font-weight:700">ViT</td>
+        <td style="padding:0.5rem 0.8rem">Images</td>
+        <td style="padding:0.5rem 0.8rem">Transformer applied to image patches</td>
+        <td style="padding:0.5rem 0.8rem">Large-scale image tasks, replacing CNNs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-title">Residual connections — why ResNet transfers so well</div>
+    ResNet introduced <strong>skip connections</strong>: each block adds its input directly to its output. This prevents vanishing gradients in very deep networks and means each layer only needs to learn a <em>residual correction</em> rather than a full transformation. It's the same Add &amp; Norm idea you saw in the Transformer (Lesson 13) — both borrowed from the same insight.
+  </div>
+
+  <!-- ───────────── SECTION 5: MindSpore implementation ───────────── -->
+  <h2>5. Transfer Learning in MindSpore</h2>
+
+  <p>Here is the complete pattern for feature extraction using a pre-trained ResNet-50 in MindSpore:</p>
+
+  <div class="callout tip">
+    <div class="callout-title">Step 1 — Load a pre-trained model and replace the head</div>
+    <pre style="margin:0; font-size:0.80rem; line-height:1.8">import mindspore.nn as nn
+from mindvision.classification.models import resnet50
+
+# Load ResNet-50 with ImageNet weights
+backbone = resnet50(pretrained=True)
+
+# Replace the final FC layer (1000 classes → 5 flower classes)
+backbone.classifier = nn.Dense(2048, 5)
+</pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">Step 2 — Freeze the backbone, train only the new head</div>
+    <pre style="margin:0; font-size:0.80rem; line-height:1.8"># Freeze all backbone parameters
+for param in backbone.get_parameters():
+    param.requires_grad = False
+
+# Unfreeze only the new classifier head
+for param in backbone.classifier.get_parameters():
+    param.requires_grad = True
+
+# Now only the head's params will be updated by the optimiser
+optimizer = nn.Adam(
+    params=filter(lambda p: p.requires_grad,
+                  backbone.trainable_params()),
+    learning_rate=0.001
+)
+</pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">Step 3 (optional) — Fine-tune: unfreeze all layers at a low LR</div>
+    <pre style="margin:0; font-size:0.80rem; line-height:1.8"># After training the head for a few epochs, unfreeze everything
+for param in backbone.get_parameters():
+    param.requires_grad = True
+
+# Use a much lower learning rate to avoid destroying pre-trained features
+optimizer_finetune = nn.Adam(
+    params=backbone.trainable_params(),
+    learning_rate=1e-5    # 100× smaller than the head-training LR
+)
+</pre>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    In MindSpore, you control which layers train by setting <strong>param.requires_grad = False</strong> (freeze) or <strong>True</strong> (unfreeze). The optimiser only updates parameters where <code>requires_grad=True</code>. Fine-tuning always uses a much lower learning rate than initial training to avoid overwriting pre-learned features.
+  </div>
+
+  <!-- ───────────── SECTION 6: Why transfer learning dominates ───────────── -->
+  <h2>6. Why Transfer Learning Dominates Real Projects</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Much less data needed</div>
+      A model fine-tuned from ResNet-50 can achieve excellent accuracy with only a few hundred images per class. Training the same architecture from scratch might need 100,000+.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Much faster training</div>
+      Training only a small head takes minutes instead of days. Even full fine-tuning converges much faster because the weights start in a good region.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Better generalisation</div>
+      Pre-trained weights encode robust, general representations built from vastly more data than you'll ever have. Your fine-tuned model inherits this robustness.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Enables domain-specific AI</div>
+      This is how Huawei's PanGu 3-tier hierarchy works (Lesson 03): the base LLM is pre-trained on vast general data → industry model is fine-tuned on domain data → scenario model is fine-tuned further on task-specific data.
+    </div>
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A hospital has 300 labelled chest X-ray images and wants to train a pneumonia detector. The domain is quite different from ImageNet photos. Which transfer learning strategy is most appropriate?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Full fine-tuning at a standard learning rate — the medical domain needs all weights updated</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Train from scratch — pre-trained ImageNet weights are irrelevant for X-ray images</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Feature extraction — freeze the backbone and train only a new classifier head</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Fine-tune the deep layers only, keeping the early layers random and untrained</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Why must fine-tuning use a much lower learning rate than initial training?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Because the new dataset is smaller, and a lower LR prevents the optimiser from running out of data</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">A high LR would make large weight updates that destroy the general features already learned</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Because frozen layers require a lower LR to ensure gradients do not flow through them</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Lower LR speeds up training since the model is already close to a good solution</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">In MindSpore, how do you prevent a layer's weights from being updated during training?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Call nn.freeze(layer) to lock the layer before passing it to the optimiser</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Set the layer's learning rate to zero inside the optimiser configuration dictionary</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Set param.requires_grad = False for each parameter in that layer</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Delete the layer's backward() method so no gradient flows through it</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">Huawei's PanGu model hierarchy uses Base Model → Industry Model → Scenario Model. What deep learning technique does this structure reflect?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Ensemble learning — three models trained independently and combined at inference time</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Reinforcement learning — the base model is rewarded each time the scenario model succeeds</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Transfer learning — each tier is fine-tuned from the tier above for a progressively narrower task</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Unsupervised learning — all three tiers are trained without labels using clustering</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">Which layers of a pre-trained CNN contain the most general, transferable features that are safe to freeze for any new image task?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Early layers — they detect low-level features like edges and colours that are useful everywhere</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Deep layers near the classifier — they encode the most abstract and powerful representations</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">The classifier head — it contains class probabilities that directly transfer to new tasks</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Pooling layers — they discard spatial information and therefore have no task-specific bias</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>Transfer learning: reuse weights trained on large data, adapt only the final layers for your task</li>
+        <li>Why it works: early CNN layers learn general features (edges, textures) that transfer everywhere</li>
+        <li>Feature extraction: freeze all backbone weights, train only a new head — best for small / different-domain datasets</li>
+        <li>Fine-tuning: unfreeze layers and train at a very low LR (10–100× smaller) — best for similar-domain, larger datasets</li>
+        <li>In MindSpore: <code>param.requires_grad = False</code> freezes a layer</li>
+        <li>Common models: ResNet-50 (images), BERT (text), PanGu-α (Chinese text)</li>
+        <li>PanGu's 3-tier hierarchy is a real-world application of transfer learning</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready? <a href="0017-evaluation-metrics.html">Lesson 17 → Model Evaluation Metrics</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://cs231n.github.io/transfer-learning/" target="_blank">CS231n: Transfer Learning — Stanford University</a>
+    — The definitive guide with the exact quadrant chart (data size × domain similarity) used in this lesson. Explains when to freeze, when to fine-tune, and when to train from scratch with concrete numerical intuitions.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0015-ai-app-dev-process.html">← Lesson 15: AI Application Development Process</a>
+    <a href="0017-evaluation-metrics.html" class="nav-next">Next: Evaluation Metrics →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Small dataset + different domain = feature extraction only. With only 300 images and a domain far from ImageNet (natural photos vs. X-rays), fine-tuning all weights would overfit badly. The safe choice is to freeze the backbone (its low-level edge/texture detectors still work on X-rays) and train only a small new classifier head.",
+    wrong:   "Not quite. With a small dataset and a different domain, the safest strategy is feature extraction: freeze all backbone weights and train only a new head. Full fine-tuning with 300 images would overfit — the model would memorise the training examples. Training from scratch with 300 images would be even worse. And the early (low-level) layers of ImageNet models are genuinely useful for X-rays, since both contain edges and textures."
+  },
+  q2: {
+    correct: "Correct! The pre-trained weights encode valuable general representations built from millions of images. A high learning rate would make large gradient steps that overwrite these representations with noise from your small dataset — destroying the very knowledge you were trying to transfer. A low LR makes tiny adjustments that nudge the weights toward your task without erasing what was already learned.",
+    wrong:   "Not quite. The low LR in fine-tuning is about protecting pre-trained features, not about dataset size or frozen layer gradients. A high LR would destroy the general representations already in the weights with large, aggressive updates from your small new dataset. Low LR = small gentle nudges that preserve prior knowledge while adapting to the new task."
+  },
+  q3: {
+    correct: "Correct! In MindSpore (and PyTorch), setting param.requires_grad = False tells the autograd engine not to compute or store gradients for that parameter. If there's no gradient, the optimiser has nothing to update — the weight stays frozen. Only parameters where requires_grad=True get passed to the optimiser and updated.",
+    wrong:   "Not quite. In MindSpore, freezing a layer means setting param.requires_grad = False for each of its parameters. There is no nn.freeze() function. Setting LR to zero in the optimiser is possible but not the standard approach. You can't delete a backward() method to freeze a layer — that would break the computational graph entirely."
+  },
+  q4: {
+    correct: "Correct! PanGu's hierarchy is exactly transfer learning applied at scale: the Base Model (massive general pre-training) → Industry Model (fine-tuned on domain-specific data like government documents) → Scenario Model (fine-tuned further on task-specific data like a chatbot). Each tier reuses and extends the knowledge of the tier above it.",
+    wrong:   "Not quite. The PanGu hierarchy reflects transfer learning — each tier is fine-tuned from the tier above it for a progressively narrower domain. It's not ensemble learning (which combines independent models), not RL (no reward signal between tiers), and not unsupervised learning (industry and scenario models use labelled task data)."
+  },
+  q5: {
+    correct: "Correct! Early CNN layers learn low-level detectors: Gabor-like edge filters, colour blobs, oriented line segments. These are literally the same patterns found in any natural image — whether it's a dog, a car, a satellite photo, or a medical scan. They are by far the safest to freeze because they are the most general. Deep layers near the classifier, by contrast, encode high-level concepts specific to the pre-training task.",
+    wrong:   "Not quite. Early layers are the most transferable because they detect universal low-level features (edges, colours, gradients). Deep layers near the classifier are more task-specific — they encode high-level concepts tied to ImageNet classes. The classifier head is completely task-specific and must be replaced. Pooling layers have no weights at all — they can't be transferred."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
