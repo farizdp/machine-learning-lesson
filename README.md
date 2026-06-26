@@ -47,12 +47,7 @@ open lessons/0001-what-is-ai.html
 | [11 — Convolutional Neural Networks](lessons/0011-cnn.html) | Why CNNs beat FC networks, Convolution operation, Kernel / Stride / Padding, Output size formula, Parameter sharing, Local connectivity, Max Pooling, Average Pooling, Fully-Connected layer, Full CNN pipeline |
 | [12 — Recurrent Neural Networks &amp; LSTM](lessons/0012-rnn-lstm.html) | Why sequences need memory, RNN hidden state, Vanishing gradient in time, LSTM cell state, Forget Gate, Input Gate, Output Gate, Candidate, Seq2Seq (Encoder → Context Vector → Decoder) |
 | [13 — Transformer Architecture &amp; Attention](lessons/0013-transformer-attention.html) | Attention motivation, Q/K/V, Self-attention, Multi-head attention, Positional encoding, Transformer encoder/decoder, Add &amp; Norm, Masked Self-Attention, Cross-Attention, BERT (encoder-only / bidirectional), GPT-1 (decoder-only), Mixture of Experts (MoE) |
-
----
-
-## What's Coming
-
-- **Lesson 14** — AI Development Frameworks: PyTorch, MindSpore, Computational graphs, LeNet implementation
+| [14 — AI Development Frameworks](lessons/0014-ai-frameworks.html) | Why frameworks exist, Tensor + autograd, Computational graphs (static vs dynamic), Graph Mode vs PyNative Mode, PyTorch (nn.Module / forward), MindSpore (nn.Cell / construct), LeNet-5 architecture and MindSpore implementation |
 
 ---
 

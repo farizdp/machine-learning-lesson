@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 14 — AI Development Frameworks</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 58%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 04 · Lesson 14 &nbsp;|&nbsp; AI Development Frameworks</div>
+    <h1>AI Development Frameworks</h1>
+    <p class="subtitle">The tools that turn math equations into running code — PyTorch, MindSpore, and how a real model is built.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Why frameworks? ───────────── -->
+  <h2>1. Why Do We Need an AI Framework?</h2>
+
+  <p>Everything you've learned — gradient descent, backpropagation, CNNs, Transformers — requires implementing thousands of matrix multiplications and computing gradients through complex chains of operations. Doing this from scratch for every model would be impossibly slow and error-prone.</p>
+
+  <p>An <strong>AI framework</strong> provides three things:</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Tensor operations</div>
+      A <em>tensor</em> is the generalisation of a matrix to any number of dimensions. Frameworks provide fast, hardware-accelerated (GPU/NPU) tensor math — add, multiply, reshape, transpose — as simple function calls.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Automatic differentiation (autograd)</div>
+      The framework tracks every operation you perform and automatically computes the gradient of any output with respect to any input. You never have to derive or code backpropagation by hand.
+    </div>
+    <div class="def-item">
+      <div class="def-term">High-level model building blocks</div>
+      Pre-built layers (Linear, Conv2d, LSTM), optimisers (Adam), loss functions (CrossEntropyLoss), and dataset utilities — so you can describe <em>what</em> your network is, not <em>how</em> to compute it.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 2: Computational Graphs ───────────── -->
+  <h2>2. Computational Graphs</h2>
+
+  <p>A <strong>computational graph</strong> is the internal representation a framework builds to track how tensors flow through operations — so it knows how to compute gradients automatically.</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 480 140" width="480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="ag" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#6b6b63"/>
+        </marker>
+        <marker id="agr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#dc2626"/>
+        </marker>
+      </defs>
+
+      <!-- Forward pass -->
+      <text x="4" y="14" font-family="sans-serif" font-size="10" fill="#15803d" font-weight="700">Forward pass →</text>
+
+      <rect x="10"  y="22" width="50" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="35"  y="38" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">x (input)</text>
+
+      <rect x="80"  y="22" width="50" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="105" y="38" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a">W (weight)</text>
+
+      <line x1="60"  y1="36" x2="148" y2="36" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#ag)"/>
+      <line x1="130" y1="36" x2="148" y2="36" stroke="#6b6b63" stroke-width="1.5"/>
+
+      <rect x="148" y="22" width="50" height="28" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="173" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f" font-weight="700">× (matmul)</text>
+      <text x="173" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f">z = W·x</text>
+
+      <line x1="198" y1="36" x2="228" y2="36" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#ag)"/>
+
+      <rect x="228" y="22" width="50" height="28" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="253" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f" font-weight="700">ReLU</text>
+      <text x="253" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f">a = ReLU(z)</text>
+
+      <line x1="278" y1="36" x2="308" y2="36" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#ag)"/>
+
+      <rect x="308" y="22" width="60" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="338" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Loss</text>
+      <text x="338" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">L = CE(a, y)</text>
+
+      <!-- Backward pass -->
+      <text x="4" y="90" font-family="sans-serif" font-size="10" fill="#dc2626" font-weight="700">← Backward pass (autograd)</text>
+
+      <line x1="308" y1="110" x2="283" y2="110" stroke="#dc2626" stroke-width="1.5" marker-end="url(#agr)"/>
+      <text x="295" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#dc2626">∂L/∂a</text>
+
+      <line x1="228" y1="110" x2="203" y2="110" stroke="#dc2626" stroke-width="1.5" marker-end="url(#agr)"/>
+      <text x="215" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#dc2626">∂L/∂z</text>
+
+      <line x1="148" y1="110" x2="123" y2="110" stroke="#dc2626" stroke-width="1.5" marker-end="url(#agr)"/>
+      <text x="135" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#dc2626">∂L/∂W</text>
+
+      <rect x="228" y="96" width="50" height="28" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+      <text x="253" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#991b1b">grad ReLU</text>
+      <rect x="148" y="96" width="50" height="28" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+      <text x="173" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#991b1b">grad matmul</text>
+      <rect x="308" y="96" width="60" height="28" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+      <text x="338" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#991b1b">grad loss</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      The framework records every operation in the forward pass and uses the chain rule automatically during the backward pass to compute gradients.
+    </p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Static Graph (Define-and-Run)</div>
+      The full computation graph is defined first, compiled, and then executed repeatedly with data. Faster at inference, but harder to debug — you can't inspect values mid-graph. Used by TensorFlow 1.x and MindSpore's <em>Graph Mode</em>.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Dynamic Graph (Define-by-Run)</div>
+      The graph is built on-the-fly as operations execute. You can print tensor values anywhere, use normal Python control flow (if/for), and debug interactively. Used by PyTorch's default mode and MindSpore's <em>PyNative Mode</em>.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Static graph</strong> = define then run = faster inference, harder to debug. <strong>Dynamic graph</strong> = define while running = easier to debug, more flexible. MindSpore supports both: <strong>Graph Mode</strong> (static) and <strong>PyNative Mode</strong> (dynamic).
+  </div>
+
+  <!-- ───────────── SECTION 3: PyTorch ───────────── -->
+  <h2>3. PyTorch</h2>
+
+  <p>PyTorch (Meta AI, 2016) is the dominant research framework globally. It uses a dynamic graph by default, which makes it feel like writing ordinary Python.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">torch.Tensor</div>
+      The core data type — an n-dimensional array backed by GPU memory if available. Supports all standard math operations. Every tensor records which operations created it (the gradient tape).
+    </div>
+    <div class="def-item">
+      <div class="def-term">torch.nn.Module</div>
+      The base class for all models and layers. Override <code>__init__</code> to define layers and <code>forward()</code> to define the computation. PyTorch automatically generates the backward pass.
+    </div>
+    <div class="def-item">
+      <div class="def-term">torch.optim</div>
+      Ready-made optimisers: <code>SGD</code>, <code>Adam</code>, <code>AdamW</code>. Call <code>optimizer.step()</code> after <code>loss.backward()</code> to update weights.
+    </div>
+    <div class="def-item">
+      <div class="def-term">torch.utils.data</div>
+      <code>Dataset</code> and <code>DataLoader</code> — standard interfaces for loading, batching, and shuffling training data.
+    </div>
+  </div>
+
+  <!-- PyTorch training loop -->
+  <div class="callout tip">
+    <div class="callout-title">The PyTorch training loop (4 lines at its core)</div>
+    <pre style="margin:0; font-size:0.82rem; line-height:1.7">optimizer.zero_grad()   # clear old gradients
+output = model(inputs)  # forward pass
+loss = criterion(output, labels)  # compute loss
+loss.backward()         # backpropagation (autograd)
+optimizer.step()        # update weights</pre>
+  </div>
+
+  <!-- ───────────── SECTION 4: MindSpore ───────────── -->
+  <h2>4. MindSpore — Huawei's AI Framework</h2>
+
+  <p>MindSpore is Huawei's open-source AI framework, designed to run efficiently on Huawei's <strong>Ascend NPU</strong> chips as well as CPUs and GPUs. It is the primary framework tested in the HCIA-AI exam.</p>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 480 160" width="480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Layers -->
+      <rect x="40"  y="10"  width="400" height="30" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="240" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#78350f" font-weight="700">User API — mindspore.nn · mindspore.ops · mindspore.Tensor</text>
+
+      <rect x="40"  y="50"  width="190" height="30" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="135" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#1e3a8a" font-weight="700">Graph Mode (Static)</text>
+
+      <rect x="250" y="50"  width="190" height="30" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="345" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#14532d" font-weight="700">PyNative Mode (Dynamic)</text>
+
+      <rect x="40"  y="90"  width="400" height="30" rx="6" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+      <text x="240" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#3730a3" font-weight="700">MindSpore IR — Intermediate Representation &amp; Graph Optimisation</text>
+
+      <rect x="40"  y="128" width="120" height="26" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="100" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#333">Ascend NPU</text>
+
+      <rect x="175" y="128" width="90"  height="26" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="220" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#333">GPU (CUDA)</text>
+
+      <rect x="280" y="128" width="80"  height="26" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="320" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#333">CPU</text>
+
+      <rect x="375" y="128" width="65"  height="26" rx="5" fill="#f0f0ec" stroke="#6b6b63" stroke-width="1.5"/>
+      <text x="407" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#333">Mobile/Edge</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      MindSpore's layered architecture: one API, two execution modes, one IR for optimisation, multiple hardware backends.
+    </p>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">mindspore.nn</div>
+      High-level layer classes — <code>nn.Conv2d</code>, <code>nn.Dense</code> (fully-connected), <code>nn.ReLU</code>, <code>nn.MaxPool2d</code>, <code>nn.SequentialCell</code>. Same concept as PyTorch's <code>torch.nn</code>.
+    </div>
+    <div class="def-item">
+      <div class="def-term">mindspore.ops</div>
+      Lower-level primitive operations — <code>ops.MatMul</code>, <code>ops.Softmax</code>, <code>ops.GatherV2</code>. Used when you need fine-grained control over the graph.
+    </div>
+    <div class="def-item">
+      <div class="def-term">mindspore.Tensor</div>
+      MindSpore's tensor type. Created from NumPy arrays or Python lists. Supports <code>.asnumpy()</code> to convert back.
+    </div>
+    <div class="def-item">
+      <div class="def-term">nn.Cell</div>
+      MindSpore's base class for all models and layers — equivalent to PyTorch's <code>nn.Module</code>. Override <code>__init__</code> and <code>construct()</code> (not <code>forward()</code>).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Model.train() / Model.eval()</div>
+      MindSpore's high-level <code>Model</code> class wraps a network, loss function, and optimiser. <code>model.train(epochs, dataset)</code> runs the full training loop automatically.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    MindSpore key differences from PyTorch: the model base class is <strong>nn.Cell</strong> (not nn.Module), the forward method is called <strong>construct()</strong> (not forward()), and MindSpore's two modes are <strong>Graph Mode</strong> (static, faster) and <strong>PyNative Mode</strong> (dynamic, easier to debug). MindSpore is optimised for Huawei's Ascend NPU.
+  </div>
+
+  <!-- ───────────── SECTION 5: LeNet ───────────── -->
+  <h2>5. LeNet — A Classic CNN in Code</h2>
+
+  <p>LeNet-5 (LeCun, 1998) was the first successful CNN, originally used to recognise handwritten digits (MNIST). It's the "Hello World" of deep learning — small enough to understand completely, real enough to actually work.</p>
+
+  <!-- LeNet architecture diagram -->
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 560 100" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="an" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0 0,6 3,0 6" fill="#6b6b63"/>
+        </marker>
+      </defs>
+
+      <rect x="4"   y="30" width="52" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="30"  y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a" font-weight="700">Input</text>
+      <text x="30"  y="59" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">32×32×1</text>
+
+      <line x1="56" y1="50" x2="66" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="66"  y="22" width="64" height="56" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="98"  y="44" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f" font-weight="700">Conv1</text>
+      <text x="98"  y="56" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">6 × 5×5</text>
+      <text x="98"  y="67" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">→ 28×28×6</text>
+
+      <line x1="130" y1="50" x2="140" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="140" y="28" width="64" height="44" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="172" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d" font-weight="700">Pool1</text>
+      <text x="172" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">avg 2×2</text>
+      <text x="172" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">→ 14×14×6</text>
+
+      <line x1="204" y1="50" x2="214" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="214" y="18" width="64" height="64" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="246" y="40" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f" font-weight="700">Conv2</text>
+      <text x="246" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">16 × 5×5</text>
+      <text x="246" y="63" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">→ 10×10×16</text>
+
+      <line x1="278" y1="50" x2="288" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="288" y="26" width="64" height="48" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="320" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d" font-weight="700">Pool2</text>
+      <text x="320" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">avg 2×2</text>
+      <text x="320" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">→ 5×5×16</text>
+
+      <line x1="352" y1="50" x2="362" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="362" y="30" width="52" height="40" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="388" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d" font-weight="700">FC1</text>
+      <text x="388" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">400→120</text>
+
+      <line x1="414" y1="50" x2="424" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="424" y="30" width="52" height="40" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="450" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d" font-weight="700">FC2</text>
+      <text x="450" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">120→84</text>
+
+      <line x1="476" y1="50" x2="486" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#an)"/>
+
+      <rect x="486" y="30" width="66" height="40" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="519" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#5b21b6" font-weight="700">Output</text>
+      <text x="519" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">84→10</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.5rem">
+      LeNet-5: two Conv+Pool pairs for feature extraction, then three FC layers for classification (10 digit classes).
+    </p>
+  </div>
+
+  <p>Here is LeNet implemented in MindSpore — the exam-relevant framework. Notice how it matches the architecture diagram directly:</p>
+
+  <div class="callout tip">
+    <div class="callout-title">LeNet in MindSpore</div>
+    <pre style="margin:0; font-size:0.80rem; line-height:1.8">import mindspore.nn as nn
+
+class LeNet5(nn.Cell):
+    def __init__(self):
+        super(LeNet5, self).__init__()
+        self.conv1  = nn.Conv2d(1, 6, 5)      # 1 in-channel, 6 filters, 5×5
+        self.pool1  = nn.AvgPool2d(2, 2)      # 2×2 average pool, stride 2
+        self.conv2  = nn.Conv2d(6, 16, 5)     # 6 → 16 filters
+        self.pool2  = nn.AvgPool2d(2, 2)
+        self.flatten = nn.Flatten()            # 5×5×16 = 400
+        self.fc1    = nn.Dense(400, 120)
+        self.fc2    = nn.Dense(120, 84)
+        self.fc3    = nn.Dense(84, 10)        # 10 digit classes
+        self.relu   = nn.ReLU()
+
+    def construct(self, x):                   # "construct" not "forward"
+        x = self.pool1(self.relu(self.conv1(x)))
+        x = self.pool2(self.relu(self.conv2(x)))
+        x = self.flatten(x)
+        x = self.relu(self.fc1(x))
+        x = self.relu(self.fc2(x))
+        return self.fc3(x)                    # logits (no softmax here)
+</pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">Training LeNet in MindSpore (high-level API)</div>
+    <pre style="margin:0; font-size:0.80rem; line-height:1.8">from mindspore.train import Model
+import mindspore.nn as nn
+
+net       = LeNet5()
+loss_fn   = nn.SoftmaxCrossEntropyWithLogits(sparse=True, reduction='mean')
+optimizer = nn.Adam(net.trainable_params(), learning_rate=0.001)
+
+model = Model(net, loss_fn=loss_fn, optimizer=optimizer, metrics={"accuracy"})
+model.train(epochs=10, train_dataset=train_ds)
+model.eval(eval_dataset=test_ds)</pre>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Know the LeNet-5 layer sequence: <strong>Conv(6) → Pool → Conv(16) → Pool → Flatten → FC(120) → FC(84) → FC(10)</strong>. Both pooling layers use <strong>average pooling</strong> (not max pooling) in the original LeNet. In MindSpore the forward method is <strong>construct()</strong>, not <code>forward()</code>.
+  </div>
+
+  <!-- ───────────── SECTION 6: Framework comparison ───────────── -->
+  <h2>6. Framework Comparison</h2>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.87rem; margin-top:0.5rem">
+    <thead>
+      <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+        <th style="padding:0.6rem 0.8rem; text-align:left">Property</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">PyTorch</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">MindSpore</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.6rem 0.8rem">Organisation</td>
+        <td style="padding:0.6rem 0.8rem">Meta AI</td>
+        <td style="padding:0.6rem 0.8rem">Huawei</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.6rem 0.8rem">Default execution</td>
+        <td style="padding:0.6rem 0.8rem">Dynamic (eager)</td>
+        <td style="padding:0.6rem 0.8rem">Graph Mode (static) or PyNative (dynamic)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.6rem 0.8rem">Model base class</td>
+        <td style="padding:0.6rem 0.8rem"><code>nn.Module</code></td>
+        <td style="padding:0.6rem 0.8rem"><code>nn.Cell</code></td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.6rem 0.8rem">Forward method name</td>
+        <td style="padding:0.6rem 0.8rem"><code>forward()</code></td>
+        <td style="padding:0.6rem 0.8rem"><code>construct()</code></td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.6rem 0.8rem">Optimised hardware</td>
+        <td style="padding:0.6rem 0.8rem">NVIDIA GPU</td>
+        <td style="padding:0.6rem 0.8rem">Huawei Ascend NPU</td>
+      </tr>
+      <tr style="background:#fafaf7">
+        <td style="padding:0.6rem 0.8rem">Primary strength</td>
+        <td style="padding:0.6rem 0.8rem">Research flexibility, huge ecosystem</td>
+        <td style="padding:0.6rem 0.8rem">Ascend performance, unified device/cloud/edge</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">What does automatic differentiation (autograd) do in an AI framework?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It automatically selects the best optimiser for a given model and dataset</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">It tracks operations during the forward pass and automatically computes gradients during the backward pass</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It converts model weights into a format suitable for deployment on mobile devices</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">It generates training data by augmenting the original dataset automatically</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">Which of the following correctly describes MindSpore's Graph Mode?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">The graph is built step-by-step as operations execute, allowing easy debugging with print statements</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It is identical to PyTorch's eager execution mode and offers the same debugging experience</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">The full computation graph is defined and compiled before execution, enabling hardware optimisation</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">It executes only the convolutional layers as a graph while FC layers run dynamically</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">In MindSpore, what is the correct name for the base class that all custom models must inherit from?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">nn.Module — the standard base class shared with PyTorch</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">nn.Layer — MindSpore's layer abstraction for building deep networks</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">nn.Cell — MindSpore's base class, equivalent to PyTorch's nn.Module</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">nn.Graph — MindSpore's base class for static graph models</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">What is the correct layer sequence in LeNet-5?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">FC → FC → Conv → Pool → Conv → Pool → Output</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Conv → Conv → Pool → Pool → FC → FC → Output</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Conv → Pool → Conv → Pool → FC → FC → Output</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Pool → Conv → Pool → Conv → FC → FC → Output</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">In MindSpore, the method that defines the forward computation of a model is called:</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">forward() — the same name used in PyTorch and TensorFlow</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">compute() — MindSpore uses this name to distinguish from other frameworks</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">call() — a Python special method used to make the model callable</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">construct() — MindSpore's specific name for the forward computation method</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>AI frameworks provide: tensor ops, autograd, and high-level model building blocks</li>
+        <li>Computational graph: tracks all operations so gradients can be computed automatically</li>
+        <li>Static graph (define-and-run): compile then execute — faster, harder to debug</li>
+        <li>Dynamic graph (define-by-run): build as you execute — easier to debug</li>
+        <li>MindSpore modes: Graph Mode (static) and PyNative Mode (dynamic)</li>
+        <li>MindSpore base class: <code>nn.Cell</code>; forward method: <code>construct()</code></li>
+        <li>MindSpore modules: <code>mindspore.nn</code>, <code>mindspore.ops</code>, <code>mindspore.Tensor</code></li>
+        <li>LeNet-5: Conv(6) → Pool → Conv(16) → Pool → FC(120) → FC(84) → Output(10)</li>
+        <li>LeNet uses average pooling in the original design</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://www.mindspore.cn/docs/en/master/index.html" target="_blank">MindSpore Official Documentation</a>
+    — Start with "Beginner Tutorial &gt; Quick Start" and "Model Building." The LeNet quickstart tutorial walks through exactly what was covered in this lesson with runnable code.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0013-transformer-attention.html">← Lesson 13: Transformer &amp; Attention</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! Autograd records every tensor operation in a computational graph during the forward pass. When you call loss.backward() (PyTorch) or the equivalent, the framework traverses that graph in reverse using the chain rule and computes the gradient of the loss with respect to every parameter — automatically, without any manual calculus.",
+    wrong:   "Not quite. Autograd is specifically about computing gradients automatically via the chain rule. It doesn't select optimisers, convert models for deployment, or augment data. Its job: record operations forward, then compute ∂loss/∂weight for every weight during the backward pass."
+  },
+  q2: {
+    correct: "Correct! In Graph Mode (also called 'define-and-run'), MindSpore first constructs the full computation graph by running through the construct() method once, then compiles and optimises it (e.g. operator fusion for Ascend NPU), and finally executes it repeatedly with actual data. This enables aggressive hardware-specific optimisations that dynamic mode cannot.",
+    wrong:   "Not quite. Graph Mode is MindSpore's static execution mode — the graph is fully compiled before any real data flows through it. PyNative Mode is the dynamic equivalent (build as you execute). The two modes are quite different in how they execute, and Graph Mode is generally faster at inference time."
+  },
+  q3: {
+    correct: "Correct! In MindSpore, all custom models and layers inherit from nn.Cell. It plays the same role as PyTorch's nn.Module — you define sub-layers in __init__ and the computation in construct(). This is a common exam question because it's one of the most obvious differences between MindSpore and PyTorch.",
+    wrong:   "Not quite. MindSpore's base class is nn.Cell — not nn.Module (that's PyTorch), not nn.Layer, and not nn.Graph. If you write a MindSpore model and inherit from the wrong class, the training loop will fail. nn.Cell is the answer the HCIA-AI exam expects."
+  },
+  q4: {
+    correct: "Correct! LeNet-5 alternates between convolutional layers (feature extraction) and pooling layers (downsampling), then uses fully-connected layers for classification: Conv1 → Pool1 → Conv2 → Pool2 → FC1 (400→120) → FC2 (120→84) → FC3 (84→10). Each Conv is followed immediately by its Pool before the next Conv.",
+    wrong:   "Not quite. The correct sequence is Conv → Pool → Conv → Pool → FC → FC → Output. Convolution always comes before pooling (pool downsamples the feature map the conv just produced). Starting with FC or Pool before any Conv doesn't make sense architecturally — there are no features to pool yet."
+  },
+  q5: {
+    correct: "Correct! MindSpore uses construct() instead of forward(). This is one of the most-tested differences from PyTorch. In Graph Mode, MindSpore compiles the construct() method into a static graph — which is why its name is different: 'construct the graph.' If you write forward() in a MindSpore Cell, the method simply won't be called by the framework.",
+    wrong:   "Not quite. MindSpore's forward computation method is construct() — not forward() (that's PyTorch and TensorFlow Keras), not compute(), and not the Python __call__ dunder. This is specifically tested in HCIA-AI because it's the most common mistake developers make when switching from PyTorch to MindSpore."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
