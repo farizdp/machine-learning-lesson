@@ -29,7 +29,17 @@ Content Material.md  # Original syllabus outline (Huawei HCIA-AI)
 | 06 | Key ML Concepts: Gradient Descent, Hyperparameters & Cross-Validation | Ch 02 — Machine Learning |
 | 07 | Common ML Algorithms | Ch 02 — Machine Learning |
 | 08 | Deep Learning: Perceptrons & Neural Networks | Ch 03 — Deep Learning & Foundation Models |
-
+| 09 | Activation Functions & Training | Ch 03 — Deep Learning & Foundation Models |
+| 10 | Optimizers & Regularization | Ch 03 — Deep Learning & Foundation Models |
+| 11 | Convolutional Neural Networks (CNN) | Ch 03 — Deep Learning & Foundation Models |
+| 12 | Recurrent Neural Networks & LSTM | Ch 03 — Deep Learning & Foundation Models |
+| 13 | Transformer Architecture & Attention | Ch 03 — Deep Learning & Foundation Models |
+| 14 | AI Development Frameworks | Ch 04 — AI Development Framework |
+| 15 | AI Application Development Process | Ch 04 — AI Development Framework |
+| 16 | Transfer Learning & Fine-tuning | Advanced |
+| 17 | Model Evaluation Metrics | Advanced |
+| 18 | AI Ethics & Responsible AI | Advanced |
+| 19 | HCIA-AI Exam Review | Advanced |
 
 ## How to Continue Learning
 

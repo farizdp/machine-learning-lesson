@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 15 — AI Application Development Process</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 62%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Chapter 04 · Lesson 15 &nbsp;|&nbsp; AI Development Framework</div>
+    <h1>AI Application Development Process</h1>
+    <p class="subtitle">How a real AI project goes from a problem statement to a deployed application — the six stages every developer follows.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: The 6-Stage Pipeline ───────────── -->
+  <h2>1. The Six-Stage AI Development Pipeline</h2>
+
+  <p>Building an AI model is not just about writing a neural network. There are six stages, and skipping any of them causes the project to fail in production. The Huawei HCIA-AI syllabus explicitly defines this pipeline:</p>
+
+  <div class="diagram" style="padding:1.4rem; overflow-x:auto">
+    <svg viewBox="0 0 560 100" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="pp" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#6b6b63"/>
+        </marker>
+      </defs>
+
+      <rect x="2"   y="30" width="74" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="39"  y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1e3a8a" font-weight="700">① Requirement</text>
+      <text x="39"  y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1e3a8a" font-weight="700">Analysis</text>
+
+      <line x1="76"  y1="50" x2="86"  y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#pp)"/>
+
+      <rect x="86"  y="30" width="74" height="40" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="123" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#78350f" font-weight="700">② Environment</text>
+      <text x="123" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#78350f" font-weight="700">Setup</text>
+
+      <line x1="160" y1="50" x2="170" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#pp)"/>
+
+      <rect x="170" y="30" width="74" height="40" rx="6" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="207" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#9d174d" font-weight="700">③ Data</text>
+      <text x="207" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#9d174d" font-weight="700">Preparation</text>
+
+      <line x1="244" y1="50" x2="254" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#pp)"/>
+
+      <rect x="254" y="30" width="74" height="40" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="291" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#14532d" font-weight="700">④ Network</text>
+      <text x="291" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#14532d" font-weight="700">Building</text>
+
+      <line x1="328" y1="50" x2="338" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#pp)"/>
+
+      <rect x="338" y="30" width="74" height="40" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="375" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#5b21b6" font-weight="700">⑤ Model</text>
+      <text x="375" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#5b21b6" font-weight="700">Training</text>
+
+      <line x1="412" y1="50" x2="422" y2="50" stroke="#6b6b63" stroke-width="1.5" marker-end="url(#pp)"/>
+
+      <rect x="422" y="30" width="130" height="40" rx="6" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+      <text x="487" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#14532d" font-weight="700">⑥ Application</text>
+      <text x="487" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#14532d" font-weight="700">Development</text>
+
+      <!-- Feedback loop arrow below -->
+      <path d="M 552 72 Q 552 90 277 90 Q 4 90 4 72" fill="none" stroke="#6b6b63" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#pp)"/>
+      <text x="277" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6b6b63">Feedback &amp; Iteration</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.3rem">
+      AI development is a loop, not a straight line. Feedback from deployment drives improvements in data and the model.
+    </p>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    Memorise the six stages in order: <strong>Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development</strong>. The exam often asks you to identify which stage a described activity belongs to.
+  </div>
+
+  <!-- ───────────── SECTION 2: Each stage in detail ───────────── -->
+  <h2>2. Each Stage Explained</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">① Requirement Analysis</div>
+      <strong>What:</strong> Define the problem clearly before writing a single line of code. Is it classification, regression, or detection? What counts as acceptable accuracy? What are the latency and memory constraints?<br>
+      <strong>Outputs:</strong> Task type, success metrics (accuracy / F1 / latency), data requirements, hardware targets.
+    </div>
+    <div class="def-item">
+      <div class="def-term">② Environment Setup</div>
+      <strong>What:</strong> Install and configure the frameworks and hardware that will run your model.<br>
+      <strong>Huawei context:</strong> MindSpore installed on Ascend hardware, or using <strong>ModelArts</strong> (Huawei's cloud AI platform) which provides a managed environment where frameworks, drivers, and compute are pre-configured. Saves days of environment debugging.
+    </div>
+    <div class="def-item">
+      <div class="def-term">③ Data Preparation</div>
+      <strong>What:</strong> Collect, clean, label, split, and augment data — typically 60–70% of the total project time.<br>
+      <strong>Sub-steps (from Lesson 05):</strong> Data cleansing → Standardisation → Dimensionality reduction → Feature selection → Split into train / validation / test sets.<br>
+      <strong>Key principle:</strong> Garbage in, garbage out. No model can compensate for poor quality data.
+    </div>
+    <div class="def-item">
+      <div class="def-term">④ Network Building</div>
+      <strong>What:</strong> Choose an architecture and implement it in MindSpore (or another framework). Decisions: number of layers, layer types, activation functions, whether to start from scratch or use a pre-trained model.<br>
+      <strong>Example:</strong> For digit recognition, start with LeNet-5 (Lesson 14). For a new image task with limited data, use a pre-trained ResNet and fine-tune (see Lesson 16).
+    </div>
+    <div class="def-item">
+      <div class="def-term">⑤ Model Training</div>
+      <strong>What:</strong> Feed data through the network, compute loss, run backpropagation, update weights — repeated across many epochs.<br>
+      <strong>Key decisions:</strong> Loss function, optimiser (usually Adam), learning rate schedule, batch size, number of epochs, when to apply regularisation (Dropout, L2).<br>
+      <strong>Monitor:</strong> Training loss and validation accuracy at each epoch. Stop when validation accuracy stops improving (early stopping).
+    </div>
+    <div class="def-item">
+      <div class="def-term">⑥ Application Development</div>
+      <strong>What:</strong> Package the trained model for real-world use. Export it, wrap it in an API or app, deploy it to a server, edge device, or the cloud.<br>
+      <strong>MindSpore tools:</strong>
+      <ul style="margin-top:0.4rem">
+        <li><code>mindspore.save_checkpoint()</code> — save trained weights</li>
+        <li><code>mindspore.export()</code> — export to ONNX, MindIR, or AIR format</li>
+        <li><strong>MindSpore Serving</strong> — production inference server for Ascend/GPU</li>
+        <li><strong>MindSpore Lite</strong> — compressed model for mobile / edge devices</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 3: Worked example ───────────── -->
+  <h2>3. Worked Example: Digit Recognition with LeNet on ModelArts</h2>
+
+  <p>Let's walk the full six stages for a concrete project — building a handwritten digit classifier using LeNet-5 on Huawei's ModelArts platform.</p>
+
+  <div class="diagram" style="padding:1rem">
+    <table style="width:100%; border-collapse:collapse; font-size:0.85rem">
+      <thead>
+        <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+          <th style="padding:0.5rem 0.8rem; text-align:left; width:22%">Stage</th>
+          <th style="padding:0.5rem 0.8rem; text-align:left">What happens in this project</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e5e5e0">
+          <td style="padding:0.5rem 0.8rem; color:#1e3a8a; font-weight:700">① Requirement</td>
+          <td style="padding:0.5rem 0.8rem">Classify 28×28 greyscale images into digits 0–9. Target: &gt;99% accuracy on MNIST test set. Inference must run in under 10ms.</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+          <td style="padding:0.5rem 0.8rem; color:#92400e; font-weight:700">② Environment</td>
+          <td style="padding:0.5rem 0.8rem">Create a ModelArts training job — select MindSpore 2.x, Ascend 910 instance. No local setup needed.</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e5e0">
+          <td style="padding:0.5rem 0.8rem; color:#9d174d; font-weight:700">③ Data</td>
+          <td style="padding:0.5rem 0.8rem">Download MNIST (60,000 train / 10,000 test images). Normalise pixel values to [0, 1]. Upload to OBS (Huawei Object Storage). No augmentation needed — MNIST is already clean.</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+          <td style="padding:0.5rem 0.8rem; color:#14532d; font-weight:700">④ Network</td>
+          <td style="padding:0.5rem 0.8rem">Implement LeNet5 as nn.Cell with construct() method (Lesson 14). Input: 32×32×1 (MNIST images are padded from 28×28).</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e5e0">
+          <td style="padding:0.5rem 0.8rem; color:#5b21b6; font-weight:700">⑤ Training</td>
+          <td style="padding:0.5rem 0.8rem">Use Adam (lr=0.001), SoftmaxCrossEntropyWithLogits loss, batch size 32, 10 epochs. Watch validation accuracy per epoch via ModelArts dashboard.</td>
+        </tr>
+        <tr>
+          <td style="padding:0.5rem 0.8rem; color:#15803d; font-weight:700">⑥ Application</td>
+          <td style="padding:0.5rem 0.8rem">Export model to MindIR format. Deploy via MindSpore Serving as a REST API. Mobile client sends image → server returns digit prediction.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ───────────── SECTION 4: RNN Types ───────────── -->
+  <h2>4. RNN Input/Output Types</h2>
+
+  <p>Covered in Lesson 12: RNNs can process sequences. But the input and output don't have to be the same length — this flexibility is what makes RNNs (and LSTMs) useful for many different task types.</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 560 200" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+
+      <!-- ONE-TO-ONE -->
+      <text x="56" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63" font-weight="700">One-to-One</text>
+      <rect x="30" y="70" width="52" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="56" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">x</text>
+      <rect x="30" y="24" width="52" height="28" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="56" y="42" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#14532d">y</text>
+      <rect x="24" y="48" width="64" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="56" y="60" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">RNN cell</text>
+      <line x1="56" y1="66" x2="56" y2="52" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="56" y1="48" x2="56" y2="36" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <text x="56" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">e.g. image → label</text>
+      <text x="56" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">(plain classifier)</text>
+
+      <!-- ONE-TO-MANY -->
+      <text x="168" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63" font-weight="700">One-to-Many</text>
+      <!-- Input -->
+      <rect x="142" y="70" width="52" height="28" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="168" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1e3a8a">x</text>
+      <!-- Cells -->
+      <rect x="118" y="48" width="38" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="137" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <rect x="162" y="48" width="38" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="181" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <!-- Outputs -->
+      <rect x="118" y="24" width="38" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="137" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#14532d">y₁</text>
+      <rect x="162" y="24" width="38" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="181" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#14532d">y₂</text>
+      <!-- Arrows -->
+      <line x1="168" y1="70" x2="137" y2="67" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="137" y1="66" x2="137" y2="52" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="137" y1="48" x2="137" y2="46" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="155" y1="57" x2="162" y2="57" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="181" y1="66" x2="181" y2="52" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="181" y1="48" x2="181" y2="46" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <text x="168" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">e.g. image → caption</text>
+      <text x="168" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">(image captioning)</text>
+
+      <!-- MANY-TO-ONE -->
+      <text x="300" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63" font-weight="700">Many-to-One</text>
+      <rect x="264" y="70" width="38" height="20" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="283" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#1e3a8a">x₁</text>
+      <rect x="308" y="70" width="38" height="20" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="327" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#1e3a8a">x₂</text>
+      <rect x="264" y="48" width="38" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="283" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <rect x="308" y="48" width="38" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="327" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <rect x="288" y="24" width="52" height="20" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="314" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#14532d">y</text>
+      <line x1="283" y1="70" x2="283" y2="68" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="302" y1="57" x2="308" y2="57" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="327" y1="70" x2="327" y2="68" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="327" y1="48" x2="314" y2="46" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <text x="300" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">e.g. review → sentiment</text>
+      <text x="300" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">(sentiment analysis)</text>
+
+      <!-- MANY-TO-MANY -->
+      <text x="450" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6b6b63" font-weight="700">Many-to-Many</text>
+      <rect x="406" y="70" width="36" height="18" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="424" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#1e3a8a">x₁</text>
+      <rect x="448" y="70" width="36" height="18" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="466" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#1e3a8a">x₂</text>
+      <rect x="406" y="48" width="36" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="424" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <rect x="448" y="48" width="36" height="18" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1"/>
+      <text x="466" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#78350f">cell</text>
+      <rect x="406" y="26" width="36" height="18" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="424" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#14532d">y₁</text>
+      <rect x="448" y="26" width="36" height="18" rx="4" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="466" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#14532d">y₂</text>
+      <line x1="424" y1="70" x2="424" y2="67" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="442" y1="57" x2="448" y2="57" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="466" y1="70" x2="466" y2="67" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="424" y1="48" x2="424" y2="46" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <line x1="466" y1="48" x2="466" y2="46" stroke="#6b6b63" stroke-width="1" marker-end="url(#pp)"/>
+      <text x="450" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">e.g. word → POS tag</text>
+      <text x="450" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6b6b63">(sequence labelling)</text>
+    </svg>
+  </div>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.87rem; margin-top:0.5rem">
+    <thead>
+      <tr style="background:#f0f0ec; border-bottom:2px solid #d4d4c8">
+        <th style="padding:0.6rem 0.8rem; text-align:left">Type</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Input → Output</th>
+        <th style="padding:0.6rem 0.8rem; text-align:left">Real-world example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">One-to-One</td>
+        <td style="padding:0.5rem 0.8rem">Single → Single</td>
+        <td style="padding:0.5rem 0.8rem">Image classification (not really sequential, but the degenerate case)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0; background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">One-to-Many</td>
+        <td style="padding:0.5rem 0.8rem">Single → Sequence</td>
+        <td style="padding:0.5rem 0.8rem">Image captioning (one photo → a sentence of words)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e5e0">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">Many-to-One</td>
+        <td style="padding:0.5rem 0.8rem">Sequence → Single</td>
+        <td style="padding:0.5rem 0.8rem">Sentiment analysis (a review → positive/negative label)</td>
+      </tr>
+      <tr style="background:#fafaf7">
+        <td style="padding:0.5rem 0.8rem; font-weight:700">Many-to-Many</td>
+        <td style="padding:0.5rem 0.8rem">Sequence → Sequence</td>
+        <td style="padding:0.5rem 0.8rem">Machine translation (sentence → sentence) or POS tagging (word → tag for each word)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The exam may describe a task and ask which RNN type applies. Key examples: <strong>sentiment analysis = many-to-one</strong>, <strong>machine translation = many-to-many</strong> (often via Seq2Seq), <strong>image captioning = one-to-many</strong>.
+  </div>
+
+  <!-- ───────────── SECTION 5: ModelArts ───────────── -->
+  <h2>5. ModelArts — Huawei's Full-Stack AI Platform</h2>
+
+  <p>ModelArts supports the entire 6-stage pipeline as a single managed platform. It is Huawei's answer to Google Vertex AI and AWS SageMaker.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Data Management</div>
+      Upload datasets to OBS (Object Storage Service). Label images with the built-in data labelling tool. Generate train/val/test splits automatically.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Training Jobs</div>
+      Submit a MindSpore training script. ModelArts provisions Ascend NPU instances, runs training, logs metrics, and saves checkpoints to OBS — no server management needed.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Automated Hyperparameter Search</div>
+      ModelArts can run many training jobs in parallel with different hyperparameter combinations and report which performed best (grid or random search, Lesson 06).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Model Deployment</div>
+      One-click deploy a saved model as a real-time API endpoint. ModelArts handles scaling, load balancing, and monitoring.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>ModelArts</strong> is Huawei's cloud AI development platform. It supports the full pipeline from data labelling to model serving, running on <strong>Ascend NPU</strong> hardware. It is the primary platform for MindSpore development in the HCIA-AI exam context.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">In the 6-stage AI development process, which stage comes immediately after Data Preparation?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Model Training — begin training as soon as the data is ready to save time</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Application Development — deploy early and improve iteratively in production</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Network Building — design and implement the model architecture before training</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Requirement Analysis — revisit the requirements once the data is understood</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">A team is building an AI system that reads a customer support email (a sequence of words) and classifies it as one of five issue categories (a single label). Which RNN input/output type does this match?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">One-to-Many — the model receives one input and generates a sequence of labels</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">Many-to-Many — every word in the email maps to a corresponding output category</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Many-to-One — the model reads a sequence and produces a single classification output</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">One-to-One — the email is treated as a single unit mapped to a single category</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">During the Requirement Analysis stage, a developer writes: "The model must classify chest X-ray images as normal or abnormal, with at least 95% recall on the abnormal class." What has this developer correctly specified?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">The model architecture and number of layers needed for the task</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">The specific optimiser and learning rate to use during training</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">The task type, success metric, and business constraint before any code is written</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">The data augmentation strategy and train/val/test split ratios</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">Which MindSpore tool is used to deploy a trained model as a real-time inference server for production use on Ascend hardware?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">MindSpore Lite — the tool for deploying compressed models to production servers</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">mindspore.export() — the function that exports the model and hosts it as an API</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">MindSpore Serving — the production inference server for Ascend and GPU backends</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">ModelArts AutoML — the platform feature that serves models after hyperparameter search</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">An AI team notices their model accuracy stopped improving after deployment, even though it performed well during training. What should they do according to the AI development process?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Switch to a different model architecture, since the current one is too simple</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Roll back to the previous model version and stop using AI for this task</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Collect feedback from production, re-examine the data, and iterate through the pipeline again</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Increase the learning rate and retrain on the same training data for more epochs</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>The 6-stage AI pipeline: Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development</li>
+        <li>Stage 1 defines task type, success metrics, and constraints before coding</li>
+        <li>Stage 3 (Data Preparation) typically takes 60–70% of total project time</li>
+        <li>Stage 6 tools: <code>save_checkpoint()</code>, <code>export()</code>, MindSpore Serving, MindSpore Lite</li>
+        <li>RNN types: One-to-One, One-to-Many (captioning), Many-to-One (sentiment), Many-to-Many (translation)</li>
+        <li>ModelArts: Huawei's managed AI platform covering all 6 stages on Ascend hardware</li>
+        <li>AI development is iterative — production feedback drives the next cycle</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready for advanced topics? <a href="0016-transfer-learning.html">Lesson 16 → Transfer Learning &amp; Fine-tuning</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://www.mindspore.cn/tutorials/en/master/beginner/quick_start.html" target="_blank">MindSpore Quick Start Tutorial</a>
+    — Walks through the full 6-stage development process using LeNet on MNIST. Matches this lesson step for step. Run it on ModelArts or locally.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0014-ai-frameworks.html">← Lesson 14: AI Development Frameworks</a>
+    <a href="0016-transfer-learning.html" class="nav-next">Next: Transfer Learning →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! The sequence is: Requirement Analysis → Environment Setup → Data Preparation → <strong>Network Building</strong> → Model Training → Application Development. You build and implement the network architecture before training begins — you can't train a model that doesn't exist yet.",
+    wrong:   "Not quite. The correct order after Data Preparation is Network Building — you must design and implement the model architecture before you can train it. The full sequence is: Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development."
+  },
+  q2: {
+    correct: "Correct! Many-to-One means the RNN reads a full sequence of inputs (the words of the email) and produces a single output (the category label). This is the standard pattern for text classification tasks like sentiment analysis and support ticket routing.",
+    wrong:   "Not quite. The email is a sequence (many words) and the output is a single category label. That's Many-to-One. One-to-Many would be the reverse (e.g. image captioning). Many-to-Many means each input step produces an output step (e.g. POS tagging, translation). One-to-One treats both input and output as non-sequential."
+  },
+  q3: {
+    correct: "Correct! Requirement Analysis is about defining the problem before writing any code: what type of task is this (binary classification), what does success look like (95% recall on the abnormal class — a deliberate business choice to minimise missed diagnoses), and what constraints apply. All correct decisions before stage two.",
+    wrong:   "Not quite. Requirement Analysis happens before any model is built or trained. Architecture choices, optimiser settings, and data split ratios all come in later stages. What this developer correctly did is specify the task type, the success metric, and a domain-specific constraint — that's exactly what Requirement Analysis produces."
+  },
+  q4: {
+    correct: "Correct! MindSpore Serving is designed for production inference — it loads a trained model (in MindIR or AIR format) and exposes it as a high-performance server endpoint optimised for Ascend and GPU hardware. MindSpore Lite is for mobile and edge devices (smaller, lower power). mindspore.export() is a function for saving the model, not hosting it.",
+    wrong:   "Not quite. MindSpore Serving is the production inference server — it hosts the model and handles requests. MindSpore Lite is for mobile/edge devices (compressed, low-power), not server deployment. mindspore.export() saves the model file but does not run a server. ModelArts AutoML is for hyperparameter search, not serving."
+  },
+  q5: {
+    correct: "Correct! The AI development process has a feedback loop. When production performance degrades, the right response is to collect real-world data (what kinds of inputs are the model getting wrong?), re-examine the data pipeline, possibly collect new labelled examples, and iterate through the pipeline again. This is why the diagram showed a feedback arrow from stage 6 back to stage 1.",
+    wrong:   "Not quite. Degraded production performance usually means the real-world data distribution has changed (data drift), or the training data didn't represent real inputs well — not simply that the model is too small or needs more epochs on the same data. The correct response is to follow the feedback loop: collect new data, understand the failure cases, and iterate."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

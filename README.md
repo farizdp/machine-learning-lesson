@@ -48,6 +48,16 @@ open lessons/0001-what-is-ai.html
 | [12 — Recurrent Neural Networks &amp; LSTM](lessons/0012-rnn-lstm.html) | Why sequences need memory, RNN hidden state, Vanishing gradient in time, LSTM cell state, Forget Gate, Input Gate, Output Gate, Candidate, Seq2Seq (Encoder → Context Vector → Decoder) |
 | [13 — Transformer Architecture &amp; Attention](lessons/0013-transformer-attention.html) | Attention motivation, Q/K/V, Self-attention, Multi-head attention, Positional encoding, Transformer encoder/decoder, Add &amp; Norm, Masked Self-Attention, Cross-Attention, BERT (encoder-only / bidirectional), GPT-1 (decoder-only), Mixture of Experts (MoE) |
 | [14 — AI Development Frameworks](lessons/0014-ai-frameworks.html) | Why frameworks exist, Tensor + autograd, Computational graphs (static vs dynamic), Graph Mode vs PyNative Mode, PyTorch (nn.Module / forward), MindSpore (nn.Cell / construct), LeNet-5 architecture and MindSpore implementation |
+| [15 — AI Application Development Process](lessons/0015-ai-app-dev-process.html) | 6-stage pipeline (Requirement → Environment → Data → Network → Training → Deployment), RNN types (one-to-one / one-to-many / many-to-one / many-to-many), ModelArts platform, MindSpore Serving vs Lite, Feedback &amp; iteration loop |
+
+### Advanced Topics
+
+| Lesson | Topics |
+|--------|--------|
+| [16 — Transfer Learning &amp; Fine-tuning](lessons/0016-transfer-learning.html) | *(coming soon)* |
+| [17 — Model Evaluation Metrics](lessons/0017-evaluation-metrics.html) | *(coming soon)* |
+| [18 — AI Ethics &amp; Responsible AI](lessons/0018-ai-ethics.html) | *(coming soon)* |
+| [19 — HCIA-AI Exam Review](lessons/0019-exam-review.html) | *(coming soon)* |
 
 ---
 
