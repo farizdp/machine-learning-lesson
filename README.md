@@ -56,7 +56,7 @@ open lessons/0001-what-is-ai.html
 |--------|--------|
 | [16 — Transfer Learning &amp; Fine-tuning](lessons/0016-transfer-learning.html) | Why training from scratch fails on small data, Feature extraction vs Fine-tuning, Data size × domain similarity quadrant, Freezing layers with requires_grad, ResNet / BERT / PanGu-α, MindSpore fine-tuning pattern |
 | [17 — Model Evaluation Metrics](lessons/0017-evaluation-metrics.html) | Why accuracy misleads, Confusion matrix (TP/TN/FP/FN), Accuracy / Precision / Recall / F1 with formulas, Precision–Recall trade-off, ROC curve (TPR vs FPR), AUC interpretation, Which metric to use when, Multi-class macro vs weighted average |
-| [18 — AI Ethics &amp; Responsible AI](lessons/0018-ai-ethics.html) | *(coming soon)* |
+| [18 — AI Ethics &amp; Responsible AI](lessons/0018-ai-ethics.html) | AI bias (data / representation / feedback loops), Explainability vs accuracy trade-off, Federated Learning, Differential Privacy, Deepfakes &amp; detection, AI and employment, Five Responsible AI principles (Fairness / Transparency / Accountability / Privacy / Safety), Human-in-the-loop, AGI, Alignment problem |
 | [19 — HCIA-AI Exam Review](lessons/0019-exam-review.html) | *(coming soon)* |
 
 ---

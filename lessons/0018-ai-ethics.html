@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 18 — AI Ethics &amp; Responsible AI</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 74%"></div>
+  </div>
+
+  <header>
+    <div class="lesson-meta">Advanced · Lesson 18 &nbsp;|&nbsp; AI Ethics</div>
+    <h1>AI Ethics &amp; Responsible AI</h1>
+    <p class="subtitle">Powerful technology creates powerful responsibilities. These are the debates, risks, and principles every AI developer needs to understand.</p>
+  </header>
+
+  <!-- ───────────── SECTION 1: Why ethics matters in AI ───────────── -->
+  <h2>1. Why AI Ethics Is Not Optional</h2>
+
+  <p>Every model you build makes decisions that affect real people. A hiring model that screens résumés. A loan model that approves or rejects applications. A medical model that flags suspicious scans. A content moderation model that removes posts. These decisions carry consequences — and the technical choices you make (what data to use, what to optimise for, how to deploy) are moral choices too.</p>
+
+  <div class="callout analogy">
+    <div class="callout-title">Analogy</div>
+    A knife is a tool — but a surgeon using one and an assailant using one are doing very different things. The knife itself carries no ethics. AI is the same: the ethics lives in who builds it, how it is trained, what it is deployed to do, and who is accountable when it fails.
+  </div>
+
+  <!-- ───────────── SECTION 2: Bias and Fairness ───────────── -->
+  <h2>2. Bias and Fairness</h2>
+
+  <p>An AI model learns from data. If the data reflects historical human biases, the model will learn — and amplify — those biases. This is not a bug in the algorithm; it is a systematic consequence of training on biased data.</p>
+
+  <div class="diagram" style="padding:1.2rem; overflow-x:auto">
+    <svg viewBox="0 0 520 110" width="520" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <defs>
+        <marker id="eth" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0,7 3.5,0 7" fill="#dc2626"/>
+        </marker>
+      </defs>
+
+      <rect x="4"   y="35" width="100" height="40" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="54"  y="52" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#991b1b" font-weight="700">Biased</text>
+      <text x="54"  y="64" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#991b1b" font-weight="700">Training Data</text>
+
+      <line x1="104" y1="55" x2="118" y2="55" stroke="#dc2626" stroke-width="1.5" marker-end="url(#eth)"/>
+
+      <rect x="118" y="28" width="110" height="54" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="173" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#78350f" font-weight="700">Model learns</text>
+      <text x="173" y="60" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#78350f">biased patterns</text>
+      <text x="173" y="72" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">(not just noise —</text>
+      <text x="173" y="82" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">real statistical signal)</text>
+
+      <line x1="228" y1="55" x2="242" y2="55" stroke="#dc2626" stroke-width="1.5" marker-end="url(#eth)"/>
+
+      <rect x="242" y="28" width="110" height="54" rx="6" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="297" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#9d174d" font-weight="700">Biased decisions</text>
+      <text x="297" y="62" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#9d174d">at scale and speed</text>
+      <text x="297" y="74" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">(thousands/second,</text>
+      <text x="297" y="84" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">no human review)</text>
+
+      <line x1="352" y1="55" x2="366" y2="55" stroke="#dc2626" stroke-width="1.5" marker-end="url(#eth)"/>
+
+      <rect x="366" y="28" width="148" height="54" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="440" y="44" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#5b21b6" font-weight="700">Harm to real people</text>
+      <text x="440" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">Loan rejected unfairly.</text>
+      <text x="440" y="69" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">Résumé screened out.</text>
+      <text x="440" y="81" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">Face misidentified by police.</text>
+
+      <text x="260" y="108" font-family="sans-serif" font-size="8" fill="#dc2626" text-anchor="middle">The bias compounds at each step — and the model carries no malice. It's just math.</text>
+    </svg>
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Data bias</div>
+      Historical data encodes past discrimination. A hiring model trained on past successful employee data will favour whatever groups were already overrepresented in successful hires — not because the algorithm is discriminatory, but because the data is.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Representation bias</div>
+      If certain groups are underrepresented in training data, the model performs worse on them. Early facial recognition systems had much higher error rates for darker-skinned faces because datasets were predominantly lighter-skinned.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Measurement bias</div>
+      The label or proxy metric used for training doesn't measure what it claims. "Creditworthiness" measured by past repayment history excludes people who never had access to credit — not because they're unreliable borrowers, but because the system excluded them before.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Feedback loops</div>
+      A biased model makes predictions → those predictions become data for the next model → bias is reinforced. Predictive policing models direct patrols to historically over-policed areas → more arrests there → more training data from those areas → model predicts more crime there.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    AI bias arises primarily from <strong>biased training data</strong> — the model is not intentionally discriminatory, it reflects patterns in the data it learned from. The three main sources: data bias (skewed historical data), representation bias (underrepresented groups), and feedback loops (model predictions become future training data).
+  </div>
+
+  <!-- ───────────── SECTION 3: Explainability ───────────── -->
+  <h2>3. Explainability (XAI)</h2>
+
+  <p>Modern deep learning models are <strong>black boxes</strong> — their internal weights encode relationships too complex for any human to read directly. This creates a fundamental problem: if a model denies your loan, rejects your visa, or flags your medical scan, you have a right to know <em>why</em>.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Explainability (XAI — Explainable AI)</div>
+      The ability to describe, in human-understandable terms, why a model made a specific prediction. Not just "the model says positive" but "the model focused on these features, which contributed to the decision in this way."
+    </div>
+    <div class="def-item">
+      <div class="def-term">Why it matters</div>
+      Legal requirements (EU AI Act, GDPR Article 22 — right to explanation for automated decisions). Clinical trust — a doctor won't follow a recommendation they can't understand or verify. Debugging — you can't fix a biased model you can't interpret.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Explainability vs Accuracy trade-off</div>
+      Simpler, interpretable models (Decision Tree, Logistic Regression) are easy to explain but often less accurate. Complex models (deep networks, boosted ensembles) are highly accurate but hard to explain. Responsible AI requires choosing the right balance for the context — a model approving a loan needs to be explainable; a model recommending a movie does not.
+    </div>
+  </div>
+
+  <div class="diagram" style="padding:1rem">
+    <svg viewBox="0 0 460 90" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+      <!-- Spectrum bar -->
+      <defs>
+        <linearGradient id="xg" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#dcfce7"/>
+          <stop offset="100%" style="stop-color:#ede9fe"/>
+        </linearGradient>
+      </defs>
+      <rect x="60" y="30" width="340" height="24" rx="4" fill="url(#xg)" stroke="#d4d4c8" stroke-width="1"/>
+
+      <!-- Model labels on bar -->
+      <text x="80"  y="46" font-family="sans-serif" font-size="8" fill="#14532d" font-weight="700">Decision Tree</text>
+      <text x="170" y="46" font-family="sans-serif" font-size="8" fill="#1e3a8a" font-weight="700">Logistic Reg.</text>
+      <text x="265" y="46" font-family="sans-serif" font-size="8" fill="#92400e" font-weight="700">Random Forest</text>
+      <text x="360" y="46" font-family="sans-serif" font-size="8" fill="#5b21b6" font-weight="700">Deep Network</text>
+
+      <!-- Axis labels -->
+      <text x="60"  y="20" font-family="sans-serif" font-size="8" fill="#14532d" text-anchor="middle">Most explainable</text>
+      <text x="400" y="20" font-family="sans-serif" font-size="8" fill="#5b21b6" text-anchor="middle">Most accurate</text>
+      <text x="60"  y="68" font-family="sans-serif" font-size="8" fill="#dc2626" text-anchor="middle">↑ low accuracy</text>
+      <text x="400" y="68" font-family="sans-serif" font-size="8" fill="#dc2626" text-anchor="middle">↑ black box</text>
+    </svg>
+    <p style="font-size:0.78rem; color:#6b6b63; text-align:center; margin-top:0.3rem">
+      Explainability and raw accuracy often trade off. Responsible AI means choosing the right point on this spectrum for the application.
+    </p>
+  </div>
+
+  <!-- ───────────── SECTION 4: Privacy and Data Security ───────────── -->
+  <h2>4. Privacy and Data Security</h2>
+
+  <p>AI systems consume vast amounts of data, much of it personal. This creates obligations that go beyond technical performance.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Data minimisation</div>
+      Collect only the data actually needed for the task. If a translation model only needs text, there is no justification for also collecting location, device ID, or browsing history.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Model memorisation</div>
+      Large models can memorise and reproduce training data verbatim — including private information. A language model trained on emails might generate someone's actual address or medical details when prompted. This is an active research problem (membership inference attacks).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Federated Learning</div>
+      A privacy-preserving training approach: the model is sent to each user's device, trained locally on their data, and only the weight updates (not the raw data) are sent back and aggregated. The raw data never leaves the device. Used by Huawei in mobile keyboard prediction.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Differential Privacy</div>
+      Adds carefully calibrated statistical noise to model updates before they are shared. Provides a mathematical guarantee that any single individual's data cannot be extracted from the model, even by an adversary who sees the weights.
+    </div>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    <strong>Federated Learning</strong>: model trains on-device, only weight updates (not raw data) are shared — protects privacy. <strong>Differential Privacy</strong>: adds noise to updates to give mathematical privacy guarantees. Both are exam-relevant techniques for privacy-preserving AI.
+  </div>
+
+  <!-- ───────────── SECTION 5: Deepfakes and Misinformation ───────────── -->
+  <h2>5. Deepfakes and Misinformation</h2>
+
+  <p>Generative AI (image generation, voice cloning, video synthesis) is now capable of creating convincing fakes of real people saying or doing things they never said or did. This capability has dual use: legitimate entertainment, education, and accessibility applications — and also fraud, defamation, and political manipulation.</p>
+
+  <div class="callout tip">
+    <div class="callout-title">The "Is Seeing Still Believing?" problem</div>
+    For most of human history, a photo or video was near-impossible to convincingly fake. That guarantee is now gone. The technical capability to create a photorealistic video of any person saying anything has outpaced the social, legal, and technical infrastructure to detect or regulate it. This is one of the most urgent ethical challenges in modern AI.
+  </div>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Detection approaches</div>
+      AI models trained to detect inconsistencies in deepfakes: unnatural blinking patterns, lighting mismatches on the face, inconsistent skin texture, or frequency-domain artefacts invisible to the human eye. An arms race between generation and detection.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Provenance and watermarking</div>
+      Cryptographic signing of genuine media at capture time (camera embeds a verifiable signature). Digital watermarking of AI-generated content so it can be identified later. Content authenticity initiatives (C2PA standard) are emerging industry standards.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 6: Will AI Take Jobs? ───────────── -->
+  <h2>6. AI and Employment</h2>
+
+  <p>Every major technology shift displaces some jobs and creates others. The printing press, electricity, computing, and the internet all followed this pattern. AI is accelerating this cycle dramatically.</p>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">Automation risk</div>
+      Tasks that are repetitive, rule-based, data-intensive, or involve pattern matching are increasingly automatable: data entry, document processing, basic customer support, routine radiological screening, code review for known bug patterns.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Augmentation — the optimistic view</div>
+      AI augments humans rather than replacing them. Radiologists use AI to flag candidates, then apply medical judgement. Coders use AI to generate boilerplate, then apply architecture reasoning. The human's role shifts from execution to oversight, judgement, and creativity.
+    </div>
+    <div class="def-item">
+      <div class="def-term">New jobs created</div>
+      AI trainers, data labellers, prompt engineers, AI safety researchers, explainability specialists, AI auditors, and ethics reviewers are entirely new roles. The net employment effect is genuinely uncertain — economists disagree on whether this wave is different from past technological revolutions.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 7: Responsible AI principles ───────────── -->
+  <h2>7. Responsible AI Principles</h2>
+
+  <p>Most major AI organisations — including Huawei — have published ethical principles for AI development. These converge around a common set of values:</p>
+
+  <div class="diagram" style="padding:1rem; overflow-x:auto">
+    <svg viewBox="0 0 520 140" width="520" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
+
+      <rect x="4"   y="10" width="96" height="120" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+      <text x="52"  y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1e3a8a" font-weight="700">Fairness</text>
+      <text x="52"  y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">Equal treatment</text>
+      <text x="52"  y="64" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">across groups.</text>
+      <text x="52"  y="80" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">Audit for bias</text>
+      <text x="52"  y="92" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">before &amp; after</text>
+      <text x="52" y="104" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1e3a8a">deployment.</text>
+
+      <rect x="108" y="10" width="96" height="120" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+      <text x="156" y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#14532d" font-weight="700">Transparency</text>
+      <text x="156" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">Be clear when</text>
+      <text x="156" y="64" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">you are talking</text>
+      <text x="156" y="76" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">to an AI, not a</text>
+      <text x="156" y="88" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">human. Disclose</text>
+      <text x="156" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#14532d">model limitations.</text>
+
+      <rect x="212" y="10" width="96" height="120" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+      <text x="260" y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#78350f" font-weight="700">Accountability</text>
+      <text x="260" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">A human or</text>
+      <text x="260" y="64" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">organisation must</text>
+      <text x="260" y="76" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">be responsible for</text>
+      <text x="260" y="88" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">the model's decisions.</text>
+      <text x="260" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">"The AI decided"</text>
+      <text x="260" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#78350f">is not an excuse.</text>
+
+      <rect x="316" y="10" width="96" height="120" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+      <text x="364" y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#9d174d" font-weight="700">Privacy</text>
+      <text x="364" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">Collect only what</text>
+      <text x="364" y="64" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">is needed. Protect</text>
+      <text x="364" y="76" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">training data.</text>
+      <text x="364" y="88" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">Give users control</text>
+      <text x="364" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#9d174d">over their data.</text>
+
+      <rect x="420" y="10" width="96" height="120" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+      <text x="468" y="32" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#5b21b6" font-weight="700">Safety</text>
+      <text x="468" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">Test for failure</text>
+      <text x="468" y="64" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">modes before</text>
+      <text x="468" y="76" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">deployment. Human</text>
+      <text x="468" y="88" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">oversight for</text>
+      <text x="468" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">high-stakes</text>
+      <text x="468" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#5b21b6">decisions.</text>
+    </svg>
+  </div>
+
+  <div class="callout exam">
+    <div class="callout-title">⚠ Exam Alert</div>
+    The five Responsible AI principles: <strong>Fairness</strong> (equal treatment across groups), <strong>Transparency</strong> (disclose AI involvement and limitations), <strong>Accountability</strong> (a human is always responsible), <strong>Privacy</strong> (data minimisation and protection), <strong>Safety</strong> (test before deploy, human oversight for high-stakes decisions).
+  </div>
+
+  <!-- ───────────── SECTION 8: AI Governance ───────────── -->
+  <h2>8. AI Governance and Regulation</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">EU AI Act (2024)</div>
+      The world's first comprehensive AI law. Classifies AI systems by risk level: <strong>Unacceptable risk</strong> (banned — social scoring, real-time biometric surveillance in public); <strong>High risk</strong> (medical, hiring, credit — must meet transparency and safety requirements); <strong>Low risk</strong> (chatbots — disclosure only); <strong>Minimal risk</strong> (spam filters — unregulated).
+    </div>
+    <div class="def-item">
+      <div class="def-term">Huawei's AI Ethics Principles</div>
+      Huawei's published AI ethics framework emphasises: AI for social good, no harm to individuals or society, protection of privacy, respect for law and ethics, explainability and accountability, and inclusive and sustainable AI development.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Human-in-the-loop</div>
+      For high-stakes decisions (medical diagnosis, criminal sentencing, military targeting), AI should assist and inform but not decide autonomously. A human must review and be accountable for the final decision. This is the "human-in-the-loop" design principle.
+    </div>
+  </div>
+
+  <!-- ───────────── SECTION 9: AGI and Long-term risks ───────────── -->
+  <h2>9. AGI and Long-term Concerns</h2>
+
+  <div class="def-list">
+    <div class="def-item">
+      <div class="def-term">AGI (Artificial General Intelligence)</div>
+      AI that can perform any intellectual task a human can — flexibly, without task-specific training. No AGI exists today. All current AI is "narrow" — a Go champion cannot write code, and a coding assistant cannot diagnose cancer. AGI would represent a fundamentally different category.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Alignment problem</div>
+      Even if we build a very capable AI, how do we ensure its goals match human values? An AI optimising a single objective (e.g. "maximise engagement") may do so in ways that are harmful to human wellbeing (addiction, polarisation). Aligning AI goals with human values is an open research problem.
+    </div>
+    <div class="def-item">
+      <div class="def-term">Embodied AI</div>
+      AI combined with physical robots that can perceive and act in the physical world. Potential: care for the elderly, dangerous industrial tasks, disaster response. Risk: autonomous weapons, physical harm from errors, and new challenges in accountability when a physical agent causes damage.
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-title">The productive attitude toward AI ethics</div>
+    AI ethics is not about stopping AI development — it is about building AI that actually works well for everyone, not just for a subset of users, and not in ways that cause harm. An AI system that discriminates against 20% of its users, or that produces harmful outputs, or that violates privacy is simply a poorly built system. Ethics and engineering quality are the same thing, viewed from different angles.
+  </div>
+
+  <!-- ───────────── QUIZ ───────────── -->
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" id="q1">
+    <div class="quiz-title">Quiz · Question 1 of 5</div>
+    <div class="quiz-question">A hiring algorithm trained on 10 years of company employee data consistently ranks candidates from certain universities higher. The algorithm's code contains no explicit mention of university name. What is the most likely cause?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q1',false)">A programming error caused the model to accidentally use university as a hidden feature</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">The algorithm is deliberately designed to discriminate by the developer who wrote it</button>
+      <button class="quiz-option" onclick="answer(this,'q1',true)">Historical hiring bias in the training data — certain universities were overrepresented in past hires</button>
+      <button class="quiz-option" onclick="answer(this,'q1',false)">Overfitting to the training set caused the model to ignore all features except university</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+    <button class="quiz-next" onclick="show('q2')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q2" style="display:none">
+    <div class="quiz-title">Quiz · Question 2 of 5</div>
+    <div class="quiz-question">In Federated Learning, what is sent from each device to the central server?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q2',false)">The user's raw training data, encrypted before transmission to protect privacy</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">The full trained model with all weights, replacing the server's current version</button>
+      <button class="quiz-option" onclick="answer(this,'q2',true)">Only the model weight updates, not the raw data that produced them</button>
+      <button class="quiz-option" onclick="answer(this,'q2',false)">A summary report of which training samples were used and their labels</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+    <button class="quiz-next" onclick="show('q3')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q3" style="display:none">
+    <div class="quiz-title">Quiz · Question 3 of 5</div>
+    <div class="quiz-question">A bank deploys an AI system that rejects loan applications automatically with no human review. A rejected customer asks why they were denied. Which Responsible AI principle is most clearly violated?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Privacy — the AI is processing financial data without the customer's consent</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Safety — automated financial decisions could harm the bank's own risk profile</button>
+      <button class="quiz-option" onclick="answer(this,'q3',true)">Transparency and Accountability — the customer cannot get an explanation and no human is responsible</button>
+      <button class="quiz-option" onclick="answer(this,'q3',false)">Fairness — the model may have correctly assessed the customer's risk level without bias</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+    <button class="quiz-next" onclick="show('q4')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q4" style="display:none">
+    <div class="quiz-title">Quiz · Question 4 of 5</div>
+    <div class="quiz-question">A facial recognition model has 98% accuracy on lighter-skinned faces but only 85% accuracy on darker-skinned faces. What type of AI problem is this?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Overfitting — the model memorised lighter-skinned faces in the training set</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Underfitting — the model is too simple to generalise across different skin tones</button>
+      <button class="quiz-option" onclick="answer(this,'q4',true)">Representation bias — darker-skinned faces were underrepresented in the training dataset</button>
+      <button class="quiz-option" onclick="answer(this,'q4',false)">Measurement bias — the accuracy metric was computed incorrectly for darker-skinned faces</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+    <button class="quiz-next" onclick="show('q5')">Next →</button>
+  </div>
+
+  <div class="quiz" id="q5" style="display:none">
+    <div class="quiz-title">Quiz · Question 5 of 5</div>
+    <div class="quiz-question">What is the "alignment problem" in AI safety research?</div>
+    <div class="quiz-options">
+      <button class="quiz-option" onclick="answer(this,'q5',false)">The technical challenge of aligning the weights of a large neural network during training</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">The difficulty of aligning AI research timelines with government regulatory schedules</button>
+      <button class="quiz-option" onclick="answer(this,'q5',true)">Ensuring that a highly capable AI system's goals and behaviours remain aligned with human values</button>
+      <button class="quiz-option" onclick="answer(this,'q5',false)">Making all AI models produce the same output for the same input across different hardware</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+  </div>
+
+  <div id="lesson-complete" style="display:none">
+    <div class="callout tip" style="margin-top:1.5rem">
+      <div class="callout-title">✅ Lesson Complete!</div>
+      <strong>You now know:</strong>
+      <ul style="margin-top:0.5rem">
+        <li>AI bias comes primarily from biased training data — not intentional discrimination</li>
+        <li>Three bias sources: data bias, representation bias, feedback loops</li>
+        <li>Explainability (XAI): the ability to explain why a model made a decision; trades off against accuracy</li>
+        <li>Federated Learning: weight updates (not raw data) sent to server — privacy preserving</li>
+        <li>Differential Privacy: adds noise to guarantee individual data cannot be extracted</li>
+        <li>Deepfakes: AI-generated convincing fakes; detection is an active arms race</li>
+        <li>Five Responsible AI principles: Fairness, Transparency, Accountability, Privacy, Safety</li>
+        <li>Human-in-the-loop: humans must review high-stakes AI decisions</li>
+        <li>AGI: does not exist yet — all current AI is narrow</li>
+        <li>Alignment problem: ensuring advanced AI goals match human values</li>
+      </ul>
+      <p style="margin-top:0.75rem">Ready for the final lesson? <a href="0019-exam-review.html">Lesson 19 → HCIA-AI Exam Review</a></p>
+    </div>
+  </div>
+
+  <div class="source">
+    <strong>Primary source:</strong>
+    <a href="https://pair.withgoogle.com/guidebook/" target="_blank">People + AI Guidebook — Google PAIR</a>
+    — Practical, example-driven guide to building AI responsibly. Read the sections on "Mental Models," "Feedback and Control," and "Error + Graceful Failure." Not theory — concrete design decisions with worked examples.
+    <br><br>
+    <strong>Something unclear?</strong> Ask me — I'm your teacher.
+  </div>
+
+  <div class="lesson-nav">
+    <a href="0017-evaluation-metrics.html">← Lesson 17: Evaluation Metrics</a>
+    <a href="0019-exam-review.html" class="nav-next">Next: Exam Review →</a>
+  </div>
+
+</div>
+
+<script>
+const explanations = {
+  q1: {
+    correct: "Correct! This is data bias / historical bias. The model learned that certain universities correlate with past hiring success — because those universities were disproportionately represented in past hires, not because they produce objectively better candidates. The model has no university feature explicitly, but correlated features (writing style, network connections, prior role descriptions) encode university indirectly.",
+    wrong:   "Not quite. The most likely cause is data bias: the training data (historical hires) overrepresented candidates from certain universities, so the model learned that association. There is no programming error or deliberate discrimination needed — the bias emerges automatically from skewed data. Overfitting would cause poor generalisation overall, not a systematic preference for specific universities."
+  },
+  q2: {
+    correct: "Correct! In Federated Learning, the model is sent to each device, trained locally on that device's private data, and only the gradient updates (the changes to weights) are sent back to the server. Raw data never leaves the device. The server aggregates the updates from all devices to improve the global model — learning from everyone's data without seeing any of it.",
+    wrong:   "Not quite. Federated Learning's key property is that raw data stays on the device. Only the weight updates (gradients) from local training are sent to the server. The data is never transmitted — not even encrypted. Sending the full model back would be wasteful and doesn't address the privacy concern. The privacy benefit comes specifically from the raw data never leaving the device."
+  },
+  q3: {
+    correct: "Correct! Two principles are violated here. Transparency: the customer cannot get an explanation for the decision. Accountability: there is no human responsible for the outcome — 'the AI decided' is not an acceptable answer. In many jurisdictions (EU GDPR, EU AI Act), automated high-stakes financial decisions legally require a human review path and an explanation on request.",
+    wrong:   "Not quite. The clearest violations are Transparency (no explanation provided) and Accountability (no human is responsible for the decision). Privacy might also be relevant, but the customer presumably consented to data processing when applying. Fairness is a separate concern about whether the model treats groups equally. Safety is about preventing physical or systemic harm. The scenario most directly describes a transparency and accountability failure."
+  },
+  q4: {
+    correct: "Correct! This is representation bias — darker-skinned faces appeared less frequently in the training dataset, so the model had less data to learn from for those cases and performs worse on them. This was a widely documented real-world problem with commercial facial recognition systems in the early 2020s. It's not overfitting or underfitting in the traditional sense — the model may generalise well within the majority class while systematically failing on underrepresented groups.",
+    wrong:   "Not quite. This pattern — high accuracy on one demographic group and lower accuracy on another — is classic representation bias. The training dataset did not include enough darker-skinned faces for the model to learn them well. Overfitting would affect all groups at test time, not selectively. Underfitting would cause uniformly poor performance. Measurement bias would mean the accuracy numbers themselves were computed incorrectly."
+  },
+  q5: {
+    correct: "Correct! The alignment problem asks: as AI systems become more capable, how do we ensure their objectives and behaviours remain aligned with what humans actually value? A system optimising 'maximise user engagement' might learn to promote outrage and addiction — achieving the stated goal while causing harm. Specifying human values precisely enough that a powerful AI won't find harmful loopholes is the central unsolved challenge in AI safety.",
+    wrong:   "Not quite. The alignment problem is about ensuring advanced AI systems pursue goals that are genuinely beneficial to humans — not about weight matrix alignment, regulatory timelines, or hardware consistency. It is an AI safety research problem: as systems become more capable, small misspecifications in their objectives could lead to very large harms. 'The AI is doing exactly what we told it to do' is the problem, not the solution."
+  }
+};
+
+function answer(btn, qid, isCorrect) {
+  const quiz = document.getElementById(qid);
+  const buttons = quiz.querySelectorAll('.quiz-option');
+  const fb = document.getElementById(qid + '-fb');
+  const next = quiz.querySelector('.quiz-next');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    buttons.forEach(b => {
+      if (b.onclick.toString().includes('true')) b.classList.add('correct');
+    });
+  }
+  fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
+  fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
+  next.style.display = 'inline-block';
+}
+
+function show(qid) {
+  document.getElementById(qid).style.display = 'block';
+  document.getElementById(qid).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showComplete() {
+  document.getElementById('lesson-complete').style.display = 'block';
+  document.getElementById('lesson-complete').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
