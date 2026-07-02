@@ -7,8 +7,11 @@ A structured, self-paced AI/ML learning workspace built with the `/teach` skill 
 ## Structure
 
 ```
+index.html        # Homepage — entry point, lists all chapters and lessons
 lessons/          # HTML lesson files (open in browser)
-assets/           # Shared stylesheet (style.css) used by all lessons
+assets/
+  style.css       # Shared stylesheet used by all lessons and index.html
+  nav.js          # Shared sidebar injector (docs-style left map, active highlight)
 learning-records/ # Progress notes — what has been learned so far
 reference/        # Cheat sheets and quick-reference documents
 MISSION.md        # Learning goal and constraints

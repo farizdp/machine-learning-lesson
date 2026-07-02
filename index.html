@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HCIA-AI Self-Paced Course</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    /* ── Homepage-only styles ── */
+    .hero {
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .hero h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text);
+      border: none;
+      padding: 0;
+      margin: 0 0 0.75rem;
+    }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .hero-stats span { display: flex; align-items: center; gap: 0.3rem; }
+
+    /* Chapter section */
+    .chapter-section {
+      margin-bottom: 2.5rem;
+    }
+    .chapter-heading {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .lesson-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.3rem;
+    }
+    .lesson-item a {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      color: var(--text);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+      border: 1px solid transparent;
+    }
+    .lesson-item a:hover {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .lesson-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 5px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .lesson-item a:hover .lesson-badge {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+    .lesson-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      flex: 1;
+    }
+    .lesson-arrow {
+      color: var(--border);
+      font-size: 0.8rem;
+      transition: color 0.12s, transform 0.12s;
+    }
+    .lesson-item a:hover .lesson-arrow {
+      color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    /* Start CTA */
+    .start-cta {
+      margin-top: 0.5rem;
+    }
+    .btn-start {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .btn-start:hover { background: var(--accent-dark); text-decoration: none; color: #fff; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Huawei HCIA-AI Certification</div>
+    <h1>Machine Learning &amp; AI<br>Self-Paced Course</h1>
+    <p class="hero-desc">
+      19 interactive lessons covering every topic on the HCIA-AI exam syllabus — built for
+      complete beginners with basic Python. Each lesson explains one concept clearly, then
+      tests it with an interactive quiz.
+    </p>
+    <div class="hero-stats">
+      <span>📚 19 lessons</span>
+      <span>📋 4 chapters + advanced</span>
+      <span>🎯 HCIA-AI exam prep</span>
+    </div>
+    <div class="start-cta" style="margin-top:1.25rem">
+      <a href="lessons/0001-what-is-ai.html" class="btn-start">Start from Lesson 01 →</a>
+    </div>
+  </div>
+
+  <!-- ── Ch 01: AI Overview ── -->
+  <div class="chapter-section">
+    <div class="chapter-heading">Ch 01 — AI Overview</div>
+    <ul class="lesson-list">
+      <li class="lesson-item">
+        <a href="lessons/0001-what-is-ai.html">
+          <span class="lesson-badge">01</span>
+          <span class="lesson-name">What Is AI?</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0002-ai-technologies.html">
+          <span class="lesson-badge">02</span>
+          <span class="lesson-name">AI Technologies: NLP, CV &amp; Foundation Models</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0003-deepseek-applications-pangu.html">
+          <span class="lesson-badge">03</span>
+          <span class="lesson-name">DeepSeek, AI Applications &amp; Huawei PanGu</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Ch 02: Machine Learning ── -->
+  <div class="chapter-section">
+    <div class="chapter-heading">Ch 02 — Machine Learning</div>
+    <ul class="lesson-list">
+      <li class="lesson-item">
+        <a href="lessons/0004-ml-overview.html">
+          <span class="lesson-badge">04</span>
+          <span class="lesson-name">Machine Learning Overview</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0005-ml-process.html">
+          <span class="lesson-badge">05</span>
+          <span class="lesson-name">The ML Process</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0006-ml-key-concepts.html">
+          <span class="lesson-badge">06</span>
+          <span class="lesson-name">Key ML Concepts: Gradient Descent, Hyperparameters &amp; Cross-Validation</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0007-ml-algorithms.html">
+          <span class="lesson-badge">07</span>
+          <span class="lesson-name">Common ML Algorithms</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Ch 03: Deep Learning ── -->
+  <div class="chapter-section">
+    <div class="chapter-heading">Ch 03 — Deep Learning &amp; Foundation Models</div>
+    <ul class="lesson-list">
+      <li class="lesson-item">
+        <a href="lessons/0008-deep-learning-intro.html">
+          <span class="lesson-badge">08</span>
+          <span class="lesson-name">Deep Learning: Perceptrons &amp; Neural Networks</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0009-activation-training.html">
+          <span class="lesson-badge">09</span>
+          <span class="lesson-name">Activation Functions &amp; Training</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0010-optimizers-regularization.html">
+          <span class="lesson-badge">10</span>
+          <span class="lesson-name">Optimizers &amp; Regularization</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0011-cnn.html">
+          <span class="lesson-badge">11</span>
+          <span class="lesson-name">Convolutional Neural Networks (CNN)</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0012-rnn-lstm.html">
+          <span class="lesson-badge">12</span>
+          <span class="lesson-name">Recurrent Neural Networks &amp; LSTM</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0013-transformer-attention.html">
+          <span class="lesson-badge">13</span>
+          <span class="lesson-name">Transformer Architecture &amp; Attention</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Ch 04: AI Development ── -->
+  <div class="chapter-section">
+    <div class="chapter-heading">Ch 04 — AI Development Framework</div>
+    <ul class="lesson-list">
+      <li class="lesson-item">
+        <a href="lessons/0014-ai-frameworks.html">
+          <span class="lesson-badge">14</span>
+          <span class="lesson-name">AI Development Frameworks</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0015-ai-app-dev-process.html">
+          <span class="lesson-badge">15</span>
+          <span class="lesson-name">AI Application Development Process</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Advanced ── -->
+  <div class="chapter-section">
+    <div class="chapter-heading">Advanced Topics</div>
+    <ul class="lesson-list">
+      <li class="lesson-item">
+        <a href="lessons/0016-transfer-learning.html">
+          <span class="lesson-badge">16</span>
+          <span class="lesson-name">Transfer Learning &amp; Fine-tuning</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0017-evaluation-metrics.html">
+          <span class="lesson-badge">17</span>
+          <span class="lesson-name">Model Evaluation Metrics</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0018-ai-ethics.html">
+          <span class="lesson-badge">18</span>
+          <span class="lesson-name">AI Ethics &amp; Responsible AI</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+      <li class="lesson-item">
+        <a href="lessons/0019-exam-review.html">
+          <span class="lesson-badge">19</span>
+          <span class="lesson-name">HCIA-AI Exam Review</span>
+          <span class="lesson-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</div><!-- /.page -->
+
+<script src="assets/nav.js"></script>
+</body>
+</html>

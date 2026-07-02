@@ -8,13 +8,15 @@ Each lesson is a standalone HTML file with clear explanations, diagrams, and a q
 
 ## Getting Started
 
-Clone the repo and open a lesson:
+Clone the repo and open the homepage:
 
 ```bash
 git clone git@github.com:farizdp/machine-learning-lesson.git
 cd machine-learning-lesson
-open lessons/0001-what-is-ai.html
+open index.html
 ```
+
+`index.html` lists all 19 lessons. A left-side navigation panel is present on every page so you can jump between lessons without going back to the homepage.
 
 ---
 
