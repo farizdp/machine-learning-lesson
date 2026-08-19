@@ -26,9 +26,9 @@
 
   <div class="diagram" style="padding:1.2rem">
     <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem">
-      <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:8px; padding:0.75rem">
-        <div style="font-weight:700; color:#1d4ed8; margin-bottom:0.5rem">Supervised</div>
-        <div style="color:#1e3a8a; font-size:0.8rem; line-height:1.6">
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.75rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Supervised</div>
+        <div style="color:#2a2a28; font-size:0.8rem; line-height:1.6">
           Linear Regression<br>
           Polynomial Regression<br>
           Logistic Regression<br>
@@ -40,16 +40,16 @@
           Gradient Boosted DT
         </div>
       </div>
-      <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:8px; padding:0.75rem">
-        <div style="font-weight:700; color:#15803d; margin-bottom:0.5rem">Unsupervised</div>
-        <div style="color:#14532d; font-size:0.8rem; line-height:1.6">
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.75rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Unsupervised</div>
+        <div style="color:#2a2a28; font-size:0.8rem; line-height:1.6">
           k-Means Clustering<br>
           Hierarchical Clustering
         </div>
       </div>
-      <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:0.75rem">
-        <div style="font-weight:700; color:#b45309; margin-bottom:0.5rem">Task Type</div>
-        <div style="color:#78350f; font-size:0.8rem; line-height:1.6">
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.75rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Task Type</div>
+        <div style="color:#2a2a28; font-size:0.8rem; line-height:1.6">
           <strong>Regression</strong> → predict a number<br><br>
           <strong>Classification</strong> → predict a category<br><br>
           <strong>Clustering</strong> → find groups
@@ -68,29 +68,29 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Axes -->
-      <line x1="40" y1="150" x2="320" y2="150" stroke="#e8e6e1" stroke-width="1.5"/>
-      <line x1="40" y1="20"  x2="40"  y2="150" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="150" x2="320" y2="150" stroke="#e5e4e0" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="150" stroke="#e5e4e0" stroke-width="1.5"/>
       <!-- Best-fit line -->
-      <line x1="50" y1="135" x2="310" y2="30" stroke="#2563eb" stroke-width="2.5"/>
+      <line x1="50" y1="135" x2="310" y2="30" stroke="#3b7a77" stroke-width="2.5"/>
       <!-- Data points scattered around the line -->
-      <circle cx="70"  cy="128" r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="100" cy="115" r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="130" cy="100" r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="160" cy="95"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="185" cy="82"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="210" cy="75"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="240" cy="62"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="270" cy="55"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="295" cy="45"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="70"  cy="128" r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="100" cy="115" r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="130" cy="100" r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="160" cy="95"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="185" cy="82"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="210" cy="75"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="240" cy="62"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="270" cy="55"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="295" cy="45"  r="4" fill="#6c6c66" opacity="0.7"/>
       <!-- Error lines (residuals) -->
-      <line x1="100" y1="115" x2="100" y2="108" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
-      <line x1="210" y1="75"  x2="210" y2="83"  stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="100" y1="115" x2="100" y2="108" stroke="#c12929" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="210" y1="75"  x2="210" y2="83"  stroke="#c12929" stroke-width="1" stroke-dasharray="3,2"/>
       <!-- Labels -->
-      <text x="315" y="27" font-family="sans-serif" font-size="10" fill="#2563eb">best-fit line</text>
-      <text x="50"  y="170" font-family="sans-serif" font-size="10" fill="#6b6b63">Feature (e.g. house size)</text>
-      <text x="5"   y="90"  font-family="sans-serif" font-size="10" fill="#6b6b63" transform="rotate(-90,5,90)">Output (price)</text>
+      <text x="315" y="27" font-family="sans-serif" font-size="10" fill="#3b7a77">best-fit line</text>
+      <text x="50"  y="170" font-family="sans-serif" font-size="10" fill="#6c6c66">Feature (e.g. house size)</text>
+      <text x="5"   y="90"  font-family="sans-serif" font-size="10" fill="#6c6c66" transform="rotate(-90,5,90)">Output (price)</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Red dashed = error (residual). Training minimizes the sum of squared errors.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Red dashed = error (residual). Training minimizes the sum of squared errors.</p>
   </div>
 
   <div class="def-list">
@@ -118,23 +118,23 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Axes -->
-      <line x1="40" y1="130" x2="320" y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
-      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="130" x2="320" y2="130" stroke="#e5e4e0" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e5e4e0" stroke-width="1.5"/>
       <!-- Polynomial curve (parabola shape) -->
-      <path d="M 50 110 Q 170 10 310 100" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+      <path d="M 50 110 Q 170 10 310 100" stroke="#3b7a77" stroke-width="2.5" fill="none"/>
       <!-- Data points -->
-      <circle cx="65"  cy="102" r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="100" cy="70"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="140" cy="38"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="180" cy="22"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="220" cy="36"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="260" cy="60"  r="4" fill="#6b6b63" opacity="0.7"/>
-      <circle cx="295" cy="94"  r="4" fill="#6b6b63" opacity="0.7"/>
+      <circle cx="65"  cy="102" r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="100" cy="70"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="140" cy="38"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="180" cy="22"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="220" cy="36"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="260" cy="60"  r="4" fill="#6c6c66" opacity="0.7"/>
+      <circle cx="295" cy="94"  r="4" fill="#6c6c66" opacity="0.7"/>
       <!-- Labels -->
-      <text x="155" y="148" font-family="sans-serif" font-size="10" fill="#6b6b63" text-anchor="middle">Feature</text>
-      <text x="310" y="97"  font-family="sans-serif" font-size="10" fill="#2563eb">curve</text>
+      <text x="155" y="148" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Feature</text>
+      <text x="310" y="97"  font-family="sans-serif" font-size="10" fill="#3b7a77">curve</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Polynomial regression fits curved relationships by adding x², x³… as extra features.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Polynomial regression fits curved relationships by adding x², x³… as extra features.</p>
   </div>
 
   <div class="callout exam">
@@ -159,21 +159,21 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Axes -->
-      <line x1="40" y1="80"  x2="320" y2="80"  stroke="#e8e6e1" stroke-width="1" stroke-dasharray="4,3"/>
-      <line x1="180" y1="15" x2="180" y2="145" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="40" y1="80"  x2="320" y2="80"  stroke="#e5e4e0" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="180" y1="15" x2="180" y2="145" stroke="#e5e4e0" stroke-width="1"/>
       <!-- Sigmoid curve -->
-      <path d="M 45 135 C 80 133 110 115 140 95 S 200 40 215 30 S 280 20 310 18" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+      <path d="M 45 135 C 80 133 110 115 140 95 S 200 40 215 30 S 280 20 310 18" stroke="#3b7a77" stroke-width="2.5" fill="none"/>
       <!-- 0.5 threshold line -->
-      <line x1="40" y1="80" x2="320" y2="80" stroke="#dc2626" stroke-width="1" stroke-dasharray="5,3"/>
+      <line x1="40" y1="80" x2="320" y2="80" stroke="#193432" stroke-width="1" stroke-dasharray="5,3"/>
       <!-- Labels -->
-      <text x="28"  y="22"  font-family="sans-serif" font-size="10" fill="#6b6b63">1.0</text>
-      <text x="28"  y="84"  font-family="sans-serif" font-size="10" fill="#dc2626">0.5</text>
-      <text x="28"  y="142" font-family="sans-serif" font-size="10" fill="#6b6b63">0.0</text>
-      <text x="310" y="12"  font-family="sans-serif" font-size="10" fill="#2563eb">σ(x)</text>
-      <text x="150" y="155" font-family="sans-serif" font-size="10" fill="#6b6b63">Input value (x)</text>
-      <text x="195" y="75"  font-family="sans-serif" font-size="10" fill="#dc2626">threshold</text>
+      <text x="28"  y="22"  font-family="sans-serif" font-size="10" fill="#6c6c66">1.0</text>
+      <text x="28"  y="84"  font-family="sans-serif" font-size="10" fill="#193432">0.5</text>
+      <text x="28"  y="142" font-family="sans-serif" font-size="10" fill="#6c6c66">0.0</text>
+      <text x="310" y="12"  font-family="sans-serif" font-size="10" fill="#3b7a77">σ(x)</text>
+      <text x="150" y="155" font-family="sans-serif" font-size="10" fill="#6c6c66">Input value (x)</text>
+      <text x="195" y="75"  font-family="sans-serif" font-size="10" fill="#193432">threshold</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Sigmoid squashes all inputs into (0, 1) — readable as a probability.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Sigmoid squashes all inputs into (0, 1) — readable as a probability.</p>
   </div>
 
   <div class="callout exam">
@@ -191,25 +191,25 @@
   <div class="diagram" style="padding:1.5rem">
     <div style="font-family:sans-serif; font-size:0.82rem; text-align:center; position:relative">
       <!-- Root -->
-      <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem; display:inline-block; margin-bottom:0.5rem">
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.4rem 0.8rem; display:inline-block; margin-bottom:0.5rem">
         Age &gt; 30?
       </div>
       <!-- Connectors -->
       <div style="display:flex; justify-content:center; gap:6rem; margin-bottom:0.25rem">
-        <div style="color:#6b6b63; font-size:0.75rem">YES ↙</div>
-        <div style="color:#6b6b63; font-size:0.75rem">↘ NO</div>
+        <div style="color:#6c6c66; font-size:0.75rem">YES ↙</div>
+        <div style="color:#6c6c66; font-size:0.75rem">↘ NO</div>
       </div>
       <!-- Level 2 -->
       <div style="display:flex; justify-content:center; gap:4rem; margin-bottom:0.5rem">
-        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem">
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.4rem 0.8rem">
           Income &gt; $50k?
         </div>
-        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.4rem 0.8rem">
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.4rem 0.8rem">
           Student?
         </div>
       </div>
       <!-- Connectors level 2 -->
-      <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:0.25rem; font-size:0.75rem; color:#6b6b63">
+      <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:0.25rem; font-size:0.75rem; color:#6c6c66">
         <div style="width:7rem; text-align:right">YES ↙</div>
         <div style="width:4rem; text-align:left">↘ NO</div>
         <div style="width:6rem; text-align:right">YES ↙</div>
@@ -217,13 +217,13 @@
       </div>
       <!-- Leaf nodes -->
       <div style="display:flex; justify-content:center; gap:1rem">
-        <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#15803d; font-size:0.8rem">✓ Buys</div>
-        <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#dc2626; font-size:0.8rem">✗ No</div>
-        <div style="background:#dcfce7; border:1.5px solid #15803d; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#15803d; font-size:0.8rem">✓ Buys</div>
-        <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#dc2626; font-size:0.8rem">✗ No</div>
+        <div style="background:#d8f3e5; border:1.5px solid #1a6b3f; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#1a6b3f; font-size:0.8rem">✓ Buys</div>
+        <div style="background:#fde8e8; border:1.5px solid #c12929; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#c12929; font-size:0.8rem">✗ No</div>
+        <div style="background:#d8f3e5; border:1.5px solid #1a6b3f; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#1a6b3f; font-size:0.8rem">✓ Buys</div>
+        <div style="background:#fde8e8; border:1.5px solid #c12929; border-radius:6px; padding:0.4rem 0.6rem; font-weight:700; color:#c12929; font-size:0.8rem">✗ No</div>
       </div>
     </div>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.75rem; text-align:center">At each node, the tree picks the question that splits data most cleanly. Leaf nodes give the final answer.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.75rem; text-align:center">At each node, the tree picks the question that splits data most cleanly. Leaf nodes give the final answer.</p>
   </div>
 
   <div class="def-list">
@@ -247,34 +247,34 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Class 1 circles (left) -->
-      <circle cx="70"  cy="60"  r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="90"  cy="95"  r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="55"  cy="115" r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="105" cy="50"  r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="75"  cy="135" r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="70"  cy="60"  r="8" fill="#3d4f7b"/>
+      <circle cx="90"  cy="95"  r="8" fill="#3d4f7b"/>
+      <circle cx="55"  cy="115" r="8" fill="#3d4f7b"/>
+      <circle cx="105" cy="50"  r="8" fill="#3d4f7b"/>
+      <circle cx="75"  cy="135" r="8" fill="#3d4f7b"/>
       <!-- Class 2 squares (right) -->
-      <rect x="232" y="50"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
-      <rect x="260" y="80"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
-      <rect x="245" y="115" width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
-      <rect x="280" y="55"  width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
-      <rect x="270" y="130" width="16" height="16" rx="2" fill="#dc2626" opacity="0.7"/>
+      <rect x="232" y="50"  width="16" height="16" rx="2" fill="#7b3d64"/>
+      <rect x="260" y="80"  width="16" height="16" rx="2" fill="#7b3d64"/>
+      <rect x="245" y="115" width="16" height="16" rx="2" fill="#7b3d64"/>
+      <rect x="280" y="55"  width="16" height="16" rx="2" fill="#7b3d64"/>
+      <rect x="270" y="130" width="16" height="16" rx="2" fill="#7b3d64"/>
       <!-- Decision boundary (middle line) -->
-      <line x1="180" y1="20" x2="180" y2="160" stroke="#15803d" stroke-width="2.5"/>
+      <line x1="180" y1="20" x2="180" y2="160" stroke="#3b7a77" stroke-width="2.5"/>
       <!-- Margin lines (dashed) -->
-      <line x1="145" y1="20" x2="145" y2="160" stroke="#15803d" stroke-width="1" stroke-dasharray="5,4"/>
-      <line x1="215" y1="20" x2="215" y2="160" stroke="#15803d" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="145" y1="20" x2="145" y2="160" stroke="#3b7a77" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="215" y1="20" x2="215" y2="160" stroke="#3b7a77" stroke-width="1" stroke-dasharray="5,4"/>
       <!-- Margin shading -->
-      <rect x="145" y="20" width="70" height="140" fill="#dcfce7" opacity="0.35"/>
+      <rect x="145" y="20" width="70" height="140" fill="#e4f0ef" opacity="0.35"/>
       <!-- Support vectors (highlighted) -->
-      <circle cx="105" cy="50" r="12" fill="none" stroke="#b45309" stroke-width="2"/>
-      <rect x="229" y="47" width="22" height="22" rx="3" fill="none" stroke="#b45309" stroke-width="2"/>
+      <circle cx="105" cy="50" r="12" fill="none" stroke="#2c3b5e" stroke-width="2"/>
+      <rect x="229" y="47" width="22" height="22" rx="3" fill="none" stroke="#5e2c4c" stroke-width="2"/>
       <!-- Labels -->
-      <text x="40"  y="170" font-family="sans-serif" font-size="10" fill="#2563eb">Class A</text>
-      <text x="255" y="170" font-family="sans-serif" font-size="10" fill="#dc2626">Class B</text>
-      <text x="155" y="15"  font-family="sans-serif" font-size="10" fill="#15803d">max margin</text>
-      <text x="90"  y="35"  font-family="sans-serif" font-size="9"  fill="#b45309">support vectors</text>
+      <text x="40"  y="170" font-family="sans-serif" font-size="10" fill="#2c3b5e">Class A</text>
+      <text x="255" y="170" font-family="sans-serif" font-size="10" fill="#5e2c4c">Class B</text>
+      <text x="155" y="15"  font-family="sans-serif" font-size="10" fill="#6c6c66">max margin</text>
+      <text x="90"  y="35"  font-family="sans-serif" font-size="9"  fill="#6c6c66">support vectors</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">SVM finds the widest possible gap between classes. Points closest to the boundary are "support vectors."</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">SVM finds the widest possible gap between classes. Points closest to the boundary are "support vectors."</p>
   </div>
 
   <div class="def-list">
@@ -303,31 +303,31 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 360 180" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Blue class -->
-      <circle cx="120" cy="70"  r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="95"  cy="100" r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="140" cy="110" r="8" fill="#2563eb" opacity="0.7"/>
-      <circle cx="80"  cy="60"  r="8" fill="#2563eb" opacity="0.7"/>
+      <circle cx="120" cy="70"  r="8" fill="#3d4f7b"/>
+      <circle cx="95"  cy="100" r="8" fill="#3d4f7b"/>
+      <circle cx="140" cy="110" r="8" fill="#3d4f7b"/>
+      <circle cx="80"  cy="60"  r="8" fill="#3d4f7b"/>
       <!-- Red class -->
-      <circle cx="260" cy="80"  r="8" fill="#dc2626" opacity="0.7"/>
-      <circle cx="240" cy="110" r="8" fill="#dc2626" opacity="0.7"/>
-      <circle cx="275" cy="120" r="8" fill="#dc2626" opacity="0.7"/>
-      <circle cx="255" cy="50"  r="8" fill="#dc2626" opacity="0.7"/>
+      <circle cx="260" cy="80"  r="8" fill="#7b3d64"/>
+      <circle cx="240" cy="110" r="8" fill="#7b3d64"/>
+      <circle cx="275" cy="120" r="8" fill="#7b3d64"/>
+      <circle cx="255" cy="50"  r="8" fill="#7b3d64"/>
       <!-- New unknown point -->
-      <circle cx="185" cy="95"  r="9" fill="#f59e0b" stroke="#92400e" stroke-width="2"/>
-      <text x="193" y="90" font-family="sans-serif" font-size="10" fill="#92400e">?</text>
+      <circle cx="185" cy="95"  r="9" fill="#3b7a77" stroke="#2a2a28" stroke-width="2"/>
+      <text x="193" y="90" font-family="sans-serif" font-size="10" fill="#ffffff">?</text>
       <!-- k=3 circle -->
-      <circle cx="185" cy="95" r="65" fill="none" stroke="#15803d" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <circle cx="185" cy="95" r="65" fill="none" stroke="#3b7a77" stroke-width="1.5" stroke-dasharray="6,4"/>
       <!-- Lines to nearest 3 (k=3) -->
-      <line x1="185" y1="95" x2="140" y2="110" stroke="#15803d" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <line x1="185" y1="95" x2="120" y2="70"  stroke="#15803d" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <line x1="185" y1="95" x2="240" y2="110" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="185" y1="95" x2="140" y2="110" stroke="#3d4f7b" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="185" y1="95" x2="120" y2="70"  stroke="#3d4f7b" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="185" y1="95" x2="240" y2="110" stroke="#7b3d64" stroke-width="1.5" stroke-dasharray="4,3"/>
       <!-- Labels -->
-      <text x="155" y="170" font-family="sans-serif" font-size="10" fill="#15803d" text-anchor="middle">k=3 search radius</text>
-      <text x="75"  y="45"  font-family="sans-serif" font-size="10" fill="#2563eb">Class A (×2)</text>
-      <text x="240" y="45"  font-family="sans-serif" font-size="10" fill="#dc2626">Class B (×1)</text>
-      <text x="148" y="92"  font-family="sans-serif" font-size="9"  fill="#15803d">→ Vote: A wins</text>
+      <text x="155" y="170" font-family="sans-serif" font-size="10" fill="#3b7a77" text-anchor="middle">k=3 search radius</text>
+      <text x="75"  y="45"  font-family="sans-serif" font-size="10" fill="#2c3b5e">Class A (×2)</text>
+      <text x="240" y="45"  font-family="sans-serif" font-size="10" fill="#5e2c4c">Class B (×1)</text>
+      <text x="148" y="92"  font-family="sans-serif" font-size="9"  fill="#6c6c66">→ Vote: A wins</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">With k=3, 2 neighbors are Class A and 1 is Class B → new point classified as Class A.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">With k=3, 2 neighbors are Class A and 1 is Class B → new point classified as Class A.</p>
   </div>
 
   <div class="def-list">
@@ -385,14 +385,14 @@
   <div class="diagram" style="padding:1.2rem; text-align:center">
     <div style="font-family:sans-serif; font-size:0.85rem">
       <div style="display:flex; justify-content:space-around; margin-bottom:0.5rem">
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 1<br><span style="color:#dc2626">votes: A</span></div>
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 2<br><span style="color:#2563eb">votes: B</span></div>
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 3<br><span style="color:#dc2626">votes: A</span></div>
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 4<br><span style="color:#dc2626">votes: A</span></div>
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 5<br><span style="color:#dc2626">votes: A</span></div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 1<br><span style="color:#2c3b5e">votes: A</span></div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 2<br><span style="color:#5e2c4c">votes: B</span></div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 3<br><span style="color:#2c3b5e">votes: A</span></div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 4<br><span style="color:#2c3b5e">votes: A</span></div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; font-size:0.8rem">Tree 5<br><span style="color:#2c3b5e">votes: A</span></div>
       </div>
-      <div style="font-size:0.8rem; color:#6b6b63; margin-bottom:0.4rem">↓ majority vote</div>
-      <div style="background:#dcfce7; border:2px solid #15803d; border-radius:8px; padding:0.5rem 1.5rem; display:inline-block; font-weight:700; color:#15803d">Final answer: Class A (4/5 votes)</div>
+      <div style="font-size:0.8rem; color:#6c6c66; margin-bottom:0.4rem">↓ majority vote</div>
+      <div style="background:#d8f3e5; border:2px solid #1a6b3f; border-radius:8px; padding:0.5rem 1.5rem; display:inline-block; font-weight:700; color:#1a6b3f">Final answer: Class A (4/5 votes)</div>
     </div>
   </div>
 
@@ -458,78 +458,78 @@
       <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0.5rem; text-align:center">
         <!-- Step 1 -->
         <div>
-          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 1: Init</div>
+          <div style="font-weight:700; color:#6c6c66; font-size:0.75rem; margin-bottom:0.4rem">Step 1: Init</div>
           <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="30" cy="35" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="15" cy="45" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="55" cy="15" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="65" cy="30" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="60" cy="50" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="35" cy="60" r="4" fill="#6b6b63" opacity="0.6"/>
-            <circle cx="50" cy="65" r="4" fill="#6b6b63" opacity="0.6"/>
+            <circle cx="20" cy="20" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="30" cy="35" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="15" cy="45" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="55" cy="15" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="65" cy="30" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="60" cy="50" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="35" cy="60" r="4" fill="#6c6c66" opacity="0.6"/>
+            <circle cx="50" cy="65" r="4" fill="#6c6c66" opacity="0.6"/>
             <!-- Random centroids -->
-            <circle cx="25" cy="30" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
-            <circle cx="60" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <circle cx="25" cy="30" r="6" fill="#3d4f7b" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="40" r="6" fill="#7b3d64" stroke="white" stroke-width="1.5"/>
           </svg>
-          <div style="font-size:0.7rem; color:#6b6b63">Place k centroids randomly</div>
+          <div style="font-size:0.7rem; color:#6c6c66">Place k centroids randomly</div>
         </div>
         <!-- Step 2 -->
         <div>
-          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 2: Assign</div>
+          <div style="font-weight:700; color:#6c6c66; font-size:0.75rem; margin-bottom:0.4rem">Step 2: Assign</div>
           <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="25" cy="30" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
-            <circle cx="60" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="4" fill="#3d4f7b"/>
+            <circle cx="30" cy="35" r="4" fill="#3d4f7b"/>
+            <circle cx="15" cy="45" r="4" fill="#3d4f7b"/>
+            <circle cx="35" cy="60" r="4" fill="#3d4f7b"/>
+            <circle cx="55" cy="15" r="4" fill="#7b3d64"/>
+            <circle cx="65" cy="30" r="4" fill="#7b3d64"/>
+            <circle cx="60" cy="50" r="4" fill="#7b3d64"/>
+            <circle cx="50" cy="65" r="4" fill="#7b3d64"/>
+            <circle cx="25" cy="30" r="6" fill="#3d4f7b" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="40" r="6" fill="#7b3d64" stroke="white" stroke-width="1.5"/>
           </svg>
-          <div style="font-size:0.7rem; color:#6b6b63">Assign each point to nearest centroid</div>
+          <div style="font-size:0.7rem; color:#6c6c66">Assign each point to nearest centroid</div>
         </div>
         <!-- Step 3 -->
         <div>
-          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 3: Update</div>
+          <div style="font-weight:700; color:#6c6c66; font-size:0.75rem; margin-bottom:0.4rem">Step 3: Update</div>
           <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
+            <circle cx="20" cy="20" r="4" fill="#3d4f7b"/>
+            <circle cx="30" cy="35" r="4" fill="#3d4f7b"/>
+            <circle cx="15" cy="45" r="4" fill="#3d4f7b"/>
+            <circle cx="35" cy="60" r="4" fill="#3d4f7b"/>
+            <circle cx="55" cy="15" r="4" fill="#7b3d64"/>
+            <circle cx="65" cy="30" r="4" fill="#7b3d64"/>
+            <circle cx="60" cy="50" r="4" fill="#7b3d64"/>
+            <circle cx="50" cy="65" r="4" fill="#7b3d64"/>
             <!-- New centroids (moved to center of clusters) -->
-            <circle cx="22" cy="40" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
-            <circle cx="58" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <circle cx="22" cy="40" r="6" fill="#3d4f7b" stroke="white" stroke-width="1.5"/>
+            <circle cx="58" cy="40" r="6" fill="#7b3d64" stroke="white" stroke-width="1.5"/>
             <!-- Old centroid ghost -->
-            <circle cx="25" cy="30" r="4" fill="none" stroke="#2563eb" stroke-dasharray="2,2" opacity="0.5"/>
-            <circle cx="60" cy="38" r="4" fill="none" stroke="#dc2626" stroke-dasharray="2,2" opacity="0.5"/>
+            <circle cx="25" cy="30" r="4" fill="none" stroke="#3d4f7b" stroke-dasharray="2,2" opacity="0.5"/>
+            <circle cx="60" cy="38" r="4" fill="none" stroke="#7b3d64" stroke-dasharray="2,2" opacity="0.5"/>
           </svg>
-          <div style="font-size:0.7rem; color:#6b6b63">Move centroids to cluster mean</div>
+          <div style="font-size:0.7rem; color:#6c6c66">Move centroids to cluster mean</div>
         </div>
         <!-- Step 4 -->
         <div>
-          <div style="font-weight:700; color:#6b6b63; font-size:0.75rem; margin-bottom:0.4rem">Step 4: Repeat</div>
+          <div style="font-weight:700; color:#6c6c66; font-size:0.75rem; margin-bottom:0.4rem">Step 4: Repeat</div>
           <svg viewBox="0 0 80 80" width="80" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="30" cy="35" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="15" cy="45" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="35" cy="60" r="4" fill="#2563eb" opacity="0.7"/>
-            <circle cx="55" cy="15" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="65" cy="30" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="60" cy="50" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="50" cy="65" r="4" fill="#dc2626" opacity="0.7"/>
-            <circle cx="22" cy="40" r="6" fill="#2563eb" stroke="white" stroke-width="1.5"/>
-            <circle cx="58" cy="40" r="6" fill="#dc2626" stroke="white" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="4" fill="#3d4f7b"/>
+            <circle cx="30" cy="35" r="4" fill="#3d4f7b"/>
+            <circle cx="15" cy="45" r="4" fill="#3d4f7b"/>
+            <circle cx="35" cy="60" r="4" fill="#3d4f7b"/>
+            <circle cx="55" cy="15" r="4" fill="#7b3d64"/>
+            <circle cx="65" cy="30" r="4" fill="#7b3d64"/>
+            <circle cx="60" cy="50" r="4" fill="#7b3d64"/>
+            <circle cx="50" cy="65" r="4" fill="#7b3d64"/>
+            <circle cx="22" cy="40" r="6" fill="#3d4f7b" stroke="white" stroke-width="1.5"/>
+            <circle cx="58" cy="40" r="6" fill="#7b3d64" stroke="white" stroke-width="1.5"/>
             <!-- Boundary -->
-            <line x1="40" y1="10" x2="40" y2="75" stroke="#6b6b63" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+            <line x1="40" y1="10" x2="40" y2="75" stroke="#6c6c66" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
           </svg>
-          <div style="font-size:0.7rem; color:#6b6b63">Repeat until centroids stop moving</div>
+          <div style="font-size:0.7rem; color:#6c6c66">Repeat until centroids stop moving</div>
         </div>
       </div>
     </div>
@@ -572,48 +572,48 @@
   <div class="diagram" style="padding:1.2rem; text-align:center">
     <svg viewBox="0 0 360 160" width="340" xmlns="http://www.w3.org/2000/svg">
       <!-- Data points at bottom -->
-      <circle cx="50"  cy="140" r="5" fill="#2563eb"/>
-      <circle cx="80"  cy="140" r="5" fill="#2563eb"/>
-      <circle cx="115" cy="140" r="5" fill="#15803d"/>
-      <circle cx="145" cy="140" r="5" fill="#15803d"/>
-      <circle cx="220" cy="140" r="5" fill="#dc2626"/>
-      <circle cx="250" cy="140" r="5" fill="#dc2626"/>
-      <circle cx="285" cy="140" r="5" fill="#dc2626"/>
+      <circle cx="50"  cy="140" r="5" fill="#193432"/>
+      <circle cx="80"  cy="140" r="5" fill="#193432"/>
+      <circle cx="115" cy="140" r="5" fill="#193432"/>
+      <circle cx="145" cy="140" r="5" fill="#193432"/>
+      <circle cx="220" cy="140" r="5" fill="#193432"/>
+      <circle cx="250" cy="140" r="5" fill="#193432"/>
+      <circle cx="285" cy="140" r="5" fill="#193432"/>
       <!-- Level 1 merges -->
-      <line x1="50"  y1="135" x2="50"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
-      <line x1="80"  y1="135" x2="80"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
-      <line x1="50"  y1="100" x2="80"  y2="100" stroke="#2563eb" stroke-width="1.5"/>
-      <line x1="115" y1="135" x2="115" y2="100" stroke="#15803d" stroke-width="1.5"/>
-      <line x1="145" y1="135" x2="145" y2="100" stroke="#15803d" stroke-width="1.5"/>
-      <line x1="115" y1="100" x2="145" y2="100" stroke="#15803d" stroke-width="1.5"/>
-      <line x1="220" y1="135" x2="220" y2="100" stroke="#dc2626" stroke-width="1.5"/>
-      <line x1="250" y1="135" x2="250" y2="100" stroke="#dc2626" stroke-width="1.5"/>
-      <line x1="220" y1="100" x2="250" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="50"  y1="135" x2="50"  y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="80"  y1="135" x2="80"  y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="50"  y1="100" x2="80"  y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="115" y1="135" x2="115" y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="145" y1="135" x2="145" y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="115" y1="100" x2="145" y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="220" y1="135" x2="220" y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="250" y1="135" x2="250" y2="100" stroke="#2f605e" stroke-width="1.5"/>
+      <line x1="220" y1="100" x2="250" y2="100" stroke="#2f605e" stroke-width="1.5"/>
       <!-- Level 2 merges -->
-      <line x1="65"  y1="100" x2="65"  y2="65" stroke="#9333ea" stroke-width="1.5"/>
-      <line x1="130" y1="100" x2="130" y2="65" stroke="#9333ea" stroke-width="1.5"/>
-      <line x1="65"  y1="65"  x2="130" y2="65" stroke="#9333ea" stroke-width="1.5"/>
-      <line x1="235" y1="100" x2="235" y2="100" stroke="#dc2626" stroke-width="1.5"/>
-      <line x1="285" y1="135" x2="285" y2="80" stroke="#dc2626" stroke-width="1.5"/>
-      <line x1="235" y1="100" x2="285" y2="80" stroke="#dc2626" stroke-width="1.5"/>
+      <line x1="65"  y1="100" x2="65"  y2="65" stroke="#5aafab" stroke-width="1.5"/>
+      <line x1="130" y1="100" x2="130" y2="65" stroke="#5aafab" stroke-width="1.5"/>
+      <line x1="65"  y1="65"  x2="130" y2="65" stroke="#5aafab" stroke-width="1.5"/>
+      <line x1="235" y1="100" x2="235" y2="100" stroke="#5aafab" stroke-width="1.5"/>
+      <line x1="285" y1="135" x2="285" y2="80" stroke="#5aafab" stroke-width="1.5"/>
+      <line x1="235" y1="100" x2="285" y2="80" stroke="#5aafab" stroke-width="1.5"/>
       <!-- Level 3 merge -->
-      <line x1="97"  y1="65"  x2="97"  y2="30" stroke="#6b21a8" stroke-width="1.5"/>
-      <line x1="260" y1="80"  x2="260" y2="30" stroke="#6b21a8" stroke-width="1.5"/>
-      <line x1="97"  y1="30"  x2="260" y2="30" stroke="#6b21a8" stroke-width="1.5"/>
+      <line x1="97"  y1="65"  x2="97"  y2="30" stroke="#a9d5d3" stroke-width="1.5"/>
+      <line x1="260" y1="80"  x2="260" y2="30" stroke="#a9d5d3" stroke-width="1.5"/>
+      <line x1="97"  y1="30"  x2="260" y2="30" stroke="#a9d5d3" stroke-width="1.5"/>
       <!-- Cut line -->
-      <line x1="30" y1="55" x2="330" y2="55" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4"/>
-      <text x="295" y="52" font-family="sans-serif" font-size="9" fill="#b45309">cut here</text>
-      <text x="295" y="62" font-family="sans-serif" font-size="9" fill="#b45309">→ 3 clusters</text>
+      <line x1="30" y1="55" x2="330" y2="55" stroke="#3b7a77" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="295" y="52" font-family="sans-serif" font-size="9" fill="#2c5e5c">cut here</text>
+      <text x="295" y="62" font-family="sans-serif" font-size="9" fill="#2c5e5c">→ 3 clusters</text>
       <!-- Point labels -->
-      <text x="40"  y="157" font-family="sans-serif" font-size="9" fill="#2563eb">A</text>
-      <text x="78"  y="157" font-family="sans-serif" font-size="9" fill="#2563eb">B</text>
-      <text x="110" y="157" font-family="sans-serif" font-size="9" fill="#15803d">C</text>
-      <text x="143" y="157" font-family="sans-serif" font-size="9" fill="#15803d">D</text>
-      <text x="218" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">E</text>
-      <text x="248" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">F</text>
-      <text x="283" y="157" font-family="sans-serif" font-size="9" fill="#dc2626">G</text>
+      <text x="40"  y="157" font-family="sans-serif" font-size="9" fill="#193432">A</text>
+      <text x="78"  y="157" font-family="sans-serif" font-size="9" fill="#193432">B</text>
+      <text x="110" y="157" font-family="sans-serif" font-size="9" fill="#193432">C</text>
+      <text x="143" y="157" font-family="sans-serif" font-size="9" fill="#193432">D</text>
+      <text x="218" y="157" font-family="sans-serif" font-size="9" fill="#193432">E</text>
+      <text x="248" y="157" font-family="sans-serif" font-size="9" fill="#193432">F</text>
+      <text x="283" y="157" font-family="sans-serif" font-size="9" fill="#193432">G</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Dendrogram: cutting at different heights gives different numbers of clusters. The yellow line cuts for 3 clusters.</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Dendrogram: cutting at different heights gives different numbers of clusters. The teal line cuts for 3 clusters.</p>
   </div>
 
   <div class="def-list">
@@ -633,77 +633,77 @@
   <div class="diagram" style="padding:1rem; overflow-x:auto">
     <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:500px">
       <thead>
-        <tr style="background:#f3f4f6">
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Algorithm</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Type</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Task</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key idea</th>
+        <tr style="background:#e4f0ef">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Algorithm</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Type</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Task</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Key idea</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Linear Regression</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Regression</td>
           <td style="padding:0.4rem 0.75rem">Best-fit straight line</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
           <td style="padding:0.4rem 0.75rem">Polynomial Regression</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Regression</td>
           <td style="padding:0.4rem 0.75rem">Curved fit using x², x³…</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Logistic Regression</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Classification</td>
           <td style="padding:0.4rem 0.75rem">Sigmoid → probability</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
           <td style="padding:0.4rem 0.75rem">Decision Tree</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Both</td>
           <td style="padding:0.4rem 0.75rem">If/else splits on features</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">SVM</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Classification</td>
           <td style="padding:0.4rem 0.75rem">Max-margin boundary</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
           <td style="padding:0.4rem 0.75rem">k-Nearest Neighbors</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Both</td>
           <td style="padding:0.4rem 0.75rem">Vote from k closest points</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Naive Bayes</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Classification</td>
           <td style="padding:0.4rem 0.75rem">Bayes' theorem + independence assumption</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
           <td style="padding:0.4rem 0.75rem">Random Forest</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Both</td>
           <td style="padding:0.4rem 0.75rem">Bagging of Decision Trees</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">GBDT</td>
-          <td style="padding:0.4rem 0.75rem; color:#1d4ed8">Supervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Supervised</td>
           <td style="padding:0.4rem 0.75rem">Both</td>
           <td style="padding:0.4rem 0.75rem">Boosting: correct previous errors</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
           <td style="padding:0.4rem 0.75rem">k-Means</td>
-          <td style="padding:0.4rem 0.75rem; color:#15803d">Unsupervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Unsupervised</td>
           <td style="padding:0.4rem 0.75rem">Clustering</td>
           <td style="padding:0.4rem 0.75rem">Assign to nearest centroid + update</td>
         </tr>
         <tr>
           <td style="padding:0.4rem 0.75rem">Hierarchical Clustering</td>
-          <td style="padding:0.4rem 0.75rem; color:#15803d">Unsupervised</td>
+          <td style="padding:0.4rem 0.75rem; color:#2c5e5c">Unsupervised</td>
           <td style="padding:0.4rem 0.75rem">Clustering</td>
           <td style="padding:0.4rem 0.75rem">Build dendrogram, cut at desired level</td>
         </tr>

@@ -122,6 +122,14 @@
 
     document.body.insertBefore(nav, document.body.firstChild);
     document.body.classList.add('has-sidebar');
+
+    /* keyboard-only users need an escape hatch from the mobile sidebar */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && document.body.classList.contains('nav-open')) {
+        closeSidebar();
+        toggle.focus();
+      }
+    });
   }
 
   function closeSidebar() {
