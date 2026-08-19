@@ -14,7 +14,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 01 · Lesson 1 of 4 &nbsp;|&nbsp; AI Overview</div>
+    <div class="lesson-meta">Chapter 01 · Lesson 1 &nbsp;|&nbsp; AI Overview</div>
     <h1>What Is AI — and Where Did It Come From?</h1>
     <p class="subtitle">The big picture before the details. By the end, you'll be able to explain AI, Machine Learning, and Deep Learning in plain English.</p>
   </header>
@@ -59,24 +59,24 @@
 
   <div class="diagram">
     <svg viewBox="0 0 400 260" width="360" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
-      <!-- AI (outermost) -->
-      <ellipse cx="200" cy="130" rx="190" ry="115" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <!-- AI (outermost) — muted-teal tonal ramp, per DESIGN.md's One Accent Rule -->
+      <ellipse cx="200" cy="130" rx="190" ry="115" fill="#eef7f6" stroke="#3b7a77" stroke-width="2"/>
       <!-- ML (middle) -->
-      <ellipse cx="200" cy="145" rx="130" ry="80" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+      <ellipse cx="200" cy="145" rx="130" ry="80" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="2"/>
       <!-- DL (innermost) -->
-      <ellipse cx="200" cy="158" rx="70" ry="45" fill="#93c5fd" stroke="#1e40af" stroke-width="2"/>
+      <ellipse cx="200" cy="158" rx="70" ry="45" fill="#a9d5d3" stroke="#193432" stroke-width="2"/>
 
       <!-- Labels -->
-      <text x="200" y="42" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1e3a8a" font-weight="600">Artificial Intelligence (AI)</text>
-      <text x="200" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e3a8a">Simulating human intelligence</text>
+      <text x="200" y="42" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#193432" font-weight="600">Artificial Intelligence (AI)</text>
+      <text x="200" y="58" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#193432">Simulating human intelligence</text>
 
-      <text x="200" y="110" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#1e3a8a" font-weight="600">Machine Learning (ML)</text>
-      <text x="200" y="127" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#1e3a8a">Learning from data</text>
+      <text x="200" y="110" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#193432" font-weight="600">Machine Learning (ML)</text>
+      <text x="200" y="127" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#193432">Learning from data</text>
 
-      <text x="200" y="155" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e3a8a" font-weight="600">Deep Learning (DL)</text>
-      <text x="200" y="170" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1e3a8a">Neural networks</text>
+      <text x="200" y="155" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#193432" font-weight="600">Deep Learning (DL)</text>
+      <text x="200" y="170" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#193432">Neural networks</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.5rem">AI ⊃ Machine Learning ⊃ Deep Learning</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.5rem">AI ⊃ Machine Learning ⊃ Deep Learning</p>
   </div>
 
   <div class="def-list">
@@ -131,20 +131,20 @@
 
   <div class="diagram" style="text-align:left; padding: 1.5rem 2rem;">
     <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; font-family:sans-serif;">
-      <div style="flex:1; min-width:150px; background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:1rem; text-align:center;">
+      <div style="flex:1; min-width:150px; background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem; text-align:center;">
         <div style="font-size:2rem">📦</div>
-        <div style="font-weight:700; margin:0.4rem 0; color:#15803d">Data</div>
-        <div style="font-size:0.8rem; color:#166534">The internet, smartphones, and sensors generated billions of labelled examples for AI to learn from.</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#2c5e5c">Data</div>
+        <div style="font-size:0.8rem; color:#2a2a28">The internet, smartphones, and sensors generated billions of labelled examples for AI to learn from.</div>
       </div>
-      <div style="flex:1; min-width:150px; background:#eff6ff; border:1.5px solid #2563eb; border-radius:8px; padding:1rem; text-align:center;">
+      <div style="flex:1; min-width:150px; background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem; text-align:center;">
         <div style="font-size:2rem">⚡</div>
-        <div style="font-weight:700; margin:0.4rem 0; color:#1d4ed8">Computing Power</div>
-        <div style="font-size:0.8rem; color:#1e3a8a">GPUs (and later AI chips like Huawei's Ascend) made training large neural networks affordable.</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#2c5e5c">Computing Power</div>
+        <div style="font-size:0.8rem; color:#2a2a28">GPUs (and later AI chips like Huawei's Ascend) made training large neural networks affordable.</div>
       </div>
-      <div style="flex:1; min-width:150px; background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:1rem; text-align:center;">
+      <div style="flex:1; min-width:150px; background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem; text-align:center;">
         <div style="font-size:2rem">🧮</div>
-        <div style="font-weight:700; margin:0.4rem 0; color:#92400e">Algorithms</div>
-        <div style="font-size:0.8rem; color:#78350f">Breakthroughs in backpropagation, CNNs, attention, and transformers gave AI the right techniques.</div>
+        <div style="font-weight:700; margin:0.4rem 0; color:#2c5e5c">Algorithms</div>
+        <div style="font-size:0.8rem; color:#2a2a28">Breakthroughs in backpropagation, CNNs, attention, and transformers gave AI the right techniques.</div>
       </div>
     </div>
   </div>
@@ -186,7 +186,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',true)">AI ⊃ ML ⊃ DL (AI is the biggest)</button>
       <button class="quiz-option" onclick="answer(this,'q1',false)">They are three separate fields with no overlap</button>
     </div>
-    <div class="quiz-feedback" id="q1-fb"></div>
+    <div class="quiz-feedback" id="q1-fb" aria-live="polite"></div>
     <button class="quiz-next" onclick="show('q2')">Next question →</button>
   </div>
 
@@ -199,7 +199,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">Connectionism</button>
       <button class="quiz-option" onclick="answer(this,'q2',false)">Symbolic AI</button>
     </div>
-    <div class="quiz-feedback" id="q2-fb"></div>
+    <div class="quiz-feedback" id="q2-fb" aria-live="polite"></div>
     <button class="quiz-next" onclick="show('q3')">Next question →</button>
   </div>
 
@@ -212,7 +212,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',true)">Symbolism</button>
       <button class="quiz-option" onclick="answer(this,'q3',false)">Reinforcement Learning</button>
     </div>
-    <div class="quiz-feedback" id="q3-fb"></div>
+    <div class="quiz-feedback" id="q3-fb" aria-live="polite"></div>
     <button class="quiz-next" onclick="show('q4')">Next question →</button>
   </div>
 
@@ -225,7 +225,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">Neurons, Layers, Backpropagation</button>
       <button class="quiz-option" onclick="answer(this,'q4',false)">Python, GPUs, the Internet</button>
     </div>
-    <div class="quiz-feedback" id="q4-fb"></div>
+    <div class="quiz-feedback" id="q4-fb" aria-live="polite"></div>
     <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
   </div>
 
@@ -256,7 +256,7 @@
   </div>
 
   <div class="lesson-nav">
-    <span style="color:#6b6b63">← Start of course</span>
+    <span style="color:#6c6c66">← Start of course</span>
     <a href="0002-ai-technologies.html" class="nav-next">Next: AI Technologies →</a>
   </div>
 
@@ -300,6 +300,7 @@ function answer(btn, qid, isCorrect) {
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
   next.style.display = 'inline-block';
+  next.focus();
 }
 
 function show(qid) {

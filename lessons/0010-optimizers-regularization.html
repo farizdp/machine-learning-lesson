@@ -133,38 +133,38 @@
     <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:480px">
       <thead>
         <tr style="background:#f3f4f6">
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Optimizer</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Adapts LR per weight?</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Has momentum?</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key weakness</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Optimizer</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Adapts LR per weight?</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Has momentum?</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Key weakness</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">SGD (plain)</td>
           <td style="padding:0.4rem 0.75rem">✗</td>
           <td style="padding:0.4rem 0.75rem">✗</td>
           <td style="padding:0.4rem 0.75rem">Oscillates, slow</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#fafaf8">
           <td style="padding:0.4rem 0.75rem">Momentum</td>
           <td style="padding:0.4rem 0.75rem">✗</td>
           <td style="padding:0.4rem 0.75rem">✓</td>
           <td style="padding:0.4rem 0.75rem">Can overshoot; one global LR</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">AdaGrad</td>
           <td style="padding:0.4rem 0.75rem">✓</td>
           <td style="padding:0.4rem 0.75rem">✗</td>
           <td style="padding:0.4rem 0.75rem">LR decays to zero permanently</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#fafaf8">
           <td style="padding:0.4rem 0.75rem">RMSProp</td>
           <td style="padding:0.4rem 0.75rem">✓ (recent only)</td>
           <td style="padding:0.4rem 0.75rem">✗</td>
           <td style="padding:0.4rem 0.75rem">No momentum term</td>
         </tr>
-        <tr style="background:#dbeafe">
+        <tr style="background:#e4f0ef">
           <td style="padding:0.4rem 0.75rem; font-weight:700">Adam ★</td>
           <td style="padding:0.4rem 0.75rem">✓ (recent only)</td>
           <td style="padding:0.4rem 0.75rem">✓</td>
@@ -218,16 +218,16 @@
 
   <div class="diagram" style="padding:1.2rem">
     <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
-      <div style="background:#f0fdf4; border:1.5px solid #16a34a; border-radius:8px; padding:1rem">
-        <div style="font-weight:700; color:#15803d; margin-bottom:0.4rem">L1 (Lasso)</div>
-        <div style="color:#14532d; font-size:0.82rem">Penalty: <code>λ·Σ|w|</code><br>Result: <strong>sparse</strong> — many weights = 0<br>Use: automatic feature selection</div>
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.4rem">L1 (Lasso)</div>
+        <div style="color:#2a2a28; font-size:0.82rem">Penalty: <code>λ·Σ|w|</code><br>Result: <strong>sparse</strong> — many weights = 0<br>Use: automatic feature selection</div>
       </div>
-      <div style="background:#eff6ff; border:1.5px solid #2563eb; border-radius:8px; padding:1rem">
-        <div style="font-weight:700; color:#1d4ed8; margin-bottom:0.4rem">L2 (Ridge / Weight Decay)</div>
-        <div style="color:#1e3a8a; font-size:0.82rem">Penalty: <code>λ·Σw²</code><br>Result: <strong>small</strong> weights spread across all features<br>Use: general overfitting control</div>
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.4rem">L2 (Ridge / Weight Decay)</div>
+        <div style="color:#2a2a28; font-size:0.82rem">Penalty: <code>λ·Σw²</code><br>Result: <strong>small</strong> weights spread across all features<br>Use: general overfitting control</div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:0.75rem; font-family:sans-serif; font-size:0.78rem; color:#6b6b63">λ (lambda) is the regularization strength hyperparameter — higher λ = stronger penalty = simpler model</div>
+    <div style="text-align:center; margin-top:0.75rem; font-family:sans-serif; font-size:0.78rem; color:#6c6c66">λ (lambda) is the regularization strength hyperparameter — higher λ = stronger penalty = simpler model</div>
   </div>
 
   <div class="callout exam">
@@ -243,25 +243,25 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 380 160" width="360" xmlns="http://www.w3.org/2000/svg">
       <!-- Axes -->
-      <line x1="40" y1="130" x2="350" y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
-      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e8e6e1" stroke-width="1.5"/>
+      <line x1="40" y1="130" x2="350" y2="130" stroke="#e5e4e0" stroke-width="1.5"/>
+      <line x1="40" y1="20"  x2="40"  y2="130" stroke="#e5e4e0" stroke-width="1.5"/>
       <!-- Training loss (always decreasing) -->
-      <path d="M 45 110 C 80 90 120 70 165 55 S 240 38 310 25" stroke="#2563eb" stroke-width="2" fill="none"/>
+      <path d="M 45 110 C 80 90 120 70 165 55 S 240 38 310 25" stroke="#3b7a77" stroke-width="2" fill="none"/>
       <!-- Validation loss (U-shape) -->
-      <path d="M 45 112 C 80 88 120 68 160 58 S 210 58 240 65 S 280 82 310 100" stroke="#dc2626" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+      <path d="M 45 112 C 80 88 120 68 160 58 S 210 58 240 65 S 280 82 310 100" stroke="#c12929" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
       <!-- Best point marker -->
-      <line x1="195" y1="20" x2="195" y2="130" stroke="#15803d" stroke-width="1.5" stroke-dasharray="5,4"/>
-      <circle cx="195" cy="57" r="5" fill="#15803d"/>
+      <line x1="195" y1="20" x2="195" y2="130" stroke="#1a6b3f" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <circle cx="195" cy="57" r="5" fill="#1a6b3f"/>
       <!-- Labels -->
-      <text x="285" y="22"  font-family="sans-serif" font-size="10" fill="#2563eb">Training loss</text>
-      <text x="270" y="108" font-family="sans-serif" font-size="10" fill="#dc2626">Validation loss</text>
-      <text x="162" y="18"  font-family="sans-serif" font-size="10" fill="#15803d">Stop here</text>
-      <text x="45"  y="148" font-family="sans-serif" font-size="10" fill="#6b6b63">Training epochs →</text>
-      <text x="5"   y="80"  font-family="sans-serif" font-size="10" fill="#6b6b63" transform="rotate(-90,5,80)">Loss</text>
+      <text x="285" y="22"  font-family="sans-serif" font-size="10" fill="#3b7a77">Training loss</text>
+      <text x="270" y="108" font-family="sans-serif" font-size="10" fill="#c12929">Validation loss</text>
+      <text x="162" y="18"  font-family="sans-serif" font-size="10" fill="#1a6b3f">Stop here</text>
+      <text x="45"  y="148" font-family="sans-serif" font-size="10" fill="#6c6c66">Training epochs →</text>
+      <text x="5"   y="80"  font-family="sans-serif" font-size="10" fill="#6c6c66" transform="rotate(-90,5,80)">Loss</text>
       <!-- Overfitting zone label -->
-      <text x="220" y="50"  font-family="sans-serif" font-size="9" fill="#dc2626">← overfitting zone</text>
+      <text x="220" y="50"  font-family="sans-serif" font-size="9" fill="#c12929">← overfitting zone</text>
     </svg>
-    <p style="color:#6b6b63; font-size:0.8rem; margin-top:0.3rem">Stop when validation loss bottoms out — before the overfitting gap widens</p>
+    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Stop when validation loss bottoms out — before the overfitting gap widens</p>
   </div>
 
   <div class="def-list">
@@ -281,48 +281,50 @@
   <div class="diagram" style="padding:1.2rem">
     <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem; text-align:center">
       <div>
-        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.5rem">Training (Dropout ON)</div>
+        <div style="font-weight:700; color:#6c6c66; margin-bottom:0.5rem">Training (Dropout ON)</div>
         <svg viewBox="0 0 120 100" width="120" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="25"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <circle cx="20" cy="55"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <circle cx="20" cy="85"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <!-- dropped neurons (grey X) -->
-          <circle cx="60" cy="20"  r="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
-          <text x="60" y="24" font-family="sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle">✕</text>
-          <circle cx="60" cy="50"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
-          <circle cx="60" cy="80"  r="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
-          <text x="60" y="84" font-family="sans-serif" font-size="12" fill="#9ca3af" text-anchor="middle">✕</text>
-          <circle cx="100" cy="35" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-          <circle cx="100" cy="70" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+          <!-- input layer: teal -->
+          <circle cx="20" cy="25"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <circle cx="20" cy="55"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <circle cx="20" cy="85"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <!-- hidden layer: slate — dropped neurons fall back to neutral hairline/ink-muted -->
+          <circle cx="60" cy="20"  r="12" fill="#f3f3f2" stroke="#6c6c66" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="60" y="24" font-family="sans-serif" font-size="12" fill="#6c6c66" text-anchor="middle">✕</text>
+          <circle cx="60" cy="50"  r="12" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1.5"/>
+          <circle cx="60" cy="80"  r="12" fill="#f3f3f2" stroke="#6c6c66" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="60" y="84" font-family="sans-serif" font-size="12" fill="#6c6c66" text-anchor="middle">✕</text>
+          <!-- output layer: plum -->
+          <circle cx="100" cy="35" r="12" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1.5"/>
+          <circle cx="100" cy="70" r="12" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1.5"/>
           <!-- active connections only -->
-          <line x1="32" y1="25" x2="48" y2="50" stroke="#7c3aed" stroke-width="1"/>
-          <line x1="32" y1="55" x2="48" y2="50" stroke="#7c3aed" stroke-width="1"/>
-          <line x1="72" y1="50" x2="88" y2="35" stroke="#15803d" stroke-width="1"/>
-          <line x1="72" y1="50" x2="88" y2="70" stroke="#15803d" stroke-width="1"/>
+          <line x1="32" y1="25" x2="48" y2="50" stroke="#3d4f7b" stroke-width="1"/>
+          <line x1="32" y1="55" x2="48" y2="50" stroke="#3d4f7b" stroke-width="1"/>
+          <line x1="72" y1="50" x2="88" y2="35" stroke="#7b3d64" stroke-width="1"/>
+          <line x1="72" y1="50" x2="88" y2="70" stroke="#7b3d64" stroke-width="1"/>
         </svg>
-        <div style="font-size:0.75rem; color:#6b6b63; margin-top:0.3rem">Grey ✕ = dropped this step</div>
+        <div style="font-size:0.75rem; color:#6c6c66; margin-top:0.3rem">Dashed ✕ = dropped this step</div>
       </div>
       <div>
-        <div style="font-weight:700; color:#6b6b63; margin-bottom:0.5rem">Inference (Dropout OFF)</div>
+        <div style="font-weight:700; color:#6c6c66; margin-bottom:0.5rem">Inference (Dropout OFF)</div>
         <svg viewBox="0 0 120 100" width="120" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="25"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <circle cx="20" cy="55"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <circle cx="20" cy="85"  r="12" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
-          <circle cx="60" cy="20"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
-          <circle cx="60" cy="50"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
-          <circle cx="60" cy="80"  r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
-          <circle cx="100" cy="35" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-          <circle cx="100" cy="70" r="12" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-          <line x1="32" y1="25" x2="48" y2="20" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
-          <line x1="32" y1="25" x2="48" y2="50" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
-          <line x1="32" y1="55" x2="48" y2="50" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
-          <line x1="32" y1="55" x2="48" y2="80" stroke="#c4b5fd" stroke-width="0.8" opacity="0.7"/>
-          <line x1="72" y1="20" x2="88" y2="35" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
-          <line x1="72" y1="50" x2="88" y2="35" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
-          <line x1="72" y1="50" x2="88" y2="70" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
-          <line x1="72" y1="80" x2="88" y2="70" stroke="#bbf7d0" stroke-width="0.8" opacity="0.7"/>
+          <circle cx="20" cy="25"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <circle cx="20" cy="55"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <circle cx="20" cy="85"  r="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
+          <circle cx="60" cy="20"  r="12" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1.5"/>
+          <circle cx="60" cy="50"  r="12" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1.5"/>
+          <circle cx="60" cy="80"  r="12" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1.5"/>
+          <circle cx="100" cy="35" r="12" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1.5"/>
+          <circle cx="100" cy="70" r="12" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1.5"/>
+          <line x1="32" y1="25" x2="48" y2="20" stroke="#aab6d5" stroke-width="0.8"/>
+          <line x1="32" y1="25" x2="48" y2="50" stroke="#aab6d5" stroke-width="0.8"/>
+          <line x1="32" y1="55" x2="48" y2="50" stroke="#aab6d5" stroke-width="0.8"/>
+          <line x1="32" y1="55" x2="48" y2="80" stroke="#aab6d5" stroke-width="0.8"/>
+          <line x1="72" y1="20" x2="88" y2="35" stroke="#c284ab" stroke-width="0.8"/>
+          <line x1="72" y1="50" x2="88" y2="35" stroke="#c284ab" stroke-width="0.8"/>
+          <line x1="72" y1="50" x2="88" y2="70" stroke="#c284ab" stroke-width="0.8"/>
+          <line x1="72" y1="80" x2="88" y2="70" stroke="#c284ab" stroke-width="0.8"/>
         </svg>
-        <div style="font-size:0.75rem; color:#6b6b63; margin-top:0.3rem">All neurons active — outputs scaled</div>
+        <div style="font-size:0.75rem; color:#6c6c66; margin-top:0.3rem">All neurons active — outputs scaled</div>
       </div>
     </div>
   </div>

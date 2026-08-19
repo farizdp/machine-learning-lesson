@@ -41,16 +41,16 @@
   <h3>② Sigmoid (Logistic)</h3>
   <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
     <svg viewBox="0 0 300 100" width="280" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="50" x2="290" y2="50" stroke="#e8e6e1" stroke-width="1"/>
-      <line x1="150" y1="5" x2="150" y2="95" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="10" y1="50" x2="290" y2="50" stroke="#e5e4e0" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="95" stroke="#e5e4e0" stroke-width="1"/>
       <path d="M 15 88 C 40 87 70 80 100 65 S 160 20 185 12 S 250 8 285 7" stroke="#2563eb" stroke-width="2.5" fill="none"/>
-      <text x="5"   y="13" font-family="sans-serif" font-size="9" fill="#6b6b63">1</text>
+      <text x="5"   y="13" font-family="sans-serif" font-size="9" fill="#6c6c66">1</text>
       <text x="5"   y="53" font-family="sans-serif" font-size="9" fill="#dc2626">0.5</text>
-      <text x="5"   y="93" font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
+      <text x="5"   y="93" font-family="sans-serif" font-size="9" fill="#6c6c66">0</text>
       <text x="258" y="10" font-family="sans-serif" font-size="9" fill="#2563eb">σ(z)</text>
       <line x1="10" y1="50" x2="290" y2="50" stroke="#dc2626" stroke-width="0.8" stroke-dasharray="4,3"/>
     </svg>
-    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">σ(z) = 1 / (1 + e<sup>−z</sup>) — output always between 0 and 1</p>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6c6c66; margin-top:0.3rem">σ(z) = 1 / (1 + e<sup>−z</sup>) — output always between 0 and 1</p>
   </div>
   <div class="def-list">
     <div class="def-item">
@@ -65,15 +65,15 @@
   <h3>③ Tanh (Hyperbolic Tangent)</h3>
   <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
     <svg viewBox="0 0 300 110" width="280" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="55" x2="290" y2="55" stroke="#e8e6e1" stroke-width="1"/>
-      <line x1="150" y1="5" x2="150" y2="105" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="10" y1="55" x2="290" y2="55" stroke="#e5e4e0" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="105" stroke="#e5e4e0" stroke-width="1"/>
       <path d="M 15 100 C 50 98 80 85 110 65 S 170 20 200 10 S 255 6 285 5" stroke="#7c3aed" stroke-width="2.5" fill="none"/>
-      <text x="5" y="10"  font-family="sans-serif" font-size="9" fill="#6b6b63">+1</text>
-      <text x="5" y="57"  font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
-      <text x="5" y="103" font-family="sans-serif" font-size="9" fill="#6b6b63">−1</text>
+      <text x="5" y="10"  font-family="sans-serif" font-size="9" fill="#6c6c66">+1</text>
+      <text x="5" y="57"  font-family="sans-serif" font-size="9" fill="#6c6c66">0</text>
+      <text x="5" y="103" font-family="sans-serif" font-size="9" fill="#6c6c66">−1</text>
       <text x="260" y="10" font-family="sans-serif" font-size="9" fill="#7c3aed">tanh(z)</text>
     </svg>
-    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">Output range: (−1, +1) — zero-centered</p>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6c6c66; margin-top:0.3rem">Output range: (−1, +1) — zero-centered</p>
   </div>
   <div class="def-list">
     <div class="def-item">
@@ -88,14 +88,14 @@
   <h3>④ ReLU (Rectified Linear Unit)</h3>
   <div class="diagram" style="padding:1rem 1.5rem; text-align:center">
     <svg viewBox="0 0 300 100" width="280" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="80" x2="290" y2="80" stroke="#e8e6e1" stroke-width="1"/>
-      <line x1="150" y1="5" x2="150" y2="95" stroke="#e8e6e1" stroke-width="1"/>
+      <line x1="10" y1="80" x2="290" y2="80" stroke="#e5e4e0" stroke-width="1"/>
+      <line x1="150" y1="5" x2="150" y2="95" stroke="#e5e4e0" stroke-width="1"/>
       <!-- flat left, rising right -->
       <polyline points="15,80 150,80 285,10" stroke="#15803d" stroke-width="2.5" fill="none"/>
       <text x="155" y="78" font-family="sans-serif" font-size="9" fill="#15803d">f(z) = max(0, z)</text>
-      <text x="18" y="75" font-family="sans-serif" font-size="9" fill="#6b6b63">0</text>
+      <text x="18" y="75" font-family="sans-serif" font-size="9" fill="#6c6c66">0</text>
     </svg>
-    <p style="font-family:sans-serif; font-size:0.78rem; color:#6b6b63; margin-top:0.3rem">f(z) = max(0, z) — zero below 0, linear above 0</p>
+    <p style="font-family:sans-serif; font-size:0.78rem; color:#6c6c66; margin-top:0.3rem">f(z) = max(0, z) — zero below 0, linear above 0</p>
   </div>
   <div class="def-list">
     <div class="def-item">
@@ -143,44 +143,44 @@
     <table style="font-family:sans-serif; font-size:0.8rem; border-collapse:collapse; width:100%; min-width:460px">
       <thead>
         <tr style="background:#f3f4f6">
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Function</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Output range</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Used where</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e8e6e1">Key weakness</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Function</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Output range</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Used where</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Key weakness</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Step</td>
           <td style="padding:0.4rem 0.75rem">{0, 1}</td>
           <td style="padding:0.4rem 0.75rem">Historical only</td>
           <td style="padding:0.4rem 0.75rem">Zero gradient everywhere</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#fafaf8">
           <td style="padding:0.4rem 0.75rem">Sigmoid</td>
           <td style="padding:0.4rem 0.75rem">(0, 1)</td>
           <td style="padding:0.4rem 0.75rem">Binary output layer</td>
           <td style="padding:0.4rem 0.75rem">Vanishing gradient</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Tanh</td>
           <td style="padding:0.4rem 0.75rem">(−1, +1)</td>
           <td style="padding:0.4rem 0.75rem">Hidden layers (older)</td>
           <td style="padding:0.4rem 0.75rem">Vanishing gradient</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#fafaf8">
           <td style="padding:0.4rem 0.75rem; font-weight:700">ReLU ★</td>
           <td style="padding:0.4rem 0.75rem">[0, ∞)</td>
           <td style="padding:0.4rem 0.75rem"><strong>Hidden layers (default)</strong></td>
           <td style="padding:0.4rem 0.75rem">Dying ReLU</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1">
+        <tr style="border-bottom:1px solid #e5e4e0">
           <td style="padding:0.4rem 0.75rem">Leaky ReLU</td>
           <td style="padding:0.4rem 0.75rem">(−∞, ∞)</td>
           <td style="padding:0.4rem 0.75rem">Hidden layers</td>
           <td style="padding:0.4rem 0.75rem">Extra hyperparameter (slope)</td>
         </tr>
-        <tr style="border-bottom:1px solid #e8e6e1; background:#fafaf8">
+        <tr style="border-bottom:1px solid #e5e4e0; background:#fafaf8">
           <td style="padding:0.4rem 0.75rem">Swish</td>
           <td style="padding:0.4rem 0.75rem">(−∞, ∞)</td>
           <td style="padding:0.4rem 0.75rem">Deep hidden layers</td>
@@ -232,22 +232,22 @@
   <div class="diagram" style="padding:1.2rem">
     <div style="font-family:sans-serif; font-size:0.85rem; display:flex; flex-direction:column; gap:0.6rem">
       <div style="display:flex; align-items:center; gap:1rem">
-        <div style="background:#dbeafe; border:1.5px solid #2563eb; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#1d4ed8">① Forward Pass</div>
-        <div style="color:#374151; font-size:0.875rem">Input flows left→right through all layers. Each layer computes <code>z = Wx + b</code>, then <code>a = f(z)</code>. Final layer produces prediction ŷ.</div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#2c5e5c">① Forward Pass</div>
+        <div style="color:#2a2a28; font-size:0.875rem">Input flows left→right through all layers. Each layer computes <code>z = Wx + b</code>, then <code>a = f(z)</code>. Final layer produces prediction ŷ.</div>
       </div>
       <div style="display:flex; align-items:center; gap:1rem">
-        <div style="background:#fce7f3; border:1.5px solid #db2777; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#9d174d">② Compute Loss</div>
-        <div style="color:#374151; font-size:0.875rem">Compare ŷ (predicted) to y (true label) using the loss function. Get a single number: how wrong were we?</div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#2c5e5c">② Compute Loss</div>
+        <div style="color:#2a2a28; font-size:0.875rem">Compare ŷ (predicted) to y (true label) using the loss function. Get a single number: how wrong were we?</div>
       </div>
       <div style="display:flex; align-items:center; gap:1rem">
-        <div style="background:#dcfce7; border:1.5px solid #16a34a; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#15803d">③ Backward Pass</div>
-        <div style="color:#374151; font-size:0.875rem">Compute how much each weight contributed to the loss. Flow gradients right→left through all layers using the <strong>chain rule</strong>. This is <strong>backpropagation</strong>.</div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#2c5e5c">③ Backward Pass</div>
+        <div style="color:#2a2a28; font-size:0.875rem">Compute how much each weight contributed to the loss. Flow gradients right→left through all layers using the <strong>chain rule</strong>. This is <strong>backpropagation</strong>.</div>
       </div>
       <div style="display:flex; align-items:center; gap:1rem">
-        <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#92400e">④ Update Weights</div>
-        <div style="color:#374151; font-size:0.875rem">Adjust every weight by a small step in the direction that reduces loss: <code>w ← w − η · ∂L/∂w</code>. (η is the learning rate.)</div>
+        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; min-width:110px; text-align:center; font-weight:700; color:#2c5e5c">④ Update Weights</div>
+        <div style="color:#2a2a28; font-size:0.875rem">Adjust every weight by a small step in the direction that reduces loss: <code>w ← w − η · ∂L/∂w</code>. (η is the learning rate.)</div>
       </div>
-      <div style="text-align:center; color:#6b6b63; font-size:0.8rem; margin-top:0.25rem">↺ Repeat for every batch until loss converges</div>
+      <div style="text-align:center; color:#6c6c66; font-size:0.8rem; margin-top:0.25rem">↺ Repeat for every batch until loss converges</div>
     </div>
   </div>
 
@@ -296,15 +296,15 @@
 
   <div class="diagram" style="padding:1rem 1.5rem">
     <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
-      <div style="background:#fef3c7; border:1.5px solid #b45309; border-radius:8px; padding:1rem">
-        <div style="font-weight:700; color:#92400e; margin-bottom:0.4rem">📉 Vanishing</div>
-        <div style="color:#451a03">gradient × gradient × … ≈ <strong>0</strong><br>Early layers freeze. Network learns poorly.</div>
-        <div style="margin-top:0.6rem; font-size:0.78rem; color:#78350f"><strong>Fix:</strong> ReLU · Batch Norm · ResNet skip connections</div>
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.4rem">📉 Vanishing</div>
+        <div style="color:#2a2a28">gradient × gradient × … ≈ <strong>0</strong><br>Early layers freeze. Network learns poorly.</div>
+        <div style="margin-top:0.6rem; font-size:0.78rem; color:#2a2a28"><strong>Fix:</strong> ReLU · Batch Norm · ResNet skip connections</div>
       </div>
-      <div style="background:#fee2e2; border:1.5px solid #dc2626; border-radius:8px; padding:1rem">
-        <div style="font-weight:700; color:#991b1b; margin-bottom:0.4rem">📈 Exploding</div>
-        <div style="color:#7f1d1d">gradient × gradient × … = <strong>∞</strong><br>Weights blow up. Training diverges.</div>
-        <div style="margin-top:0.6rem; font-size:0.78rem; color:#9b1c1c"><strong>Fix:</strong> Gradient clipping · Xavier/He init</div>
+      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:1rem">
+        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.4rem">📈 Exploding</div>
+        <div style="color:#2a2a28">gradient × gradient × … = <strong>∞</strong><br>Weights blow up. Training diverges.</div>
+        <div style="margin-top:0.6rem; font-size:0.78rem; color:#2a2a28"><strong>Fix:</strong> Gradient clipping · Xavier/He init</div>
       </div>
     </div>
   </div>
