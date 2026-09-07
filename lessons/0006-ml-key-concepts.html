@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 06 — Key ML Concepts</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 02 · Lesson 6 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <div class="plate-num">06</div>
     <h1>Key ML Concepts: Gradient Descent, Hyperparameters & Cross-Validation</h1>
     <p class="subtitle">How a model actually learns — and how you tune and evaluate it properly.</p>
   </header>
@@ -28,76 +46,68 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Step 1 — Measure the error (Loss)</div>
-      The model makes a prediction. We compare it to the correct answer and calculate how wrong it was. This "wrongness" score is called the <strong>loss</strong> (or cost). Lower loss = better model.
+      <div class="def-term">Step 1 — Measure the error (Loss)</div>The model makes a prediction. We compare it to the correct answer and calculate how wrong it was. This "wrongness" score is called the <strong>loss</strong> (or cost). Lower loss = better model.
     </div>
     <div class="def-item">
-      <div class="def-term">Step 2 — Calculate the gradient</div>
-      A <strong>gradient</strong> tells you the direction and steepness of the loss curve — like knowing which way is "downhill." Mathematically it's a derivative: how much does the loss change if you nudge each parameter slightly?
+      <div class="def-term">Step 2 — Calculate the gradient</div>A <strong>gradient</strong> tells you the direction and steepness of the loss curve — like knowing which way is "downhill." Mathematically it's a derivative: how much does the loss change if you nudge each parameter slightly?
     </div>
     <div class="def-item">
-      <div class="def-term">Step 3 — Update parameters</div>
-      Move each parameter a small step in the direction that <em>reduces</em> the loss. Repeat thousands of times until the loss stops decreasing.
+      <div class="def-term">Step 3 — Update parameters</div>Move each parameter a small step in the direction that <em>reduces</em> the loss. Repeat thousands of times until the loss stops decreasing.
     </div>
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy — Hiking Down a Mountain Blindfolded</div>
-    Imagine you're dropped blindfolded onto a mountain and need to find the lowest valley. You can't see far, but you can feel the slope under your feet. You take a step in whichever direction feels most downhill. Repeat. Eventually you reach a low point. That's gradient descent — the "mountain" is the loss landscape, the "valley" is the minimum loss.
+    <div class="callout-title">Analogy — Hiking Down a Mountain Blindfolded</div>Imagine you're dropped blindfolded onto a mountain and need to find the lowest valley. You can't see far, but you can feel the slope under your feet. You take a step in whichever direction feels most downhill. Repeat. Eventually you reach a low point. That's gradient descent — the "mountain" is the loss landscape, the "valley" is the minimum loss.
   </div>
 
   <div class="diagram" style="text-align:center; padding:1.5rem 1rem">
     <svg viewBox="0 0 400 180" width="380" xmlns="http://www.w3.org/2000/svg">
       <!-- Curve -->
-      <path d="M 30 30 Q 200 200 370 20" stroke="#3b7a77" stroke-width="2.5" fill="none"/>
+      <path d="M 30 30 Q 200 200 370 20" stroke-width="2.5" fill="none" style="stroke:var(--line)"/>
       <!-- Steps down the curve -->
-      <circle cx="80" cy="80" r="6" fill="#eef7f6" stroke="#3b7a77"/>
-      <circle cx="130" cy="118" r="6" fill="#a9d5d3" stroke="#2c5e5c"/>
-      <circle cx="185" cy="148" r="6" fill="#5aafab" stroke="#2c5e5c"/>
-      <circle cx="240" cy="155" r="5" fill="#2f605e"/>
-      <circle cx="295" cy="138" r="4" fill="#193432"/>
+      <circle cx="80" cy="80" r="6" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <circle cx="130" cy="118" r="6" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <circle cx="185" cy="148" r="6" style="fill:var(--line); stroke:var(--ink)"/>
+      <circle cx="240" cy="155" r="5" style="fill:var(--ink)"/>
+      <circle cx="295" cy="138" r="4" style="fill:var(--ink)"/>
       <!-- Arrows -->
-      <line x1="80" y1="80" x2="124" y2="115" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#arr)"/>
-      <line x1="130" y1="118" x2="179" y2="145" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#arr)"/>
-      <line x1="185" y1="148" x2="234" y2="154" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="80" y1="80" x2="124" y2="115" stroke-width="1.5" marker-end="url(#arr)" style="stroke:var(--ink-2)"/>
+      <line x1="130" y1="118" x2="179" y2="145" stroke-width="1.5" marker-end="url(#arr)" style="stroke:var(--ink-2)"/>
+      <line x1="185" y1="148" x2="234" y2="154" stroke-width="1.5" marker-end="url(#arr)" style="stroke:var(--ink-2)"/>
       <defs>
         <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L6,3 L0,6 Z" fill="#6c6c66"/>
+          <path d="M0,0 L6,3 L0,6 Z" style="fill:var(--ink-2)"/>
         </marker>
       </defs>
       <!-- Labels -->
-      <text x="72" y="70" font-family="sans-serif" font-size="10" fill="#193432">Start</text>
-      <text x="230" y="172" font-family="sans-serif" font-size="10" fill="#193432">Minimum (best)</text>
+      <text x="72" y="70" font-family="sans-serif" font-size="10" style="fill:var(--ink)">Start</text>
+      <text x="230" y="172" font-family="sans-serif" font-size="10" style="fill:var(--ink)">Minimum (best)</text>
       <!-- Axes -->
-      <text x="10" y="100" font-family="sans-serif" font-size="10" fill="#6c6c66" transform="rotate(-90,10,100)">Loss</text>
-      <text x="180" y="178" font-family="sans-serif" font-size="10" fill="#6c6c66">Parameters</text>
+      <text x="10" y="100" font-family="sans-serif" font-size="10" transform="rotate(-90,10,100)" style="fill:var(--ink-2)">Loss</text>
+      <text x="180" y="178" font-family="sans-serif" font-size="10" style="fill:var(--ink-2)">Parameters</text>
     </svg>
-    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">Each step moves parameters toward the minimum loss</p>
+    <p class="diagram-caption">Each step moves parameters toward the minimum loss</p>
   </div>
 
   <h3>Three Variants of Gradient Descent</h3>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Batch Gradient Descent (BGD)</div>
-      Calculates the gradient using the <em>entire training dataset</em> before taking one step. <br>
+      <div class="def-term">Batch Gradient Descent (BGD)</div>Calculates the gradient using the <em>entire training dataset</em> before taking one step. <br>
       <strong>Pro:</strong> Smooth, stable convergence. <strong>Con:</strong> Very slow on large datasets — one step requires processing all data.
     </div>
     <div class="def-item">
-      <div class="def-term">Stochastic Gradient Descent (SGD)</div>
-      Takes a step after <em>each single training example</em>. <br>
+      <div class="def-term">Stochastic Gradient Descent (SGD)</div>Takes a step after <em>each single training example</em>. <br>
       <strong>Pro:</strong> Very fast updates, can escape local minima. <strong>Con:</strong> Noisy — the loss bounces around rather than descending smoothly.
     </div>
     <div class="def-item">
-      <div class="def-term">Mini-batch Gradient Descent (MBGD)</div>
-      Takes a step after each small <em>batch</em> (e.g. 32 or 64 examples). <br>
+      <div class="def-term">Mini-batch Gradient Descent (MBGD)</div>Takes a step after each small <em>batch</em> (e.g. 32 or 64 examples). <br>
       <strong>Pro:</strong> Best of both worlds — faster than BGD, smoother than SGD. <strong>This is the standard in practice.</strong>
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all three variants. The practical standard is <strong>Mini-batch Gradient Descent</strong>. BGD uses all data; SGD uses one sample; MBGD uses a small batch. "Batch size" is a hyperparameter you choose.
+    <div class="callout-title">Exam Alert</div>Know all three variants. The practical standard is <strong>Mini-batch Gradient Descent</strong>. BGD uses all data; SGD uses one sample; MBGD uses a small batch. "Batch size" is a hyperparameter you choose.
   </div>
 
   <!-- ───────────── SECTION 2: Parameters vs Hyperparameters ───────────── -->
@@ -106,26 +116,26 @@
   <p>These two terms are easy to confuse. The distinction is about <em>who sets them</em>.</p>
 
   <div class="diagram" style="text-align:left; padding:1.5rem">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-family:sans-serif; font-size:0.875rem;">
-      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Parameters</div>
-        <ul style="color:#2a2a28; margin:0 0 0 1rem">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-family:var(--font-plate); font-size:0.875rem;">
+      <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Parameters</div>
+        <ul style="color:var(--ink); margin:0 0 0 1rem">
           <li>Learned automatically by the model during training</li>
           <li>You never set these manually</li>
           <li>Change with every training run</li>
         </ul>
-        <div style="margin-top:0.75rem; font-size:0.8rem; color:#2c5e5c">
+        <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--ink)">
           <strong>Examples:</strong> weights and biases in a neural network, coefficients in linear regression
         </div>
       </div>
-      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Hyperparameters</div>
-        <ul style="color:#2a2a28; margin:0 0 0 1rem">
+      <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Hyperparameters</div>
+        <ul style="color:var(--ink); margin:0 0 0 1rem">
           <li>Set by <em>you</em> before training begins</li>
           <li>Control how training happens</li>
           <li>Not learned from data</li>
         </ul>
-        <div style="margin-top:0.75rem; font-size:0.8rem; color:#2c5e5c">
+        <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--ink)">
           <strong>Examples:</strong> learning rate, number of layers, batch size, number of trees in a forest, max tree depth
         </div>
       </div>
@@ -133,8 +143,7 @@
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Think of baking bread. <strong>Hyperparameters</strong> are the settings you choose before baking: oven temperature (200°C), baking time (30 min), flour amount. <strong>Parameters</strong> are what the bread becomes: its texture, crust, rise — determined by the baking process itself, not chosen in advance.
+    <div class="callout-title">Analogy</div>Think of baking bread. <strong>Hyperparameters</strong> are the settings you choose before baking: oven temperature (200°C), baking time (30 min), flour amount. <strong>Parameters</strong> are what the bread becomes: its texture, crust, rise — determined by the baking process itself, not chosen in advance.
   </div>
 
   <h3>The Learning Rate — The Most Important Hyperparameter</h3>
@@ -160,30 +169,25 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">① Grid Search</div>
-      Define a grid of values to try for each hyperparameter. Train a model for every combination. Pick the best.<br><br>
+      <div class="def-term">① Grid Search</div>Define a grid of values to try for each hyperparameter. Train a model for every combination. Pick the best.<br><br>
       <em>Example:</em> Try learning rates [0.001, 0.01, 0.1] × batch sizes [16, 32, 64] = 9 combinations, train all 9.<br><br>
       <strong>Pro:</strong> Exhaustive — guaranteed to find the best within the grid. <strong>Con:</strong> Exponentially slow as you add more hyperparameters.
     </div>
     <div class="def-item">
-      <div class="def-term">② Random Search</div>
-      Randomly sample hyperparameter combinations and train on each. Stop after a budget of trials.<br><br>
+      <div class="def-term">② Random Search</div>Randomly sample hyperparameter combinations and train on each. Stop after a budget of trials.<br><br>
       <strong>Pro:</strong> Much faster than grid search and often finds good results sooner (random samples cover the space more efficiently). <strong>Con:</strong> Not exhaustive — might miss the best combination.
     </div>
     <div class="def-item">
-      <div class="def-term">③ Heuristic / Intelligent Search</div>
-      Use domain knowledge or evolutionary algorithms (genetic algorithms, etc.) to guide the search toward promising regions. Smarter than random but requires more setup.
+      <div class="def-term">③ Heuristic / Intelligent Search</div>Use domain knowledge or evolutionary algorithms (genetic algorithms, etc.) to guide the search toward promising regions. Smarter than random but requires more setup.
     </div>
     <div class="def-item">
-      <div class="def-term">④ Bayesian Search (Bayesian Optimization)</div>
-      Builds a probabilistic model of which hyperparameter combinations are likely to work well, based on results so far. Uses that model to pick the <em>most promising</em> next combination to try. <br><br>
+      <div class="def-term">④ Bayesian Search (Bayesian Optimization)</div>Builds a probabilistic model of which hyperparameter combinations are likely to work well, based on results so far. Uses that model to pick the <em>most promising</em> next combination to try. <br><br>
       <strong>Pro:</strong> Far more efficient than grid or random — learns from previous trials to focus on good regions. <strong>Con:</strong> More complex to implement. <strong>This is the state-of-the-art in practice.</strong>
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all four methods in order of sophistication: <strong>Grid Search</strong> (exhaustive, slow) → <strong>Random Search</strong> (faster, good coverage) → <strong>Heuristic Search</strong> (domain-guided) → <strong>Bayesian Search</strong> (learns from previous trials, most efficient). Bayesian is most efficient; Grid is simplest.
+    <div class="callout-title">Exam Alert</div>Know all four methods in order of sophistication: <strong>Grid Search</strong> (exhaustive, slow) → <strong>Random Search</strong> (faster, good coverage) → <strong>Heuristic Search</strong> (domain-guided) → <strong>Bayesian Search</strong> (learns from previous trials, most efficient). Bayesian is most efficient; Grid is simplest.
   </div>
 
   <!-- ───────────── SECTION 4: Cross-Validation ───────────── -->
@@ -196,57 +200,56 @@
   <h3>K-Fold Cross-Validation (the standard method)</h3>
 
   <div class="diagram" style="padding:1.2rem 1rem">
-    <div style="font-family:sans-serif; font-size:0.82rem">
-      <div style="color:#6c6c66; margin-bottom:0.75rem">Example: 5-Fold Cross-Validation (k=5)</div>
+    <div style="font-family:var(--font-plate); font-size:0.82rem">
+      <div style="color:var(--ink-2); margin-bottom:0.75rem">Example: 5-Fold Cross-Validation (k=5)</div>
       <!-- Each fold -->
       <div style="display:flex; flex-direction:column; gap:0.4rem">
         <!-- fold 1 -->
         <div style="display:flex; align-items:center; gap:0.4rem">
-          <div style="width:3rem; color:#6c6c66; font-size:0.75rem">Fold 1</div>
-          <div style="flex:1; background:#3b7a77; color:white; border-radius:5px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="width:3rem; color:var(--ink-2); font-size:0.75rem">Fold 1</div>
+          <div style="flex:1; background:var(--line); color:white; border-radius:2px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
         </div>
         <!-- fold 2 -->
         <div style="display:flex; align-items:center; gap:0.4rem">
-          <div style="width:3rem; color:#6c6c66; font-size:0.75rem">Fold 2</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#3b7a77; color:white; border-radius:5px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="width:3rem; color:var(--ink-2); font-size:0.75rem">Fold 2</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--line); color:white; border-radius:2px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
         </div>
         <!-- fold 3 -->
         <div style="display:flex; align-items:center; gap:0.4rem">
-          <div style="width:3rem; color:#6c6c66; font-size:0.75rem">Fold 3</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#3b7a77; color:white; border-radius:5px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="width:3rem; color:var(--ink-2); font-size:0.75rem">Fold 3</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--line); color:white; border-radius:2px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
         </div>
         <!-- fold 4 -->
         <div style="display:flex; align-items:center; gap:0.4rem">
-          <div style="width:3rem; color:#6c6c66; font-size:0.75rem">Fold 4</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#3b7a77; color:white; border-radius:5px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="width:3rem; color:var(--ink-2); font-size:0.75rem">Fold 4</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--line); color:white; border-radius:2px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
         </div>
         <!-- fold 5 -->
         <div style="display:flex; align-items:center; gap:0.4rem">
-          <div style="width:3rem; color:#6c6c66; font-size:0.75rem">Fold 5</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#e4f0ef; color:#2c5e5c; border-radius:5px; padding:0.25rem 0.5rem; text-align:center">train</div>
-          <div style="flex:1; background:#3b7a77; color:white; border-radius:5px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
+          <div style="width:3rem; color:var(--ink-2); font-size:0.75rem">Fold 5</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--fill-0); color:var(--ink); border-radius:2px; padding:0.25rem 0.5rem; text-align:center">train</div>
+          <div style="flex:1; background:var(--line); color:white; border-radius:2px; padding:0.25rem 0.5rem; text-align:center; font-weight:700">TEST</div>
         </div>
-        <div style="margin-top:0.6rem; color:#6c6c66; font-size:0.8rem; text-align:center">
-          Final score = average of all 5 test scores
+        <div style="margin-top:0.6rem; color:var(--ink-2); font-size:0.8rem; text-align:center">Final score = average of all 5 test scores
         </div>
       </div>
     </div>
@@ -262,8 +265,7 @@
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Cross-validation purpose: get a <strong>more reliable performance estimate</strong> by testing on multiple different splits and averaging. K-Fold CV splits data into k parts, trains k times (each time using a different fold as test), then averages. It does <strong>not</strong> replace the final test set — it's used during model development to compare models or tune hyperparameters.
+    <div class="callout-title">Exam Alert</div>Cross-validation purpose: get a <strong>more reliable performance estimate</strong> by testing on multiple different splits and averaging. K-Fold CV splits data into k parts, trains k times (each time using a different fold as test), then averages. It does <strong>not</strong> replace the final test set — it's used during model development to compare models or tune hyperparameters.
   </div>
 
   <!-- ───────────── QUIZ ───────────── -->
@@ -279,7 +281,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">A loss value — it measures how wrong the model is</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -292,7 +294,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">Bayesian Gradient Descent (BayGD)</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -305,7 +307,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">Heuristic Search</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -318,7 +320,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',true)">Bayesian Search</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -331,12 +333,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">10 times — each fold is used as train and test</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>Gradient Descent: measure loss → compute gradient → update parameters → repeat</li>
@@ -359,8 +361,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0005-ml-process.html">← Lesson 05: The ML Process</a>
-    <a href="0007-ml-algorithms.html" class="nav-next">Next: ML Algorithms →</a>
+    <a href="0005-ml-process.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 05: The ML Process</a>
+    <a href="0007-ml-algorithms.html" class="nav-next">Next: ML Algorithms <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -403,7 +405,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

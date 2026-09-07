@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 04 — Machine Learning Overview</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 02 · Lesson 4 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <div class="plate-num">04</div>
     <h1>What Is Machine Learning — and What Can It Solve?</h1>
     <p class="subtitle">The four types of ML, three problem categories, and why ML beats writing rules by hand.</p>
   </header>
@@ -25,24 +43,22 @@
   <p>Before ML existed, programmers solved problems by writing explicit rules. Let's see why that falls short — and what ML does differently.</p>
 
   <div class="diagram" style="text-align:left; padding:1.5rem">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-family:sans-serif; font-size:0.875rem;">
-      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">🔧 Traditional Rule-Based</div>
-        <div style="color:#2a2a28">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-family:var(--font-plate); font-size:0.875rem;">
+      <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem"> Traditional Rule-Based</div>
+        <div style="color:var(--ink)">
           <strong>Input:</strong> Data + Hand-written Rules<br>
-          <strong>Output:</strong> Answers<br><br>
-          A human expert studies the problem, writes IF-THEN rules, and programs them in. The machine just follows those rules.
+          <strong>Output:</strong> Answers<br><br>A human expert studies the problem, writes IF-THEN rules, and programs them in. The machine just follows those rules.
           <br><br>
           <em>Works great when:</em> rules are simple and don't change.
           <br><em>Breaks when:</em> rules are too complex or unknown (e.g. "what does a cat look like?").
         </div>
       </div>
-      <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">🧠 Machine Learning</div>
-        <div style="color:#2a2a28">
+      <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem"> Machine Learning</div>
+        <div style="color:var(--ink)">
           <strong>Input:</strong> Data + Answers<br>
-          <strong>Output:</strong> Rules (learned automatically)<br><br>
-          You give the machine examples of inputs and correct outputs. It figures out the rules itself.
+          <strong>Output:</strong> Rules (learned automatically)<br><br>You give the machine examples of inputs and correct outputs. It figures out the rules itself.
           <br><br>
           <em>Works great when:</em> you have lots of data but can't write the rules.
           <br><em>Breaks when:</em> data is scarce, low quality, or biased.
@@ -52,8 +68,7 @@
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Teaching a child to recognize dogs. <br>
+    <div class="callout-title">Analogy</div>Teaching a child to recognize dogs. <br>
     <strong>Rule-based:</strong> "A dog has four legs, fur, a snout, a tail, ears…" — but a cat also fits! Rules can't capture everything. <br>
     <strong>ML:</strong> Show the child 1,000 photos labelled "dog" and "not dog." They learn what a dog looks like without you ever defining it explicitly.
   </div>
@@ -68,8 +83,7 @@
   </ul>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the key difference: Traditional programming = <strong>Data + Rules → Answers</strong>. Machine Learning = <strong>Data + Answers → Rules</strong>. The direction of "rules" is flipped.
+    <div class="callout-title">Exam Alert</div>Know the key difference: Traditional programming = <strong>Data + Rules → Answers</strong>. Machine Learning = <strong>Data + Answers → Rules</strong>. The direction of "rules" is flipped.
   </div>
 
   <!-- ───────────── SECTION 2 ───────────── -->
@@ -79,8 +93,7 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">📂 Classification — "Which category does this belong to?"</div>
-      The output is a <em>discrete label</em> from a fixed set of categories.<br><br>
+      <div class="def-term">Classification — "Which category does this belong to?"</div>The output is a <em>discrete label</em> from a fixed set of categories.<br><br>
       <strong>Examples:</strong>
       <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
         <li>Email → spam or not spam (2 categories)</li>
@@ -90,8 +103,7 @@
       </ul>
     </div>
     <div class="def-item">
-      <div class="def-term">📈 Regression — "What number will this be?"</div>
-      The output is a <em>continuous numeric value</em>.<br><br>
+      <div class="def-term">Regression — "What number will this be?"</div>The output is a <em>continuous numeric value</em>.<br><br>
       <strong>Examples:</strong>
       <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
         <li>House → predicted sale price ($342,000)</li>
@@ -101,8 +113,7 @@
       </ul>
     </div>
     <div class="def-item">
-      <div class="def-term">🔵 Clustering — "Which things are similar to each other?"</div>
-      There are <em>no labels</em> — the machine discovers natural groupings in the data.<br><br>
+      <div class="def-term">Clustering — "Which things are similar to each other?"</div>There are <em>no labels</em> — the machine discovers natural groupings in the data.<br><br>
       <strong>Examples:</strong>
       <ul style="margin:0.4rem 0 0 1rem; font-size:0.9rem">
         <li>Customers → group by purchasing behaviour (without pre-defined segments)</li>
@@ -114,8 +125,7 @@
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    The key distinguisher: <strong>Classification</strong> → discrete label (one of a fixed set). <strong>Regression</strong> → continuous number. <strong>Clustering</strong> → no labels, discover groups. A common trick question: "predict tomorrow's temperature" is regression, not classification, because the answer is a number on a continuous scale.
+    <div class="callout-title">Exam Alert</div>The key distinguisher: <strong>Classification</strong> → discrete label (one of a fixed set). <strong>Regression</strong> → continuous number. <strong>Clustering</strong> → no labels, discover groups. A common trick question: "predict tomorrow's temperature" is regression, not classification, because the answer is a number on a continuous scale.
   </div>
 
   <!-- ───────────── SECTION 3 ───────────── -->
@@ -128,8 +138,7 @@
   <p>The training data is <strong>labelled</strong> — every input comes with the correct answer. The model learns by comparing its predictions to the known correct answers.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    A student learning from a textbook with an answer key. Every practice problem has a correct answer — the student checks their work and corrects their mistakes.
+    <div class="callout-title">Analogy</div>A student learning from a textbook with an answer key. Every practice problem has a correct answer — the student checks their work and corrects their mistakes.
   </div>
 
   <p><strong>Used for:</strong> Classification and Regression tasks (when you have labelled data).</p>
@@ -140,8 +149,7 @@
   <p>The training data is <strong>unlabelled</strong> — no correct answers given. The model must find its own structure in the data.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Sorting a pile of foreign coins you've never seen before. Nobody tells you the categories — you group them yourself by size, colour, and markings. You might make 3 groups or 5; there's no single "correct" answer.
+    <div class="callout-title">Analogy</div>Sorting a pile of foreign coins you've never seen before. Nobody tells you the categories — you group them yourself by size, colour, and markings. You might make 3 groups or 5; there's no single "correct" answer.
   </div>
 
   <p><strong>Used for:</strong> Clustering, dimensionality reduction, anomaly detection.</p>
@@ -152,8 +160,7 @@
   <p>Uses a <strong>small amount of labelled data</strong> plus a <strong>large amount of unlabelled data</strong>. The labelled data guides learning; the unlabelled data helps the model understand the structure.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    A student who has 10 solved examples and 1,000 unsolved ones. They use the 10 solved problems to understand the pattern, then apply it to make sense of the other 1,000.
+    <div class="callout-title">Analogy</div>A student who has 10 solved examples and 1,000 unsolved ones. They use the 10 solved problems to understand the pattern, then apply it to make sense of the other 1,000.
   </div>
 
   <p><strong>Why it matters:</strong> Labelling data is expensive and slow (humans have to do it). In the real world, you often have millions of unlabelled data points but only thousands of labelled ones. Semi-supervised learning makes the most of both.</p>
@@ -164,8 +171,7 @@
   <p>An <strong>agent</strong> takes actions in an <strong>environment</strong>, receives <strong>rewards</strong> for good actions and <strong>penalties</strong> for bad ones, and learns to maximise cumulative reward over time. There's no labelled dataset — only feedback from the environment.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Training a dog with treats. You don't explain the rules — you reward good behaviour and ignore or correct bad behaviour. Over many repetitions, the dog learns the optimal strategy.
+    <div class="callout-title">Analogy</div>Training a dog with treats. You don't explain the rules — you reward good behaviour and ignore or correct bad behaviour. Over many repetitions, the dog learns the optimal strategy.
   </div>
 
   <p><strong>Key terms:</strong></p>
@@ -187,8 +193,7 @@
   <p><strong>Examples:</strong> AlphaGo (mastered Go), robot locomotion, game-playing agents (Atari, chess), recommendation systems, autonomous driving.</p>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all four types and their key traits:<br>
+    <div class="callout-title">Exam Alert</div>Know all four types and their key traits:<br>
     <strong>Supervised</strong> = labelled data, learns from correct answers<br>
     <strong>Unsupervised</strong> = unlabelled data, finds structure itself<br>
     <strong>Semi-supervised</strong> = small labelled + large unlabelled<br>
@@ -199,9 +204,9 @@
   <h2>4. Quick Comparison Table</h2>
 
   <div class="diagram" style="text-align:left; padding:1rem 1.5rem">
-    <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:0.85rem;">
+    <table style="width:100%; border-collapse:collapse; font-family:var(--font-plate); font-size:0.85rem;">
       <thead>
-        <tr style="background:#e4f0ef; color:#2c5e5c">
+        <tr style="background:var(--fill-0); color:var(--ink)">
           <th style="padding:0.6rem 0.8rem; text-align:left">Type</th>
           <th style="padding:0.6rem 0.8rem; text-align:left">Training Data</th>
           <th style="padding:0.6rem 0.8rem; text-align:left">Feedback Signal</th>
@@ -209,25 +214,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e5e4e0">
+        <tr style="border-bottom:1px solid var(--rule)">
           <td style="padding:0.6rem 0.8rem; font-weight:700">Supervised</td>
           <td style="padding:0.6rem 0.8rem">Labelled</td>
           <td style="padding:0.6rem 0.8rem">Correct answers</td>
           <td style="padding:0.6rem 0.8rem">Classification, Regression</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+        <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
           <td style="padding:0.6rem 0.8rem; font-weight:700">Unsupervised</td>
           <td style="padding:0.6rem 0.8rem">Unlabelled</td>
           <td style="padding:0.6rem 0.8rem">None — self-organised</td>
           <td style="padding:0.6rem 0.8rem">Clustering, Compression</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0">
+        <tr style="border-bottom:1px solid var(--rule)">
           <td style="padding:0.6rem 0.8rem; font-weight:700">Semi-supervised</td>
           <td style="padding:0.6rem 0.8rem">Small labelled + large unlabelled</td>
           <td style="padding:0.6rem 0.8rem">Partial correct answers</td>
           <td style="padding:0.6rem 0.8rem">Classification (data-scarce)</td>
         </tr>
-        <tr style="background:#f7f7f6">
+        <tr style="background:var(--plate)">
           <td style="padding:0.6rem 0.8rem; font-weight:700">Reinforcement</td>
           <td style="padding:0.6rem 0.8rem">No dataset — environment</td>
           <td style="padding:0.6rem 0.8rem">Reward / penalty</td>
@@ -250,7 +255,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">Reinforcement Learning</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -263,7 +268,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',true)">Unsupervised Learning</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -276,7 +281,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">Input: Rules only → Output: Data and Answers</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -289,7 +294,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',true)">Reinforcement Learning</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -302,12 +307,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">Reinforcement Learning</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>ML vs Rules: ML = Data + Answers → Rules (reversed from traditional programming)</li>
@@ -330,8 +335,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0003-deepseek-applications-pangu.html">← Lesson 03: DeepSeek & PanGu</a>
-    <a href="0005-ml-process.html" class="nav-next">Next: The ML Process →</a>
+    <a href="0003-deepseek-applications-pangu.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 03: DeepSeek & PanGu</a>
+    <a href="0005-ml-process.html" class="nav-next">Next: The ML Process <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -374,7 +379,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

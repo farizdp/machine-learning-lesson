@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 05 — The ML Process</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 02 · Lesson 5 &nbsp;|&nbsp; Machine Learning Overview</div>
+    <div class="plate-num">05</div>
     <h1>The ML Process: From Raw Data to Deployed Model</h1>
     <p class="subtitle">How a machine learning project actually works — end to end. Plus: what makes a model good, and why models sometimes fail.</p>
   </header>
@@ -25,44 +43,37 @@
   <p>Building an ML model is not just "feed data → get model." It's a structured process with seven stages. In practice, you loop back through earlier stages constantly.</p>
 
   <div class="diagram" style="padding: 1.2rem 1rem; overflow-x:auto">
-    <div style="display:flex; align-items:center; gap:0; flex-wrap:nowrap; font-family:sans-serif; font-size:0.78rem; min-width:560px">
+    <div style="display:flex; align-items:center; gap:0; flex-wrap:nowrap; min-width:560px; font-family:var(--font-plate); font-size:0.78rem">
       <!-- each step -->
-      <div style="flex:1; background:#eef7f6; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">📦</div>
+      <div style="flex:1; background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Data<br>Preparation</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#eef7f6; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">🧹</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Data<br>Pre-processing</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#eef7f6; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">🔍</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Feature<br>Selection</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#cbe6e5; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">🏋️</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-1); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Model<br>Training</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#cbe6e5; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">📊</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-1); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Model<br>Evaluation</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#a9d5d3; border:1.5px solid #193432; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">🚀</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-2); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Deployment<br>& Integration</div>
       </div>
-      <div style="color:#6c6c66; font-size:1rem; padding:0 0.2rem">→</div>
-      <div style="flex:1; background:#a9d5d3; border:1.5px solid #193432; border-radius:6px; padding:0.5rem 0.3rem; text-align:center; color:#193432">
-        <div style="font-size:1.1rem">🔁</div>
+      <div style="color:var(--ink-2); font-size:1rem; padding:0 0.2rem"><span class="conn" aria-hidden="true"></span></div>
+      <div style="flex:1; background:var(--fill-2); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.3rem; text-align:center; color:var(--ink)">
         <div style="font-weight:700; margin-top:0.2rem">Feedback<br>& Iteration</div>
       </div>
     </div>
-    <p style="color:#6c6c66; font-size:0.78rem; margin-top:0.75rem; text-align:center">Real projects loop back constantly — especially from Evaluation back to Data or Features</p>
+    <p class="diagram-caption">Real projects loop back constantly — especially from Evaluation back to Data or Features</p>
   </div>
 
   <!-- ───────────── SECTION 2: Dataset ───────────── -->
@@ -72,25 +83,21 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">🏋️ Training Set (~70–80% of data)</div>
-      The model <em>learns</em> from this data. It sees the inputs and the correct outputs, and adjusts its internal parameters to get better at predicting the right answers.
+      <div class="def-term">Training Set (~70–80% of data)</div>The model <em>learns</em> from this data. It sees the inputs and the correct outputs, and adjusts its internal parameters to get better at predicting the right answers.
     </div>
     <div class="def-item">
-      <div class="def-term">🧪 Test Set (~20–30% of data)</div>
-      The model has <strong>never seen</strong> this data during training. After training is complete, you use the test set to measure how well the model actually performs on new, unseen examples — simulating real-world use.
+      <div class="def-term">Test Set (~20–30% of data)</div>The model has <strong>never seen</strong> this data during training. After training is complete, you use the test set to measure how well the model actually performs on new, unseen examples — simulating real-world use.
     </div>
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Think of exam preparation. You study from a practice question book (training set). The real exam questions (test set) are different — you've never seen them before. Your exam score measures whether you truly learned the material, or just memorized the practice questions.
+    <div class="callout-title">Analogy</div>Think of exam preparation. You study from a practice question book (training set). The real exam questions (test set) are different — you've never seen them before. Your exam score measures whether you truly learned the material, or just memorized the practice questions.
   </div>
 
   <p>Why the split matters: a model could memorize all its training examples and score 100% on training — but fail completely on new data. Keeping the test set hidden gives you an honest measure of real performance.</p>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know what each set is for: <strong>Training set = the model learns from it. Test set = measures real-world performance on unseen data.</strong> The test set must never be used during training.
+    <div class="callout-title">Exam Alert</div>Know what each set is for: <strong>Training set = the model learns from it. Test set = measures real-world performance on unseen data.</strong> The test set must never be used during training.
   </div>
 
   <!-- ───────────── SECTION 3: Data Processing ───────────── -->
@@ -134,8 +141,7 @@
   <p><strong>Key technique:</strong> PCA (Principal Component Analysis) — finds the directions of maximum variation and projects the data onto them.</p>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Data processing has three stages: <strong>Cleansing</strong> (fix bad data), <strong>Standardization</strong> (rescale to same range), <strong>Dimensionality Reduction</strong> (fewer features, same information). Know what each stage solves.
+    <div class="callout-title">Exam Alert</div>Data processing has three stages: <strong>Cleansing</strong> (fix bad data), <strong>Standardization</strong> (rescale to same range), <strong>Dimensionality Reduction</strong> (fewer features, same information). Know what each stage solves.
   </div>
 
   <!-- ───────────── SECTION 4: Feature Selection ───────────── -->
@@ -147,28 +153,24 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">① Filter Method</div>
-      Evaluate each feature <em>independently</em>, without involving any model. Score each feature by how well it correlates with the target (e.g. using statistical tests). Fast, but ignores how features interact with each other.
+      <div class="def-term">① Filter Method</div>Evaluate each feature <em>independently</em>, without involving any model. Score each feature by how well it correlates with the target (e.g. using statistical tests). Fast, but ignores how features interact with each other.
       <br><br>
       <em>Analogy:</em> Screening job applicants by looking at their CV score alone, before any interview.
     </div>
     <div class="def-item">
-      <div class="def-term">② Wrapper Method</div>
-      Use the actual model to test different <em>subsets</em> of features. Try all combinations (or smart subsets), train a model on each, and pick the subset that performs best. Slow but accurate.
+      <div class="def-term">② Wrapper Method</div>Use the actual model to test different <em>subsets</em> of features. Try all combinations (or smart subsets), train a model on each, and pick the subset that performs best. Slow but accurate.
       <br><br>
       <em>Analogy:</em> Interviewing every possible team combination to find the best group chemistry.
     </div>
     <div class="def-item">
-      <div class="def-term">③ Embedded Method</div>
-      Feature selection happens <em>during</em> model training itself — the model learns which features are important as part of its optimization. Efficient: one step instead of two.
+      <div class="def-term">③ Embedded Method</div>Feature selection happens <em>during</em> model training itself — the model learns which features are important as part of its optimization. Efficient: one step instead of two.
       <br><br>
       <em>Example:</em> Decision trees and LASSO regression naturally ignore irrelevant features during training.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all three: <strong>Filter</strong> = independent of model (fastest), <strong>Wrapper</strong> = tests feature subsets using a model (most accurate, slowest), <strong>Embedded</strong> = happens inside model training (balanced). A common question gives a scenario and asks which method is being used.
+    <div class="callout-title">Exam Alert</div>Know all three: <strong>Filter</strong> = independent of model (fastest), <strong>Wrapper</strong> = tests feature subsets using a model (most accurate, slowest), <strong>Embedded</strong> = happens inside model training (balanced). A common question gives a scenario and asks which method is being used.
   </div>
 
   <!-- ───────────── SECTION 5: What Makes a Good Model ───────────── -->
@@ -178,16 +180,13 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">🌍 Generalization</div>
-      Performs well on <em>new, unseen data</em> — not just the training data. This is the most important quality. A model that memorizes training examples but fails on new ones is useless in production.
+      <div class="def-term">Generalization</div>Performs well on <em>new, unseen data</em> — not just the training data. This is the most important quality. A model that memorizes training examples but fails on new ones is useless in production.
     </div>
     <div class="def-item">
-      <div class="def-term">💡 Explainability</div>
-      Humans can understand <em>why</em> the model made a decision. Critical in high-stakes domains: a bank must explain why it denied a loan; a doctor must understand why an AI flagged a tumour. Not all models are equally explainable — decision trees are very explainable; deep neural networks are not.
+      <div class="def-term">Explainability</div>Humans can understand <em>why</em> the model made a decision. Critical in high-stakes domains: a bank must explain why it denied a loan; a doctor must understand why an AI flagged a tumour. Not all models are equally explainable — decision trees are very explainable; deep neural networks are not.
     </div>
     <div class="def-item">
-      <div class="def-term">⚡ Prediction Speed</div>
-      Makes predictions fast enough for real-world use. A model that takes 30 seconds to classify one image is useless for a real-time security camera. Speed matters most at deployment, not just during training.
+      <div class="def-term">Prediction Speed</div>Makes predictions fast enough for real-world use. A model that takes 30 seconds to classify one image is useless for a real-time security camera. Speed matters most at deployment, not just during training.
     </div>
   </div>
 
@@ -197,35 +196,31 @@
   <p>The most common failure mode in ML is building a model that doesn't <em>generalize</em>. There are two opposite ways this happens:</p>
 
   <div class="diagram" style="text-align:left; padding:1.5rem">
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; font-family:sans-serif; font-size:0.83rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; font-family:var(--font-plate); font-size:0.83rem;">
 
-      <div style="background:#fde8e8; border:1.5px solid #c12929; border-radius:6px; padding:1rem; text-align:center">
-        <div style="font-size:1.5rem; margin-bottom:0.4rem">😴</div>
-        <div style="font-weight:700; color:#c12929; margin-bottom:0.4rem">Underfitting</div>
-        <div style="color:#2a2a28">Model too simple. Doesn't learn the patterns even from training data. Bad on training AND test sets.</div>
-        <div style="margin-top:0.6rem; font-size:0.75rem; color:#2a2a28"><strong>High Bias</strong><br>Low Variance</div>
+      <div style="background:var(--stop-tint); border:1.5px solid var(--stop); border-radius:2px; padding:1rem; text-align:center">
+        <div style="font-weight:700; color:var(--stop); margin-bottom:0.4rem">Underfitting</div>
+        <div style="color:var(--ink)">Model too simple. Doesn't learn the patterns even from training data. Bad on training AND test sets.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:var(--ink)"><strong>High Bias</strong><br>Low Variance</div>
       </div>
 
-      <div style="background:#d8f3e5; border:1.5px solid #1a6b3f; border-radius:6px; padding:1rem; text-align:center">
-        <div style="font-size:1.5rem; margin-bottom:0.4rem">✅</div>
-        <div style="font-weight:700; color:#1a6b3f; margin-bottom:0.4rem">Just Right</div>
-        <div style="color:#2a2a28">Model captures the real pattern. Good on both training AND test sets.</div>
-        <div style="margin-top:0.6rem; font-size:0.75rem; color:#2a2a28"><strong>Low Bias</strong><br>Low Variance</div>
+      <div style="background:var(--go-tint); border:1.5px solid var(--go); border-radius:2px; padding:1rem; text-align:center">
+        <div style="font-weight:700; color:var(--go); margin-bottom:0.4rem">Just Right</div>
+        <div style="color:var(--ink)">Model captures the real pattern. Good on both training AND test sets.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:var(--ink)"><strong>Low Bias</strong><br>Low Variance</div>
       </div>
 
-      <div style="background:#fde8e8; border:1.5px solid #c12929; border-radius:6px; padding:1rem; text-align:center">
-        <div style="font-size:1.5rem; margin-bottom:0.4rem">🧠</div>
-        <div style="font-weight:700; color:#c12929; margin-bottom:0.4rem">Overfitting</div>
-        <div style="color:#2a2a28">Model memorizes training data, including noise. Great on training, poor on test set.</div>
-        <div style="margin-top:0.6rem; font-size:0.75rem; color:#2a2a28">Low Bias<br><strong>High Variance</strong></div>
+      <div style="background:var(--stop-tint); border:1.5px solid var(--stop); border-radius:2px; padding:1rem; text-align:center">
+        <div style="font-weight:700; color:var(--stop); margin-bottom:0.4rem">Overfitting</div>
+        <div style="color:var(--ink)">Model memorizes training data, including noise. Great on training, poor on test set.</div>
+        <div style="margin-top:0.6rem; font-size:0.75rem; color:var(--ink)">Low Bias<br><strong>High Variance</strong></div>
       </div>
 
     </div>
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Imagine studying for an exam:
+    <div class="callout-title">Analogy</div>Imagine studying for an exam:
     <ul style="margin:0.4rem 0 0 1rem">
       <li><strong>Underfitting:</strong> You barely studied. You can't even answer the practice questions.</li>
       <li><strong>Overfitting:</strong> You memorized every single practice question word-for-word. On the real exam — with different wording — you fail completely.</li>
@@ -237,21 +232,17 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Bias — "wrong assumptions"</div>
-      Error from the model being <em>too simple</em> and making wrong assumptions about the data. High bias → underfitting. The model consistently gets things wrong in the same way.
+      <div class="def-term">Bias — "wrong assumptions"</div>Error from the model being <em>too simple</em> and making wrong assumptions about the data. High bias → underfitting. The model consistently gets things wrong in the same way.
     </div>
     <div class="def-item">
-      <div class="def-term">Variance — "too sensitive"</div>
-      Error from the model being <em>too complex</em> and reacting to noise in the training data. High variance → overfitting. Small changes in training data lead to wildly different models.
+      <div class="def-term">Variance — "too sensitive"</div>Error from the model being <em>too complex</em> and reacting to noise in the training data. High variance → overfitting. Small changes in training data lead to wildly different models.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    The bias-variance trade-off: <br>
+    <div class="callout-title">Exam Alert</div>The bias-variance trade-off: <br>
     <strong>High Bias = Underfitting</strong> (too simple, wrong on everything) <br>
-    <strong>High Variance = Overfitting</strong> (too complex, memorizes noise) <br>
-    Good models have <strong>low bias AND low variance</strong> — they generalize well.
+    <strong>High Variance = Overfitting</strong> (too complex, memorizes noise) <br>Good models have <strong>low bias AND low variance</strong> — they generalize well.
   </div>
 
   <h3>How to Fix Overfitting</h3>
@@ -276,7 +267,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">High bias — the model makes wrong assumptions</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -289,7 +280,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">Dimensionality Reduction</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -302,7 +293,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">Training Accuracy — a high training score proves reliability</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -315,7 +306,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">Because the test set contains the labels the model is trying to predict</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -328,12 +319,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">Underfitting — the model has high variance</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>The 7-stage ML pipeline: Data Preparation → Pre-processing → Feature Selection → Training → Evaluation → Deployment → Feedback</li>
@@ -356,8 +347,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0004-ml-overview.html">← Lesson 04: ML Overview</a>
-    <a href="0006-ml-key-concepts.html" class="nav-next">Next: Key ML Concepts →</a>
+    <a href="0004-ml-overview.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 04: ML Overview</a>
+    <a href="0006-ml-key-concepts.html" class="nav-next">Next: Key ML Concepts <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -400,7 +391,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

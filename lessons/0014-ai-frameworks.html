@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 14 — AI Development Frameworks</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 04 · Lesson 14 &nbsp;|&nbsp; AI Development Frameworks</div>
+    <div class="plate-num">14</div>
     <h1>AI Development Frameworks</h1>
     <p class="subtitle">The tools that turn math equations into running code — PyTorch, MindSpore, and how a real model is built.</p>
   </header>
@@ -28,16 +46,13 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Tensor operations</div>
-      A <em>tensor</em> is the generalisation of a matrix to any number of dimensions. Frameworks provide fast, hardware-accelerated (GPU/NPU) tensor math — add, multiply, reshape, transpose — as simple function calls.
+      <div class="def-term">Tensor operations</div>A <em>tensor</em> is the generalisation of a matrix to any number of dimensions. Frameworks provide fast, hardware-accelerated (GPU/NPU) tensor math — add, multiply, reshape, transpose — as simple function calls.
     </div>
     <div class="def-item">
-      <div class="def-term">Automatic differentiation (autograd)</div>
-      The framework tracks every operation you perform and automatically computes the gradient of any output with respect to any input. You never have to derive or code backpropagation by hand.
+      <div class="def-term">Automatic differentiation (autograd)</div>The framework tracks every operation you perform and automatically computes the gradient of any output with respect to any input. You never have to derive or code backpropagation by hand.
     </div>
     <div class="def-item">
-      <div class="def-term">High-level model building blocks</div>
-      Pre-built layers (Linear, Conv2d, LSTM), optimisers (Adam), loss functions (CrossEntropyLoss), and dataset utilities — so you can describe <em>what</em> your network is, not <em>how</em> to compute it.
+      <div class="def-term">High-level model building blocks</div>Pre-built layers (Linear, Conv2d, LSTM), optimisers (Adam), loss functions (CrossEntropyLoss), and dataset utilities — so you can describe <em>what</em> your network is, not <em>how</em> to compute it.
     </div>
   </div>
 
@@ -50,78 +65,75 @@
     <svg viewBox="0 0 480 140" width="480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <defs>
         <marker id="ag" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <polygon points="0 0,7 3.5,0 7" fill="#6c6c66"/>
+          <polygon points="0 0,7 3.5,0 7" style="fill:var(--ink-2)"/>
         </marker>
         <marker id="agr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <polygon points="0 0,7 3.5,0 7" fill="#193432"/>
+          <polygon points="0 0,7 3.5,0 7" style="fill:var(--ink)"/>
         </marker>
       </defs>
 
       <!-- Forward pass -->
-      <text x="4" y="14" font-family="sans-serif" font-size="10" fill="#2c5e5c" font-weight="700">Forward pass →</text>
+      <text x="4" y="14" font-family="sans-serif" font-size="10" font-weight="700" style="fill:var(--ink)">Forward pass →</text>
 
-      <rect x="10"  y="22" width="50" height="28" rx="5" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="35"  y="38" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">x (input)</text>
+      <rect x="10"  y="22" width="50" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="35"  y="38" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">x (input)</text>
 
-      <rect x="80"  y="22" width="50" height="28" rx="5" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="105" y="38" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">W (weight)</text>
+      <rect x="80"  y="22" width="50" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="105" y="38" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">W (weight)</text>
 
-      <line x1="60"  y1="36" x2="148" y2="36" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#ag)"/>
-      <line x1="130" y1="36" x2="148" y2="36" stroke="#6c6c66" stroke-width="1.5"/>
+      <line x1="60"  y1="36" x2="148" y2="36" stroke-width="1.5" marker-end="url(#ag)" style="stroke:var(--ink-2)"/>
+      <line x1="130" y1="36" x2="148" y2="36" stroke-width="1.5" style="stroke:var(--ink-2)"/>
 
-      <rect x="148" y="22" width="50" height="28" rx="5" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="173" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432" font-weight="700">× (matmul)</text>
-      <text x="173" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">z = W·x</text>
+      <rect x="148" y="22" width="50" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="173" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">× (matmul)</text>
+      <text x="173" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">z = W·x</text>
 
-      <line x1="198" y1="36" x2="228" y2="36" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#ag)"/>
+      <line x1="198" y1="36" x2="228" y2="36" stroke-width="1.5" marker-end="url(#ag)" style="stroke:var(--ink-2)"/>
 
-      <rect x="228" y="22" width="50" height="28" rx="5" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="253" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432" font-weight="700">ReLU</text>
-      <text x="253" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">a = ReLU(z)</text>
+      <rect x="228" y="22" width="50" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="253" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">ReLU</text>
+      <text x="253" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">a = ReLU(z)</text>
 
-      <line x1="278" y1="36" x2="308" y2="36" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#ag)"/>
+      <line x1="278" y1="36" x2="308" y2="36" stroke-width="1.5" marker-end="url(#ag)" style="stroke:var(--ink-2)"/>
 
-      <rect x="308" y="22" width="60" height="28" rx="5" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="338" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432" font-weight="700">Loss</text>
-      <text x="338" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">L = CE(a, y)</text>
+      <rect x="308" y="22" width="60" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <text x="338" y="35" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Loss</text>
+      <text x="338" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">L = CE(a, y)</text>
 
       <!-- Backward pass -->
-      <text x="4" y="90" font-family="sans-serif" font-size="10" fill="#193432" font-weight="700">← Backward pass (autograd)</text>
+      <text x="4" y="90" font-family="sans-serif" font-size="10" font-weight="700" style="fill:var(--ink)">← Backward pass (autograd)</text>
 
-      <line x1="308" y1="110" x2="283" y2="110" stroke="#193432" stroke-width="1.5" marker-end="url(#agr)"/>
-      <text x="295" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">∂L/∂a</text>
+      <line x1="308" y1="110" x2="283" y2="110" stroke-width="1.5" marker-end="url(#agr)" style="stroke:var(--ink)"/>
+      <text x="295" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">∂L/∂a</text>
 
-      <line x1="228" y1="110" x2="203" y2="110" stroke="#193432" stroke-width="1.5" marker-end="url(#agr)"/>
-      <text x="215" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">∂L/∂z</text>
+      <line x1="228" y1="110" x2="203" y2="110" stroke-width="1.5" marker-end="url(#agr)" style="stroke:var(--ink)"/>
+      <text x="215" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">∂L/∂z</text>
 
-      <line x1="148" y1="110" x2="123" y2="110" stroke="#193432" stroke-width="1.5" marker-end="url(#agr)"/>
-      <text x="135" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">∂L/∂W</text>
+      <line x1="148" y1="110" x2="123" y2="110" stroke-width="1.5" marker-end="url(#agr)" style="stroke:var(--ink)"/>
+      <text x="135" y="105" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">∂L/∂W</text>
 
-      <rect x="228" y="96" width="50" height="28" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1"/>
-      <text x="253" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">grad ReLU</text>
-      <rect x="148" y="96" width="50" height="28" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1"/>
-      <text x="173" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">grad matmul</text>
-      <rect x="308" y="96" width="60" height="28" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1"/>
-      <text x="338" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#193432">grad loss</text>
+      <rect x="228" y="96" width="50" height="28" rx="5" stroke-width="1" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="253" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">grad ReLU</text>
+      <rect x="148" y="96" width="50" height="28" rx="5" stroke-width="1" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="173" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">grad matmul</text>
+      <rect x="308" y="96" width="60" height="28" rx="5" stroke-width="1" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="338" y="114" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">grad loss</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.5rem">
-      The framework records every operation in the forward pass and uses the chain rule automatically during the backward pass to compute gradients.
+    <p class="diagram-caption">The framework records every operation in the forward pass and uses the chain rule automatically during the backward pass to compute gradients.
     </p>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Static Graph (Define-and-Run)</div>
-      The full computation graph is defined first, compiled, and then executed repeatedly with data. Faster at inference, but harder to debug — you can't inspect values mid-graph. Used by TensorFlow 1.x and MindSpore's <em>Graph Mode</em>.
+      <div class="def-term">Static Graph (Define-and-Run)</div>The full computation graph is defined first, compiled, and then executed repeatedly with data. Faster at inference, but harder to debug — you can't inspect values mid-graph. Used by TensorFlow 1.x and MindSpore's <em>Graph Mode</em>.
     </div>
     <div class="def-item">
-      <div class="def-term">Dynamic Graph (Define-by-Run)</div>
-      The graph is built on-the-fly as operations execute. You can print tensor values anywhere, use normal Python control flow (if/for), and debug interactively. Used by PyTorch's default mode and MindSpore's <em>PyNative Mode</em>.
+      <div class="def-term">Dynamic Graph (Define-by-Run)</div>The graph is built on-the-fly as operations execute. You can print tensor values anywhere, use normal Python control flow (if/for), and debug interactively. Used by PyTorch's default mode and MindSpore's <em>PyNative Mode</em>.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
+    <div class="callout-title">Exam Alert</div>
     <strong>Static graph</strong> = define then run = faster inference, harder to debug. <strong>Dynamic graph</strong> = define while running = easier to debug, more flexible. MindSpore supports both: <strong>Graph Mode</strong> (static) and <strong>PyNative Mode</strong> (dynamic).
   </div>
 
@@ -132,16 +144,13 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">torch.Tensor</div>
-      The core data type — an n-dimensional array backed by GPU memory if available. Supports all standard math operations. Every tensor records which operations created it (the gradient tape).
+      <div class="def-term">torch.Tensor</div>The core data type — an n-dimensional array backed by GPU memory if available. Supports all standard math operations. Every tensor records which operations created it (the gradient tape).
     </div>
     <div class="def-item">
-      <div class="def-term">torch.nn.Module</div>
-      The base class for all models and layers. Override <code>__init__</code> to define layers and <code>forward()</code> to define the computation. PyTorch automatically generates the backward pass.
+      <div class="def-term">torch.nn.Module</div>The base class for all models and layers. Override <code>__init__</code> to define layers and <code>forward()</code> to define the computation. PyTorch automatically generates the backward pass.
     </div>
     <div class="def-item">
-      <div class="def-term">torch.optim</div>
-      Ready-made optimisers: <code>SGD</code>, <code>Adam</code>, <code>AdamW</code>. Call <code>optimizer.step()</code> after <code>loss.backward()</code> to update weights.
+      <div class="def-term">torch.optim</div>Ready-made optimisers: <code>SGD</code>, <code>Adam</code>, <code>AdamW</code>. Call <code>optimizer.step()</code> after <code>loss.backward()</code> to update weights.
     </div>
     <div class="def-item">
       <div class="def-term">torch.utils.data</div>
@@ -167,61 +176,54 @@ optimizer.step()        # update weights</pre>
   <div class="diagram" style="padding:1rem; overflow-x:auto">
     <svg viewBox="0 0 480 160" width="480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <!-- Layers -->
-      <rect x="40"  y="10"  width="400" height="30" rx="6" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="240" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#193432" font-weight="700">User API — mindspore.nn · mindspore.ops · mindspore.Tensor</text>
+      <rect x="40"  y="10"  width="400" height="30" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="240" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" style="fill:var(--ink)">User API — mindspore.nn · mindspore.ops · mindspore.Tensor</text>
 
-      <rect x="40"  y="50"  width="190" height="30" rx="6" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="135" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#193432" font-weight="700">Graph Mode (Static)</text>
+      <rect x="40"  y="50"  width="190" height="30" rx="6" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="135" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Graph Mode (Static)</text>
 
-      <rect x="250" y="50"  width="190" height="30" rx="6" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="345" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#193432" font-weight="700">PyNative Mode (Dynamic)</text>
+      <rect x="250" y="50"  width="190" height="30" rx="6" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="345" y="70" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" style="fill:var(--ink)">PyNative Mode (Dynamic)</text>
 
-      <rect x="40"  y="90"  width="400" height="30" rx="6" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="240" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#193432" font-weight="700">MindSpore IR — Intermediate Representation &amp; Graph Optimisation</text>
+      <rect x="40"  y="90"  width="400" height="30" rx="6" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <text x="240" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" style="fill:var(--ink)">MindSpore IR — Intermediate Representation &amp; Graph Optimisation</text>
 
-      <rect x="40"  y="128" width="120" height="26" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="100" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">Ascend NPU</text>
+      <rect x="40"  y="128" width="120" height="26" rx="5" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="100" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">Ascend NPU</text>
 
-      <rect x="175" y="128" width="90"  height="26" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="220" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">GPU (CUDA)</text>
+      <rect x="175" y="128" width="90"  height="26" rx="5" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="220" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">GPU (CUDA)</text>
 
-      <rect x="280" y="128" width="80"  height="26" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="320" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">CPU</text>
+      <rect x="280" y="128" width="80"  height="26" rx="5" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="320" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">CPU</text>
 
-      <rect x="375" y="128" width="65"  height="26" rx="5" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="407" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#193432">Mobile/Edge</text>
+      <rect x="375" y="128" width="65"  height="26" rx="5" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="407" y="145" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink)">Mobile/Edge</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.5rem">
-      MindSpore's layered architecture: one API, two execution modes, one IR for optimisation, multiple hardware backends.
+    <p class="diagram-caption">MindSpore's layered architecture: one API, two execution modes, one IR for optimisation, multiple hardware backends.
     </p>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">mindspore.nn</div>
-      High-level layer classes — <code>nn.Conv2d</code>, <code>nn.Dense</code> (fully-connected), <code>nn.ReLU</code>, <code>nn.MaxPool2d</code>, <code>nn.SequentialCell</code>. Same concept as PyTorch's <code>torch.nn</code>.
+      <div class="def-term">mindspore.nn</div>High-level layer classes — <code>nn.Conv2d</code>, <code>nn.Dense</code> (fully-connected), <code>nn.ReLU</code>, <code>nn.MaxPool2d</code>, <code>nn.SequentialCell</code>. Same concept as PyTorch's <code>torch.nn</code>.
     </div>
     <div class="def-item">
-      <div class="def-term">mindspore.ops</div>
-      Lower-level primitive operations — <code>ops.MatMul</code>, <code>ops.Softmax</code>, <code>ops.GatherV2</code>. Used when you need fine-grained control over the graph.
+      <div class="def-term">mindspore.ops</div>Lower-level primitive operations — <code>ops.MatMul</code>, <code>ops.Softmax</code>, <code>ops.GatherV2</code>. Used when you need fine-grained control over the graph.
     </div>
     <div class="def-item">
-      <div class="def-term">mindspore.Tensor</div>
-      MindSpore's tensor type. Created from NumPy arrays or Python lists. Supports <code>.asnumpy()</code> to convert back.
+      <div class="def-term">mindspore.Tensor</div>MindSpore's tensor type. Created from NumPy arrays or Python lists. Supports <code>.asnumpy()</code> to convert back.
     </div>
     <div class="def-item">
-      <div class="def-term">nn.Cell</div>
-      MindSpore's base class for all models and layers — equivalent to PyTorch's <code>nn.Module</code>. Override <code>__init__</code> and <code>construct()</code> (not <code>forward()</code>).
+      <div class="def-term">nn.Cell</div>MindSpore's base class for all models and layers — equivalent to PyTorch's <code>nn.Module</code>. Override <code>__init__</code> and <code>construct()</code> (not <code>forward()</code>).
     </div>
     <div class="def-item">
-      <div class="def-term">Model.train() / Model.eval()</div>
-      MindSpore's high-level <code>Model</code> class wraps a network, loss function, and optimiser. <code>model.train(epochs, dataset)</code> runs the full training loop automatically.
+      <div class="def-term">Model.train() / Model.eval()</div>MindSpore's high-level <code>Model</code> class wraps a network, loss function, and optimiser. <code>model.train(epochs, dataset)</code> runs the full training loop automatically.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    MindSpore key differences from PyTorch: the model base class is <strong>nn.Cell</strong> (not nn.Module), the forward method is called <strong>construct()</strong> (not forward()), and MindSpore's two modes are <strong>Graph Mode</strong> (static, faster) and <strong>PyNative Mode</strong> (dynamic, easier to debug). MindSpore is optimised for Huawei's Ascend NPU.
+    <div class="callout-title">Exam Alert</div>MindSpore key differences from PyTorch: the model base class is <strong>nn.Cell</strong> (not nn.Module), the forward method is called <strong>construct()</strong> (not forward()), and MindSpore's two modes are <strong>Graph Mode</strong> (static, faster) and <strong>PyNative Mode</strong> (dynamic, easier to debug). MindSpore is optimised for Huawei's Ascend NPU.
   </div>
 
   <!-- ───────────── SECTION 5: LeNet ───────────── -->
@@ -234,62 +236,61 @@ optimizer.step()        # update weights</pre>
     <svg viewBox="0 0 560 100" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <defs>
         <marker id="an" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-          <polygon points="0 0,6 3,0 6" fill="#6c6c66"/>
+          <polygon points="0 0,6 3,0 6" style="fill:var(--ink-2)"/>
         </marker>
       </defs>
 
-      <rect x="4"   y="30" width="52" height="40" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="30"  y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Input</text>
-      <text x="30"  y="59" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">32×32×1</text>
+      <rect x="4"   y="30" width="52" height="40" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="30"  y="47" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Input</text>
+      <text x="30"  y="59" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">32×32×1</text>
 
-      <line x1="56" y1="50" x2="66" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="56" y1="50" x2="66" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="66"  y="22" width="64" height="56" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="98"  y="44" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Conv1</text>
-      <text x="98"  y="56" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">6 × 5×5</text>
-      <text x="98"  y="67" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">→ 28×28×6</text>
+      <rect x="66"  y="22" width="64" height="56" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="98"  y="44" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Conv1</text>
+      <text x="98"  y="56" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">6 × 5×5</text>
+      <text x="98"  y="67" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">→ 28×28×6</text>
 
-      <line x1="130" y1="50" x2="140" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="130" y1="50" x2="140" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="140" y="28" width="64" height="44" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="172" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Pool1</text>
-      <text x="172" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">avg 2×2</text>
-      <text x="172" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">→ 14×14×6</text>
+      <rect x="140" y="28" width="64" height="44" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="172" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Pool1</text>
+      <text x="172" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">avg 2×2</text>
+      <text x="172" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">→ 14×14×6</text>
 
-      <line x1="204" y1="50" x2="214" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="204" y1="50" x2="214" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="214" y="18" width="64" height="64" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="246" y="40" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Conv2</text>
-      <text x="246" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">16 × 5×5</text>
-      <text x="246" y="63" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">→ 10×10×16</text>
+      <rect x="214" y="18" width="64" height="64" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="246" y="40" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Conv2</text>
+      <text x="246" y="52" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">16 × 5×5</text>
+      <text x="246" y="63" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">→ 10×10×16</text>
 
-      <line x1="278" y1="50" x2="288" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="278" y1="50" x2="288" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="288" y="26" width="64" height="48" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="320" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Pool2</text>
-      <text x="320" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">avg 2×2</text>
-      <text x="320" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">→ 5×5×16</text>
+      <rect x="288" y="26" width="64" height="48" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="320" y="46" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Pool2</text>
+      <text x="320" y="57" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">avg 2×2</text>
+      <text x="320" y="66" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">→ 5×5×16</text>
 
-      <line x1="352" y1="50" x2="362" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="352" y1="50" x2="362" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="362" y="30" width="52" height="40" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="388" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">FC1</text>
-      <text x="388" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">400→120</text>
+      <rect x="362" y="30" width="52" height="40" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="388" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">FC1</text>
+      <text x="388" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">400→120</text>
 
-      <line x1="414" y1="50" x2="424" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="414" y1="50" x2="424" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="424" y="30" width="52" height="40" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="450" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">FC2</text>
-      <text x="450" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">120→84</text>
+      <rect x="424" y="30" width="52" height="40" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="450" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">FC2</text>
+      <text x="450" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">120→84</text>
 
-      <line x1="476" y1="50" x2="486" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#an)"/>
+      <line x1="476" y1="50" x2="486" y2="50" stroke-width="1.5" marker-end="url(#an)" style="stroke:var(--ink-2)"/>
 
-      <rect x="486" y="30" width="66" height="40" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="519" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c" font-weight="700">Output</text>
-      <text x="519" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">84→10</text>
+      <rect x="486" y="30" width="66" height="40" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="519" y="47" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Output</text>
+      <text x="519" y="58" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">84→10</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.5rem">
-      LeNet-5: two Conv+Pool pairs for feature extraction, then three FC layers for classification (10 digit classes).
+    <p class="diagram-caption">LeNet-5: two Conv+Pool pairs for feature extraction, then three FC layers for classification (10 digit classes).
     </p>
   </div>
 
@@ -337,8 +338,7 @@ model.eval(eval_dataset=test_ds)</pre>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the LeNet-5 layer sequence: <strong>Conv(6) → Pool → Conv(16) → Pool → Flatten → FC(120) → FC(84) → FC(10)</strong>. Both pooling layers use <strong>average pooling</strong> (not max pooling) in the original LeNet. In MindSpore the forward method is <strong>construct()</strong>, not <code>forward()</code>.
+    <div class="callout-title">Exam Alert</div>Know the LeNet-5 layer sequence: <strong>Conv(6) → Pool → Conv(16) → Pool → Flatten → FC(120) → FC(84) → FC(10)</strong>. Both pooling layers use <strong>average pooling</strong> (not max pooling) in the original LeNet. In MindSpore the forward method is <strong>construct()</strong>, not <code>forward()</code>.
   </div>
 
   <!-- ───────────── SECTION 6: Framework comparison ───────────── -->
@@ -346,39 +346,39 @@ model.eval(eval_dataset=test_ds)</pre>
 
   <table style="width:100%; border-collapse:collapse; font-size:0.87rem; margin-top:0.5rem">
     <thead>
-      <tr style="background:#e4f0ef; border-bottom:2px solid #3b7a77; color:#2c5e5c">
+      <tr style="background:var(--fill-0); border-bottom:2px solid var(--line); color:var(--ink)">
         <th style="padding:0.6rem 0.8rem; text-align:left">Property</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">PyTorch</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">MindSpore</th>
       </tr>
     </thead>
     <tbody>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.6rem 0.8rem">Organisation</td>
         <td style="padding:0.6rem 0.8rem">Meta AI</td>
         <td style="padding:0.6rem 0.8rem">Huawei</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.6rem 0.8rem">Default execution</td>
         <td style="padding:0.6rem 0.8rem">Dynamic (eager)</td>
         <td style="padding:0.6rem 0.8rem">Graph Mode (static) or PyNative (dynamic)</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.6rem 0.8rem">Model base class</td>
         <td style="padding:0.6rem 0.8rem"><code>nn.Module</code></td>
         <td style="padding:0.6rem 0.8rem"><code>nn.Cell</code></td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.6rem 0.8rem">Forward method name</td>
         <td style="padding:0.6rem 0.8rem"><code>forward()</code></td>
         <td style="padding:0.6rem 0.8rem"><code>construct()</code></td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.6rem 0.8rem">Optimised hardware</td>
         <td style="padding:0.6rem 0.8rem">NVIDIA GPU</td>
         <td style="padding:0.6rem 0.8rem">Huawei Ascend NPU</td>
       </tr>
-      <tr style="background:#f7f7f6">
+      <tr style="background:var(--plate)">
         <td style="padding:0.6rem 0.8rem">Primary strength</td>
         <td style="padding:0.6rem 0.8rem">Research flexibility, huge ecosystem</td>
         <td style="padding:0.6rem 0.8rem">Ascend performance, unified device/cloud/edge</td>
@@ -399,7 +399,7 @@ model.eval(eval_dataset=test_ds)</pre>
       <button class="quiz-option" onclick="answer(this,'q1',false)">It generates training data by augmenting the original dataset automatically</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -412,7 +412,7 @@ model.eval(eval_dataset=test_ds)</pre>
       <button class="quiz-option" onclick="answer(this,'q2',false)">It executes only the convolutional layers as a graph while FC layers run dynamically</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -425,7 +425,7 @@ model.eval(eval_dataset=test_ds)</pre>
       <button class="quiz-option" onclick="answer(this,'q3',false)">nn.Graph — MindSpore's base class for static graph models</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -438,7 +438,7 @@ model.eval(eval_dataset=test_ds)</pre>
       <button class="quiz-option" onclick="answer(this,'q4',false)">Pool → Conv → Pool → Conv → FC → FC → Output</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -451,12 +451,12 @@ model.eval(eval_dataset=test_ds)</pre>
       <button class="quiz-option" onclick="answer(this,'q5',true)">construct() — MindSpore's specific name for the forward computation method</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>AI frameworks provide: tensor ops, autograd, and high-level model building blocks</li>
@@ -481,7 +481,7 @@ model.eval(eval_dataset=test_ds)</pre>
   </div>
 
   <div class="lesson-nav">
-    <a href="0013-transformer-attention.html">← Lesson 13: Transformer &amp; Attention</a>
+    <a href="0013-transformer-attention.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 13: Transformer &amp; Attention</a>
   </div>
 
 </div>
@@ -524,7 +524,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

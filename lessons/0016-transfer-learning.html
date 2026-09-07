@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 16 — Transfer Learning &amp; Fine-tuning</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Advanced · Lesson 16 &nbsp;|&nbsp; Transfer Learning</div>
+    <div class="plate-num">16</div>
     <h1>Transfer Learning &amp; Fine-tuning</h1>
     <p class="subtitle">How to build powerful models with little data by borrowing knowledge from models already trained on millions of examples.</p>
   </header>
@@ -32,8 +50,7 @@
   <p>Most real projects have none of these. A hospital might have 500 labelled X-rays. A startup might need a product photo classifier with only 200 images per category. Training from scratch on this data would massively overfit — the model would memorise those few examples and fail on anything new.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    You already know how to drive a car. Learning to drive a truck doesn't mean forgetting everything and starting from scratch — you transfer your knowledge of steering, braking, and road rules, then learn only what's different (a larger vehicle, different mirrors, air brakes). Transfer learning does the same: reuse knowledge from a large task, adapt only what needs to change.
+    <div class="callout-title">Analogy</div>You already know how to drive a car. Learning to drive a truck doesn't mean forgetting everything and starting from scratch — you transfer your knowledge of steering, braking, and road rules, then learn only what's different (a larger vehicle, different mirrors, air brakes). Transfer learning does the same: reuse knowledge from a large task, adapt only what needs to change.
   </div>
 
   <!-- ───────────── SECTION 2: How it works ───────────── -->
@@ -45,64 +62,64 @@
     <svg viewBox="0 0 560 130" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <defs>
         <marker id="tf" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <polygon points="0 0,7 3.5,0 7" fill="#6c6c66"/>
+          <polygon points="0 0,7 3.5,0 7" style="fill:var(--ink-2)"/>
         </marker>
       </defs>
 
       <!-- Pre-trained model layers -->
-      <text x="0" y="14" font-family="sans-serif" font-size="9" fill="#6c6c66" font-weight="700">Pre-trained on ImageNet (1.2M images, 1000 classes)</text>
+      <text x="0" y="14" font-family="sans-serif" font-size="9" font-weight="700" style="fill:var(--ink-2)">Pre-trained on ImageNet (1.2M images, 1000 classes)</text>
 
-      <rect x="0"   y="20" width="80" height="50" rx="6" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="40"  y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#2c5e5c" font-weight="700">Early Layers</text>
-      <text x="40"  y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">edges, colours</text>
-      <text x="40"  y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">gradients</text>
+      <rect x="0"   y="20" width="80" height="50" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="40"  y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Early Layers</text>
+      <text x="40"  y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">edges, colours</text>
+      <text x="40"  y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">gradients</text>
 
-      <line x1="80" y1="45" x2="92" y2="45" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
+      <line x1="80" y1="45" x2="92" y2="45" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
 
-      <rect x="92"  y="20" width="80" height="50" rx="6" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="132" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#2c5e5c" font-weight="700">Middle Layers</text>
-      <text x="132" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">textures, shapes</text>
-      <text x="132" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">object parts</text>
+      <rect x="92"  y="20" width="80" height="50" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="132" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Middle Layers</text>
+      <text x="132" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">textures, shapes</text>
+      <text x="132" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">object parts</text>
 
-      <line x1="172" y1="45" x2="184" y2="45" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
+      <line x1="172" y1="45" x2="184" y2="45" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
 
-      <rect x="184" y="20" width="80" height="50" rx="6" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="224" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#2c5e5c" font-weight="700">Deep Layers</text>
-      <text x="224" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">high-level features</text>
-      <text x="224" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">(more task-specific)</text>
+      <rect x="184" y="20" width="80" height="50" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="224" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Deep Layers</text>
+      <text x="224" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">high-level features</text>
+      <text x="224" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">(more task-specific)</text>
 
-      <line x1="264" y1="45" x2="276" y2="45" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
+      <line x1="264" y1="45" x2="276" y2="45" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
 
-      <rect x="276" y="20" width="80" height="50" rx="6" fill="#fde8e8" stroke="#c12929" stroke-width="1.5"/>
-      <text x="316" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#c12929" font-weight="700">Classifier Head</text>
-      <text x="316" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#c12929">FC → Softmax</text>
-      <text x="316" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#c12929">1000 ImageNet classes</text>
+      <rect x="276" y="20" width="80" height="50" rx="6" stroke-width="1.5" style="fill:var(--stop-tint); stroke:var(--stop)"/>
+      <text x="316" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--stop)">Classifier Head</text>
+      <text x="316" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--stop)">FC → Softmax</text>
+      <text x="316" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--stop)">1000 ImageNet classes</text>
 
       <!-- Transfer arrow -->
-      <line x1="360" y1="45" x2="390" y2="45" stroke="#3b7a77" stroke-width="2.5" marker-end="url(#tf)" stroke-dasharray="6,3"/>
-      <text x="374" y="38" font-family="sans-serif" font-size="8" fill="#3b7a77" text-anchor="middle" font-weight="700">transfer</text>
+      <line x1="360" y1="45" x2="390" y2="45" stroke-width="2.5" marker-end="url(#tf)" stroke-dasharray="6,3" style="stroke:var(--line)"/>
+      <text x="374" y="38" font-family="sans-serif" font-size="8" text-anchor="middle" font-weight="700" style="fill:var(--line)">transfer</text>
 
       <!-- New model -->
-      <text x="395" y="14" font-family="sans-serif" font-size="9" fill="#6c6c66" font-weight="700">Fine-tuned for your task (e.g. 5 flower types)</text>
+      <text x="395" y="14" font-family="sans-serif" font-size="9" font-weight="700" style="fill:var(--ink-2)">Fine-tuned for your task (e.g. 5 flower types)</text>
 
-      <rect x="390" y="20" width="80" height="50" rx="6" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="430" y="45" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Frozen layers</text>
-      <text x="430" y="57" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">(same weights)</text>
+      <rect x="390" y="20" width="80" height="50" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="430" y="45" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Frozen layers</text>
+      <text x="430" y="57" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">(same weights)</text>
 
-      <line x1="470" y1="45" x2="480" y2="45" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
+      <line x1="470" y1="45" x2="480" y2="45" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
 
-      <rect x="480" y="20" width="76" height="50" rx="6" fill="#d8f3e5" stroke="#1a6b3f" stroke-width="2"/>
-      <text x="518" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1a6b3f" font-weight="700">New Head</text>
-      <text x="518" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1a6b3f">FC → Softmax</text>
-      <text x="518" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#1a6b3f">5 flower classes</text>
+      <rect x="480" y="20" width="76" height="50" rx="6" stroke-width="2" style="fill:var(--go-tint); stroke:var(--go)"/>
+      <text x="518" y="38" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--go)">New Head</text>
+      <text x="518" y="50" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--go)">FC → Softmax</text>
+      <text x="518" y="61" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--go)">5 flower classes</text>
 
       <!-- Legends -->
-      <rect x="0"   y="86" width="12" height="12" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="16"  y="97" font-family="sans-serif" font-size="8" fill="#6c6c66">General features — safe to freeze</text>
-      <rect x="180" y="86" width="12" height="12" fill="#fde8e8" stroke="#c12929" stroke-width="1"/>
-      <text x="196" y="97" font-family="sans-serif" font-size="8" fill="#6c6c66">Task-specific — replaced</text>
-      <rect x="380" y="86" width="12" height="12" fill="#d8f3e5" stroke="#1a6b3f" stroke-width="1"/>
-      <text x="396" y="97" font-family="sans-serif" font-size="8" fill="#6c6c66">Newly trained on your data</text>
+      <rect x="0"   y="86" width="12" height="12" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="16"  y="97" font-family="sans-serif" font-size="8" style="fill:var(--ink-2)">General features — safe to freeze</text>
+      <rect x="180" y="86" width="12" height="12" stroke-width="1" style="fill:var(--stop-tint); stroke:var(--stop)"/>
+      <text x="196" y="97" font-family="sans-serif" font-size="8" style="fill:var(--ink-2)">Task-specific — replaced</text>
+      <rect x="380" y="86" width="12" height="12" stroke-width="1" style="fill:var(--go-tint); stroke:var(--go)"/>
+      <text x="396" y="97" font-family="sans-serif" font-size="8" style="fill:var(--ink-2)">Newly trained on your data</text>
     </svg>
   </div>
 
@@ -111,14 +128,12 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Strategy 1 — Feature Extraction (Freeze everything)</div>
-      Keep all pre-trained weights unchanged. Remove the original classifier head and attach a new one. Only the new head is trained.<br><br>
+      <div class="def-term">Strategy 1 — Feature Extraction (Freeze everything)</div>Keep all pre-trained weights unchanged. Remove the original classifier head and attach a new one. Only the new head is trained.<br><br>
       <strong>When to use:</strong> Your dataset is small (&lt;1,000 examples per class) <em>or</em> your domain is very different from the pre-training domain (e.g. ImageNet → medical scans).<br>
       <strong>Risk if you don't freeze:</strong> With little data, updating all weights causes overfitting — the model memorises your few examples.
     </div>
     <div class="def-item">
-      <div class="def-term">Strategy 2 — Fine-tuning (Unfreeze some or all layers)</div>
-      After training the new head, unfreeze the last few layers (or all layers) and continue training at a <strong>very low learning rate</strong> (10–100× smaller than usual). This gently nudges the pre-trained weights toward your task.<br><br>
+      <div class="def-term">Strategy 2 — Fine-tuning (Unfreeze some or all layers)</div>After training the new head, unfreeze the last few layers (or all layers) and continue training at a <strong>very low learning rate</strong> (10–100× smaller than usual). This gently nudges the pre-trained weights toward your task.<br><br>
       <strong>When to use:</strong> You have enough data to avoid overfitting, and your task domain is similar to the pre-training domain.<br>
       <strong>Why low LR:</strong> A high learning rate would destroy the general features already learned — you only want to fine-tune, not re-learn from scratch.
     </div>
@@ -128,49 +143,47 @@
   <div class="diagram" style="padding:1rem; overflow-x:auto">
     <svg viewBox="0 0 460 200" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <!-- Axes -->
-      <line x1="30" y1="10" x2="30" y2="190" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
-      <line x1="30" y1="190" x2="450" y2="190" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#tf)"/>
-      <text x="12" y="100" font-family="sans-serif" font-size="9" fill="#6c6c66" text-anchor="middle" transform="rotate(-90 12 100)">Dataset size →</text>
-      <text x="240" y="200" font-family="sans-serif" font-size="9" fill="#6c6c66" text-anchor="middle">Domain similarity to pre-training →</text>
+      <line x1="30" y1="10" x2="30" y2="190" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
+      <line x1="30" y1="190" x2="450" y2="190" stroke-width="1.5" marker-end="url(#tf)" style="stroke:var(--ink-2)"/>
+      <text x="12" y="100" font-family="sans-serif" font-size="9" text-anchor="middle" transform="rotate(-90 12 100)" style="fill:var(--ink-2)">Dataset size →</text>
+      <text x="240" y="200" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink-2)">Domain similarity to pre-training →</text>
 
       <!-- Quadrant labels -->
-      <text x="33" y="180" font-family="sans-serif" font-size="7.5" fill="#6c6c66">small</text>
-      <text x="33" y="30"  font-family="sans-serif" font-size="7.5" fill="#6c6c66">large</text>
-      <text x="35" y="180" font-family="sans-serif" font-size="7.5" fill="#6c6c66">diff.</text>
-      <text x="400" y="200" font-family="sans-serif" font-size="7.5" fill="#6c6c66">similar</text>
+      <text x="33" y="180" font-family="sans-serif" font-size="7.5" style="fill:var(--ink-2)">small</text>
+      <text x="33" y="30"  font-family="sans-serif" font-size="7.5" style="fill:var(--ink-2)">large</text>
+      <text x="35" y="180" font-family="sans-serif" font-size="7.5" style="fill:var(--ink-2)">diff.</text>
+      <text x="400" y="200" font-family="sans-serif" font-size="7.5" style="fill:var(--ink-2)">similar</text>
 
       <!-- Q1: small + different -->
-      <rect x="34" y="100" width="202" height="88" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1" opacity="0.7"/>
-      <text x="135" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">Feature extraction only</text>
-      <text x="135" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Freeze ALL layers.</text>
-      <text x="135" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Train only the new head.</text>
+      <rect x="34" y="100" width="202" height="88" rx="4" stroke-width="1" opacity="0.7" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="135" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Feature extraction only</text>
+      <text x="135" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Freeze ALL layers.</text>
+      <text x="135" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Train only the new head.</text>
 
       <!-- Q2: small + similar -->
-      <rect x="238" y="100" width="210" height="88" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1" opacity="0.7"/>
-      <text x="343" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">Feature extraction</text>
-      <text x="343" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Freeze most layers.</text>
-      <text x="343" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">May lightly fine-tune top layers.</text>
+      <rect x="238" y="100" width="210" height="88" rx="4" stroke-width="1" opacity="0.7" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="343" y="138" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Feature extraction</text>
+      <text x="343" y="152" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Freeze most layers.</text>
+      <text x="343" y="164" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">May lightly fine-tune top layers.</text>
 
       <!-- Q3: large + different -->
-      <rect x="34" y="14" width="202" height="84" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1" opacity="0.7"/>
-      <text x="135" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">Careful fine-tuning</text>
-      <text x="135" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Unfreeze all layers, very low LR.</text>
-      <text x="135" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Or train from scratch.</text>
+      <rect x="34" y="14" width="202" height="84" rx="4" stroke-width="1" opacity="0.7" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="135" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Careful fine-tuning</text>
+      <text x="135" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Unfreeze all layers, very low LR.</text>
+      <text x="135" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Or train from scratch.</text>
 
       <!-- Q4: large + similar -->
-      <rect x="238" y="14" width="210" height="84" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1" opacity="0.7"/>
-      <text x="343" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">Full fine-tuning</text>
-      <text x="343" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Unfreeze all layers, low LR.</text>
-      <text x="343" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">Best results when you have data.</text>
+      <rect x="238" y="14" width="210" height="84" rx="4" stroke-width="1" opacity="0.7" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="343" y="50" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Full fine-tuning</text>
+      <text x="343" y="64" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Unfreeze all layers, low LR.</text>
+      <text x="343" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">Best results when you have data.</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.4rem">
-      Choose your strategy based on how much data you have and how similar your task is to the source domain.
+    <p class="diagram-caption">Choose your strategy based on how much data you have and how similar your task is to the source domain.
     </p>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Two transfer learning strategies: <strong>Feature Extraction</strong> — freeze all pre-trained layers, train new head only (for small datasets). <strong>Fine-tuning</strong> — unfreeze some/all layers and train at a very low learning rate (for larger datasets or when you need maximum performance). Fine-tuning at a high LR destroys the pre-trained features.
+    <div class="callout-title">Exam Alert</div>Two transfer learning strategies: <strong>Feature Extraction</strong> — freeze all pre-trained layers, train new head only (for small datasets). <strong>Fine-tuning</strong> — unfreeze some/all layers and train at a very low learning rate (for larger datasets or when you need maximum performance). Fine-tuning at a high LR destroys the pre-trained features.
   </div>
 
   <!-- ───────────── SECTION 4: Common pre-trained models ───────────── -->
@@ -178,7 +191,7 @@
 
   <table style="width:100%; border-collapse:collapse; font-size:0.87rem">
     <thead>
-      <tr style="background:#e4f0ef; border-bottom:2px solid #3b7a77; color:#2c5e5c">
+      <tr style="background:var(--fill-0); border-bottom:2px solid var(--line); color:var(--ink)">
         <th style="padding:0.6rem 0.8rem; text-align:left">Model</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Domain</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Architecture</th>
@@ -186,25 +199,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">ResNet-50</td>
         <td style="padding:0.5rem 0.8rem">Images</td>
         <td style="padding:0.5rem 0.8rem">50-layer CNN with residual connections</td>
         <td style="padding:0.5rem 0.8rem">Most image classification and detection tasks</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">VGG-16</td>
         <td style="padding:0.5rem 0.8rem">Images</td>
         <td style="padding:0.5rem 0.8rem">16-layer CNN, simple and uniform</td>
         <td style="padding:0.5rem 0.8rem">Style transfer, feature visualisation</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">BERT</td>
         <td style="padding:0.5rem 0.8rem">Text (English)</td>
         <td style="padding:0.5rem 0.8rem">Transformer encoder, 110M params</td>
         <td style="padding:0.5rem 0.8rem">Classification, NER, question answering</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">PanGu-α</td>
         <td style="padding:0.5rem 0.8rem">Text (Chinese)</td>
         <td style="padding:0.5rem 0.8rem">GPT-style decoder, 200B params</td>
@@ -220,8 +233,7 @@
   </table>
 
   <div class="callout tip">
-    <div class="callout-title">Residual connections — why ResNet transfers so well</div>
-    ResNet introduced <strong>skip connections</strong>: each block adds its input directly to its output. This prevents vanishing gradients in very deep networks and means each layer only needs to learn a <em>residual correction</em> rather than a full transformation. It's the same Add &amp; Norm idea you saw in the Transformer (Lesson 13) — both borrowed from the same insight.
+    <div class="callout-title">Residual connections — why ResNet transfers so well</div>ResNet introduced <strong>skip connections</strong>: each block adds its input directly to its output. This prevents vanishing gradients in very deep networks and means each layer only needs to learn a <em>residual correction</em> rather than a full transformation. It's the same Add &amp; Norm idea you saw in the Transformer (Lesson 13) — both borrowed from the same insight.
   </div>
 
   <!-- ───────────── SECTION 5: MindSpore implementation ───────────── -->
@@ -276,8 +288,7 @@ optimizer_finetune = nn.Adam(
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    In MindSpore, you control which layers train by setting <strong>param.requires_grad = False</strong> (freeze) or <strong>True</strong> (unfreeze). The optimiser only updates parameters where <code>requires_grad=True</code>. Fine-tuning always uses a much lower learning rate than initial training to avoid overwriting pre-learned features.
+    <div class="callout-title">Exam Alert</div>In MindSpore, you control which layers train by setting <strong>param.requires_grad = False</strong> (freeze) or <strong>True</strong> (unfreeze). The optimiser only updates parameters where <code>requires_grad=True</code>. Fine-tuning always uses a much lower learning rate than initial training to avoid overwriting pre-learned features.
   </div>
 
   <!-- ───────────── SECTION 6: Why transfer learning dominates ───────────── -->
@@ -285,20 +296,16 @@ optimizer_finetune = nn.Adam(
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Much less data needed</div>
-      A model fine-tuned from ResNet-50 can achieve excellent accuracy with only a few hundred images per class. Training the same architecture from scratch might need 100,000+.
+      <div class="def-term">Much less data needed</div>A model fine-tuned from ResNet-50 can achieve excellent accuracy with only a few hundred images per class. Training the same architecture from scratch might need 100,000+.
     </div>
     <div class="def-item">
-      <div class="def-term">Much faster training</div>
-      Training only a small head takes minutes instead of days. Even full fine-tuning converges much faster because the weights start in a good region.
+      <div class="def-term">Much faster training</div>Training only a small head takes minutes instead of days. Even full fine-tuning converges much faster because the weights start in a good region.
     </div>
     <div class="def-item">
-      <div class="def-term">Better generalisation</div>
-      Pre-trained weights encode robust, general representations built from vastly more data than you'll ever have. Your fine-tuned model inherits this robustness.
+      <div class="def-term">Better generalisation</div>Pre-trained weights encode robust, general representations built from vastly more data than you'll ever have. Your fine-tuned model inherits this robustness.
     </div>
     <div class="def-item">
-      <div class="def-term">Enables domain-specific AI</div>
-      This is how Huawei's PanGu 3-tier hierarchy works (Lesson 03): the base LLM is pre-trained on vast general data → industry model is fine-tuned on domain data → scenario model is fine-tuned further on task-specific data.
+      <div class="def-term">Enables domain-specific AI</div>This is how Huawei's PanGu 3-tier hierarchy works (Lesson 03): the base LLM is pre-trained on vast general data → industry model is fine-tuned on domain data → scenario model is fine-tuned further on task-specific data.
     </div>
   </div>
 
@@ -315,7 +322,7 @@ optimizer_finetune = nn.Adam(
       <button class="quiz-option" onclick="answer(this,'q1',false)">Fine-tune the deep layers only, keeping the early layers random and untrained</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -328,7 +335,7 @@ optimizer_finetune = nn.Adam(
       <button class="quiz-option" onclick="answer(this,'q2',false)">Lower LR speeds up training since the model is already close to a good solution</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -341,7 +348,7 @@ optimizer_finetune = nn.Adam(
       <button class="quiz-option" onclick="answer(this,'q3',false)">Delete the layer's backward() method so no gradient flows through it</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -354,7 +361,7 @@ optimizer_finetune = nn.Adam(
       <button class="quiz-option" onclick="answer(this,'q4',false)">Unsupervised learning — all three tiers are trained without labels using clustering</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -367,12 +374,12 @@ optimizer_finetune = nn.Adam(
       <button class="quiz-option" onclick="answer(this,'q5',false)">Pooling layers — they discard spatial information and therefore have no task-specific bias</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>Transfer learning: reuse weights trained on large data, adapt only the final layers for your task</li>
@@ -396,8 +403,8 @@ optimizer_finetune = nn.Adam(
   </div>
 
   <div class="lesson-nav">
-    <a href="0015-ai-app-dev-process.html">← Lesson 15: AI Application Development Process</a>
-    <a href="0017-evaluation-metrics.html" class="nav-next">Next: Evaluation Metrics →</a>
+    <a href="0015-ai-app-dev-process.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 15: AI Application Development Process</a>
+    <a href="0017-evaluation-metrics.html" class="nav-next">Next: Evaluation Metrics <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -440,7 +447,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

@@ -20,11 +20,11 @@ Three things together, none of which a textbook, generic MOOC, or ad-hoc chatbot
 
 - **Exam-syllabus fidelity** — lessons are built directly around the HCIA-AI syllabus (`Content Material.md`), covering exactly what the exam covers, structured in the exam's own chapter order, with exam-critical content explicitly flagged.
 - **1:1 adaptive tutoring, paced to Fariz** — Claude (via the `/teach` skill) teaches one concept at a time, calibrated to Fariz's exact starting point (basic Python, zero ML), remembering progress across sessions — unlike a static course or a one-off chat that forgets context.
-- **Self-contained, durable artifacts** — every lesson is a standalone HTML file (inline SVG diagrams, interactive quiz, no external dependencies, no course-platform lock-in) that can be opened and revisited offline indefinitely.
+- **Self-contained, durable artifacts** — every lesson is a standalone HTML file (inline SVG diagrams, interactive quiz, no build step, no course-platform lock-in) that can be opened and revisited indefinitely. One deliberate exception: the three typefaces (Barlow, Barlow Condensed, JetBrains Mono) load from the Google Fonts CDN, chosen by Fariz over self-hosting; offline the pages still open and read correctly, falling back to the system sans and mono stacks, but not in their designed lettering.
 
 ## Operating Context
 
-- Lessons are opened directly in a browser (`open index.html` or any `lessons/*.html` file) — no server, build step, or install required.
+- Lessons are opened directly in a browser (`open index.html` or any `lessons/*.html` file) — no server, build step, or install required. Lettering is its own design pass: light and dark are two authored themes, remembered per reader, defaulting to the OS preference.
 - Learning happens in sessions: Fariz completes a lesson in the browser, then returns to Claude Code and says "next lesson" to continue.
 - `index.html` is the homepage/entry point listing all chapters and lessons, with a left-nav sidebar (`assets/nav.js`) present on every lesson page for jumping between lessons.
 - Progress and teaching context persist in `learning-records/` (what's been learned, user background) so tutoring stays calibrated across sessions.
@@ -36,7 +36,7 @@ Three things together, none of which a textbook, generic MOOC, or ad-hoc chatbot
 - Each lesson: explanations, analogies, inline SVG diagrams, an "Exam Alert" callout convention for exam-critical content, an interactive quiz with feedback that explains *why* wrong answers are wrong, and one recommended primary source.
 - Quiz options must be equal length (no length-based hints to the answer).
 - All lessons share `assets/style.css` — no inline duplicate styling per lesson.
-- Pure static HTML/CSS/JS — no build tooling, no backend, no external runtime dependencies.
+- Pure static HTML/CSS/JS — no build tooling, no backend, no JS runtime dependencies. The only network request any page makes is the Google Fonts stylesheet; everything else is local, and a full system fallback stack keeps the pages legible without it.
 - Out of scope: deep coding implementations (conceptual understanding is the goal, not hands-on ML engineering), advanced research-level topics beyond the syllabus, non-Python frameworks.
 - Frameworks referenced conceptually in lessons: PyTorch and MindSpore (Huawei's framework, exam-relevant).
 

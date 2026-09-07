@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 08 — Deep Learning: Perceptrons & Neural Networks</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 03 · Lesson 8 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <div class="plate-num">08</div>
     <h1>Deep Learning: Perceptrons &amp; Neural Networks</h1>
     <p class="subtitle">How the brain inspired a revolution in AI — and how a chain of simple math operations can learn almost anything.</p>
   </header>
@@ -32,67 +50,62 @@
   <p>A perceptron is a <strong>mathematical model of a single biological neuron</strong>. Just as a brain neuron receives signals, combines them, and fires if the combined signal is strong enough — a perceptron receives numbers, multiplies each by a weight, sums them, and produces an output.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Biological Analogy</div>
-    A real neuron receives electrical signals through <em>dendrites</em>, combines them in the <em>cell body</em>, and fires an output signal through the <em>axon</em> if the total input crosses a threshold. A perceptron does exactly this — in math.
+    <div class="callout-title">Biological Analogy</div>A real neuron receives electrical signals through <em>dendrites</em>, combines them in the <em>cell body</em>, and fires an output signal through the <em>axon</em> if the total input crosses a threshold. A perceptron does exactly this — in math.
   </div>
 
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 420 190" width="400" xmlns="http://www.w3.org/2000/svg">
       <!-- Input nodes -->
-      <circle cx="55" cy="60"  r="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="55" y="64"  font-family="sans-serif" font-size="12" fill="#193432" text-anchor="middle">x₁</text>
-      <circle cx="55" cy="115" r="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="55" y="119" font-family="sans-serif" font-size="12" fill="#193432" text-anchor="middle">x₂</text>
-      <circle cx="55" cy="170" r="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="55" y="174" font-family="sans-serif" font-size="12" fill="#193432" text-anchor="middle">x₃</text>
+      <circle cx="55" cy="60"  r="20" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="55" y="64"  font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)">x₁</text>
+      <circle cx="55" cy="115" r="20" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="55" y="119" font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)">x₂</text>
+      <circle cx="55" cy="170" r="20" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="55" y="174" font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)">x₃</text>
       <!-- Bias node -->
-      <circle cx="110" cy="22" r="16" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="110" y="26" font-family="sans-serif" font-size="11" fill="#193432" text-anchor="middle">b</text>
+      <circle cx="110" cy="22" r="16" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="110" y="26" font-family="sans-serif" font-size="11" text-anchor="middle" style="fill:var(--ink)">b</text>
       <!-- Weight lines -->
-      <line x1="75"  y1="60"  x2="188" y2="107" stroke="#6c6c66" stroke-width="1.5"/>
-      <line x1="75"  y1="115" x2="188" y2="107" stroke="#6c6c66" stroke-width="1.5"/>
-      <line x1="75"  y1="170" x2="188" y2="107" stroke="#6c6c66" stroke-width="1.5"/>
-      <line x1="122" y1="30"  x2="188" y2="107" stroke="#2c5e5c" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="75"  y1="60"  x2="188" y2="107" stroke-width="1.5" style="stroke:var(--ink-2)"/>
+      <line x1="75"  y1="115" x2="188" y2="107" stroke-width="1.5" style="stroke:var(--ink-2)"/>
+      <line x1="75"  y1="170" x2="188" y2="107" stroke-width="1.5" style="stroke:var(--ink-2)"/>
+      <line x1="122" y1="30"  x2="188" y2="107" stroke-width="1.5" stroke-dasharray="4,3" style="stroke:var(--ink)"/>
       <!-- Weight labels -->
-      <text x="115" y="72"  font-family="sans-serif" font-size="10" fill="#193432">w₁</text>
-      <text x="115" y="108" font-family="sans-serif" font-size="10" fill="#193432">w₂</text>
-      <text x="115" y="148" font-family="sans-serif" font-size="10" fill="#193432">w₃</text>
+      <text x="115" y="72"  font-family="sans-serif" font-size="10" style="fill:var(--ink)">w₁</text>
+      <text x="115" y="108" font-family="sans-serif" font-size="10" style="fill:var(--ink)">w₂</text>
+      <text x="115" y="148" font-family="sans-serif" font-size="10" style="fill:var(--ink)">w₃</text>
       <!-- Neuron body -->
-      <circle cx="210" cy="107" r="32" fill="#a9d5d3" stroke="#193432" stroke-width="2"/>
-      <text x="210" y="103" font-family="sans-serif" font-size="10" fill="#193432" text-anchor="middle">Σ then</text>
-      <text x="210" y="116" font-family="sans-serif" font-size="10" fill="#193432" text-anchor="middle">f(z)</text>
+      <circle cx="210" cy="107" r="32" stroke-width="2" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <text x="210" y="103" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink)">Σ then</text>
+      <text x="210" y="116" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink)">f(z)</text>
       <!-- Output arrow -->
-      <line x1="242" y1="107" x2="345" y2="107" stroke="#193432" stroke-width="2" marker-end="url(#arr2)"/>
+      <line x1="242" y1="107" x2="345" y2="107" stroke-width="2" marker-end="url(#arr2)" style="stroke:var(--ink)"/>
       <defs>
         <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-          <path d="M0,0 L8,4 L0,8 Z" fill="#193432"/>
+          <path d="M0,0 L8,4 L0,8 Z" style="fill:var(--ink)"/>
         </marker>
       </defs>
       <!-- Output node -->
-      <circle cx="365" cy="107" r="20" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="365" y="111" font-family="sans-serif" font-size="12" fill="#193432" text-anchor="middle">ŷ</text>
+      <circle cx="365" cy="107" r="20" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="365" y="111" font-family="sans-serif" font-size="12" text-anchor="middle" style="fill:var(--ink)">ŷ</text>
       <!-- Formula -->
-      <text x="210" y="162" font-family="sans-serif" font-size="11" fill="#6c6c66" text-anchor="middle">ŷ = f(w₁x₁ + w₂x₂ + w₃x₃ + b)</text>
+      <text x="210" y="162" font-family="sans-serif" font-size="11" text-anchor="middle" style="fill:var(--ink-2)">ŷ = f(w₁x₁ + w₂x₂ + w₃x₃ + b)</text>
     </svg>
-    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.3rem">The perceptron: weighted sum of inputs plus bias, then an activation function <em>f</em>.</p>
+    <p class="diagram-caption">The perceptron: weighted sum of inputs plus bias, then an activation function <em>f</em>.</p>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Inputs (x₁, x₂, x₃…)</div>
-      The features fed into the neuron — numbers representing your data (e.g. pixel brightness, temperature, word count).
+      <div class="def-term">Inputs (x₁, x₂, x₃…)</div>The features fed into the neuron — numbers representing your data (e.g. pixel brightness, temperature, word count).
     </div>
     <div class="def-item">
-      <div class="def-term">Weights (w₁, w₂, w₃…)</div>
-      How much each input matters. A large positive weight amplifies the input; a negative weight suppresses it. <strong>Weights are learned during training.</strong>
+      <div class="def-term">Weights (w₁, w₂, w₃…)</div>How much each input matters. A large positive weight amplifies the input; a negative weight suppresses it. <strong>Weights are learned during training.</strong>
     </div>
     <div class="def-item">
-      <div class="def-term">Bias (b)</div>
-      A constant that shifts the output up or down, independent of the inputs. Gives the neuron flexibility to fire even when all inputs are zero. Also learned during training.
+      <div class="def-term">Bias (b)</div>A constant that shifts the output up or down, independent of the inputs. Gives the neuron flexibility to fire even when all inputs are zero. Also learned during training.
     </div>
     <div class="def-item">
-      <div class="def-term">Activation function f(·)</div>
-      Applied to the weighted sum. Without it, the perceptron is just linear arithmetic — and stacking linear operations gives you nothing extra (more on this shortly).
+      <div class="def-term">Activation function f(·)</div>Applied to the weighted sum. Without it, the perceptron is just linear arithmetic — and stacking linear operations gives you nothing extra (more on this shortly).
     </div>
   </div>
 
@@ -101,8 +114,7 @@
   <p>A single perceptron can learn a <strong>linear decision boundary</strong> — it can separate two classes with a straight line. It works for simple problems (AND gate, OR gate) but <strong>fails on anything non-linear</strong> (XOR gate, complex image patterns).</p>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    A single perceptron can only solve <strong>linearly separable</strong> problems. It cannot solve XOR — this limitation was famously identified in 1969 and temporarily halted AI research. The solution: stack perceptrons into <strong>multi-layer networks</strong>.
+    <div class="callout-title">Exam Alert</div>A single perceptron can only solve <strong>linearly separable</strong> problems. It cannot solve XOR — this limitation was famously identified in 1969 and temporarily halted AI research. The solution: stack perceptrons into <strong>multi-layer networks</strong>.
   </div>
 
   <!-- ───────────── SECTION 2: Why Nonlinearity ───────────── -->
@@ -113,22 +125,16 @@
   <p>If every neuron just computes <code>w·x + b</code> (a linear function), then no matter how many layers you add, the whole network is still one big linear function. You could always collapse 100 linear layers into a single equivalent layer — depth adds zero expressive power.</p>
 
   <div class="diagram" style="padding:1.2rem">
-    <div style="font-family:sans-serif; font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
-      <div style="background:#fde8e8; border:1.5px solid #c12929; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#c12929; margin-bottom:0.5rem">Without Nonlinearity</div>
-        <div style="color:#2a2a28; font-size:0.82rem; line-height:1.7">
-          Layer 1: <code>y = W₁x + b₁</code><br>
-          Layer 2: <code>z = W₂y + b₂</code><br>
-          Combined: <code>z = (W₂W₁)x + c</code><br><br>
+    <div style="font-family:var(--font-plate); font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+      <div style="background:var(--stop-tint); border:1.5px solid var(--stop); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--stop); margin-bottom:0.5rem">Without Nonlinearity</div>
+        <div style="color:var(--ink); font-size:0.82rem; line-height:1.7">Layer 1: <code>y = W₁x + b₁</code><br>Layer 2: <code>z = W₂y + b₂</code><br>Combined: <code>z = (W₂W₁)x + c</code><br><br>
           <strong>Still just one linear layer.</strong> No matter how deep you go, you gain nothing new.
         </div>
       </div>
-      <div style="background:#d8f3e5; border:1.5px solid #1a6b3f; border-radius:6px; padding:1rem">
-        <div style="font-weight:700; color:#1a6b3f; margin-bottom:0.5rem">With Nonlinearity</div>
-        <div style="color:#2a2a28; font-size:0.82rem; line-height:1.7">
-          Layer 1: <code>a = f(W₁x + b₁)</code><br>
-          Layer 2: <code>z = f(W₂a + b₂)</code><br><br>
-          Because <em>f</em> is nonlinear, these <strong>cannot</strong> be collapsed. Each layer learns genuinely new representations.
+      <div style="background:var(--go-tint); border:1.5px solid var(--go); border-radius:2px; padding:1rem">
+        <div style="font-weight:700; color:var(--go); margin-bottom:0.5rem">With Nonlinearity</div>
+        <div style="color:var(--ink); font-size:0.82rem; line-height:1.7">Layer 1: <code>a = f(W₁x + b₁)</code><br>Layer 2: <code>z = f(W₂a + b₂)</code><br><br>Because <em>f</em> is nonlinear, these <strong>cannot</strong> be collapsed. Each layer learns genuinely new representations.
         </div>
       </div>
     </div>
@@ -137,8 +143,7 @@
   <p>The <strong>activation function</strong> is what introduces nonlinearity after each layer's weighted sum. It is what makes "deep" in deep learning meaningful — enabling networks to learn edges, curves, shapes, words, and strategies from raw data.</p>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Without nonlinear activation functions, stacking more layers gives <strong>no extra expressive power</strong>. Nonlinearity is the core ingredient that allows deep networks to learn complex patterns.
+    <div class="callout-title">Exam Alert</div>Without nonlinear activation functions, stacking more layers gives <strong>no extra expressive power</strong>. Nonlinearity is the core ingredient that allows deep networks to learn complex patterns.
   </div>
 
   <!-- ───────────── SECTION 3: Multi-layer Perceptron ───────────── -->
@@ -149,96 +154,92 @@
   <div class="diagram" style="padding:1.5rem; text-align:center">
     <svg viewBox="0 0 440 230" width="420" xmlns="http://www.w3.org/2000/svg">
       <!-- Column labels -->
-      <text x="55"  y="18" font-family="sans-serif" font-size="11" fill="#6c6c66" text-anchor="middle" font-weight="600">Input</text>
-      <text x="55"  y="30" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Layer</text>
-      <text x="175" y="18" font-family="sans-serif" font-size="11" fill="#6c6c66" text-anchor="middle" font-weight="600">Hidden</text>
-      <text x="175" y="30" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Layer 1</text>
-      <text x="280" y="18" font-family="sans-serif" font-size="11" fill="#6c6c66" text-anchor="middle" font-weight="600">Hidden</text>
-      <text x="280" y="30" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Layer 2</text>
-      <text x="390" y="18" font-family="sans-serif" font-size="11" fill="#6c6c66" text-anchor="middle" font-weight="600">Output</text>
-      <text x="390" y="30" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Layer</text>
+      <text x="55"  y="18" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="600" style="fill:var(--ink-2)">Input</text>
+      <text x="55"  y="30" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink-2)">Layer</text>
+      <text x="175" y="18" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="600" style="fill:var(--ink-2)">Hidden</text>
+      <text x="175" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink-2)">Layer 1</text>
+      <text x="280" y="18" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="600" style="fill:var(--ink-2)">Hidden</text>
+      <text x="280" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink-2)">Layer 2</text>
+      <text x="390" y="18" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="600" style="fill:var(--ink-2)">Output</text>
+      <text x="390" y="30" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink-2)">Layer</text>
 
       <!-- Input layer (3 nodes) -->
-      <circle cx="55" cy="75"  r="18" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <circle cx="55" cy="125" r="18" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <circle cx="55" cy="175" r="18" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="55" y="79"  font-family="sans-serif" font-size="11" fill="#193432" text-anchor="middle">x₁</text>
-      <text x="55" y="129" font-family="sans-serif" font-size="11" fill="#193432" text-anchor="middle">x₂</text>
-      <text x="55" y="179" font-family="sans-serif" font-size="11" fill="#193432" text-anchor="middle">x₃</text>
+      <circle cx="55" cy="75"  r="18" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <circle cx="55" cy="125" r="18" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <circle cx="55" cy="175" r="18" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="55" y="79"  font-family="sans-serif" font-size="11" text-anchor="middle" style="fill:var(--ink)">x₁</text>
+      <text x="55" y="129" font-family="sans-serif" font-size="11" text-anchor="middle" style="fill:var(--ink)">x₂</text>
+      <text x="55" y="179" font-family="sans-serif" font-size="11" text-anchor="middle" style="fill:var(--ink)">x₃</text>
 
       <!-- Hidden layer 1 (4 nodes) -->
-      <circle cx="175" cy="55"  r="18" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <circle cx="175" cy="105" r="18" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <circle cx="175" cy="155" r="18" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <circle cx="175" cy="205" r="18" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
+      <circle cx="175" cy="55"  r="18" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <circle cx="175" cy="105" r="18" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <circle cx="175" cy="155" r="18" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <circle cx="175" cy="205" r="18" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
 
       <!-- Hidden layer 2 (3 nodes) -->
-      <circle cx="280" cy="75"  r="18" fill="#a9d5d3" stroke="#193432" stroke-width="1.5"/>
-      <circle cx="280" cy="125" r="18" fill="#a9d5d3" stroke="#193432" stroke-width="1.5"/>
-      <circle cx="280" cy="175" r="18" fill="#a9d5d3" stroke="#193432" stroke-width="1.5"/>
+      <circle cx="280" cy="75"  r="18" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <circle cx="280" cy="125" r="18" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <circle cx="280" cy="175" r="18" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
 
       <!-- Output layer (2 nodes) -->
-      <circle cx="390" cy="100" r="20" fill="#83c3c0" stroke="#193432" stroke-width="2"/>
-      <circle cx="390" cy="155" r="20" fill="#83c3c0" stroke="#193432" stroke-width="2"/>
-      <text x="390" y="104" font-family="sans-serif" font-size="10" fill="#193432" text-anchor="middle">Cat</text>
-      <text x="390" y="159" font-family="sans-serif" font-size="10" fill="#193432" text-anchor="middle">Dog</text>
+      <circle cx="390" cy="100" r="20" stroke-width="2" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <circle cx="390" cy="155" r="20" stroke-width="2" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="390" y="104" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink)">Cat</text>
+      <text x="390" y="159" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink)">Dog</text>
 
       <!-- Connections input → h1 -->
-      <line x1="73" y1="75"  x2="157" y2="55"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="75"  x2="157" y2="105" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="75"  x2="157" y2="155" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="75"  x2="157" y2="205" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="125" x2="157" y2="55"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="125" x2="157" y2="105" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="125" x2="157" y2="155" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="125" x2="157" y2="205" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="175" x2="157" y2="55"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="175" x2="157" y2="105" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="175" x2="157" y2="155" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="73" y1="175" x2="157" y2="205" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
+      <line x1="73" y1="75"  x2="157" y2="55"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="75"  x2="157" y2="105" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="75"  x2="157" y2="155" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="75"  x2="157" y2="205" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="125" x2="157" y2="55"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="125" x2="157" y2="105" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="125" x2="157" y2="155" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="125" x2="157" y2="205" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="175" x2="157" y2="55"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="175" x2="157" y2="105" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="175" x2="157" y2="155" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="73" y1="175" x2="157" y2="205" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
 
       <!-- Connections h1 → h2 -->
-      <line x1="193" y1="55"  x2="262" y2="75"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="55"  x2="262" y2="125" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="55"  x2="262" y2="175" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="105" x2="262" y2="75"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="105" x2="262" y2="125" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="105" x2="262" y2="175" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="155" x2="262" y2="75"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="155" x2="262" y2="125" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="155" x2="262" y2="175" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="205" x2="262" y2="75"  stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="205" x2="262" y2="125" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
-      <line x1="193" y1="205" x2="262" y2="175" stroke="#a9d5d3" stroke-width="0.8" opacity="0.55"/>
+      <line x1="193" y1="55"  x2="262" y2="75"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="55"  x2="262" y2="125" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="55"  x2="262" y2="175" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="105" x2="262" y2="75"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="105" x2="262" y2="125" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="105" x2="262" y2="175" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="155" x2="262" y2="75"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="155" x2="262" y2="125" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="155" x2="262" y2="175" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="205" x2="262" y2="75"  stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="205" x2="262" y2="125" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
+      <line x1="193" y1="205" x2="262" y2="175" stroke-width="0.8" opacity="0.55" style="stroke:var(--fill-2)"/>
 
       <!-- Connections h2 → output -->
-      <line x1="298" y1="75"  x2="370" y2="100" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
-      <line x1="298" y1="75"  x2="370" y2="155" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
-      <line x1="298" y1="125" x2="370" y2="100" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
-      <line x1="298" y1="125" x2="370" y2="155" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
-      <line x1="298" y1="175" x2="370" y2="100" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
-      <line x1="298" y1="175" x2="370" y2="155" stroke="#83c3c0" stroke-width="1" opacity="0.7"/>
+      <line x1="298" y1="75"  x2="370" y2="100" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
+      <line x1="298" y1="75"  x2="370" y2="155" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
+      <line x1="298" y1="125" x2="370" y2="100" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
+      <line x1="298" y1="125" x2="370" y2="155" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
+      <line x1="298" y1="175" x2="370" y2="100" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
+      <line x1="298" y1="175" x2="370" y2="155" stroke-width="1" opacity="0.7" style="stroke:var(--line-soft)"/>
 
-      <text x="220" y="225" font-family="sans-serif" font-size="10" fill="#6c6c66" text-anchor="middle">Every neuron connects to every neuron in the next layer (fully connected)</text>
+      <text x="220" y="225" font-family="sans-serif" font-size="10" text-anchor="middle" style="fill:var(--ink-2)">Every neuron connects to every neuron in the next layer (fully connected)</text>
     </svg>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Input Layer</div>
-      Receives the raw data. Each node is one feature. No computation happens here — it just passes values forward.
+      <div class="def-term">Input Layer</div>Receives the raw data. Each node is one feature. No computation happens here — it just passes values forward.
     </div>
     <div class="def-item">
-      <div class="def-term">Hidden Layers</div>
-      Where the learning happens. Each neuron computes a weighted sum of all its inputs, adds a bias, then applies an activation function. "Hidden" because their values are not directly observed from outside the network.
+      <div class="def-term">Hidden Layers</div>Where the learning happens. Each neuron computes a weighted sum of all its inputs, adds a bias, then applies an activation function. "Hidden" because their values are not directly observed from outside the network.
     </div>
     <div class="def-item">
-      <div class="def-term">Output Layer</div>
-      Produces the final prediction. For classification, each node represents one class — the node with the highest score wins.
+      <div class="def-term">Output Layer</div>Produces the final prediction. For classification, each node represents one class — the node with the highest score wins.
     </div>
     <div class="def-item">
-      <div class="def-term">Fully Connected (Dense)</div>
-      Every neuron in one layer connects to every neuron in the next. All weights are learned — this is why a large network has millions of parameters.
+      <div class="def-term">Fully Connected (Dense)</div>Every neuron in one layer connects to every neuron in the next. All weights are learned — this is why a large network has millions of parameters.
     </div>
   </div>
 
@@ -248,15 +249,13 @@
   <p>A <strong>Deep Neural Network</strong> is an MLP with <em>many</em> hidden layers — typically 3 or more. The word "deep" refers to the number of layers (the network's depth).</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy — Feature Hierarchy in Image Recognition</div>
-    A deep network recognizing a face learns a hierarchy without being told:
+    <div class="callout-title">Analogy — Feature Hierarchy in Image Recognition</div>A deep network recognizing a face learns a hierarchy without being told:
     <ul style="margin:0.5rem 0 0 1rem; line-height:1.9">
       <li><strong>Layer 1</strong> detects edges (horizontal, vertical, diagonal lines)</li>
       <li><strong>Layer 2</strong> combines edges into shapes (circles, curves, corners)</li>
       <li><strong>Layer 3</strong> combines shapes into parts (eyes, nose, mouth)</li>
       <li><strong>Layer 4+</strong> combines parts into a full face &rarr; identifies the person</li>
-    </ul>
-    Each layer builds on the previous one. You never programmed any of this — the network discovered it from data alone.
+    </ul>Each layer builds on the previous one. You never programmed any of this — the network discovered it from data alone.
   </div>
 
   <h3>The Forward Pass</h3>
@@ -264,28 +263,28 @@
   <p>Data flows <strong>left to right</strong> from input to output. This single forward journey through the network is called the <strong>forward pass</strong>.</p>
 
   <div class="diagram" style="padding:1.2rem">
-    <div style="font-family:sans-serif; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; justify-content:center">
-      <div style="background:#eef7f6; border:1.5px solid #3b7a77; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
-        <div style="font-weight:700; color:#193432; font-size:0.8rem">Input x</div>
-        <div style="color:#193432; font-size:0.75rem">raw features</div>
+    <div style="font-family:var(--font-plate); font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; justify-content:center">
+      <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
+        <div style="font-weight:700; color:var(--ink); font-size:0.8rem">Input x</div>
+        <div style="color:var(--ink); font-size:0.75rem">raw features</div>
       </div>
-      <div style="color:#6c6c66; font-size:1.3rem">&rarr;</div>
-      <div style="background:#cbe6e5; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
-        <div style="font-weight:700; color:#193432; font-size:0.8rem">Layer 1</div>
-        <div style="color:#193432; font-size:0.75rem">z = Wx + b<br>a = f(z)</div>
+      <div style="color:var(--ink-2); font-size:1.3rem">&rarr;</div>
+      <div style="background:var(--fill-1); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
+        <div style="font-weight:700; color:var(--ink); font-size:0.8rem">Layer 1</div>
+        <div style="color:var(--ink); font-size:0.75rem">z = Wx + b<br>a = f(z)</div>
       </div>
-      <div style="color:#6c6c66; font-size:1.3rem">&rarr;</div>
-      <div style="background:#a9d5d3; border:1.5px solid #193432; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
-        <div style="font-weight:700; color:#193432; font-size:0.8rem">Layer 2</div>
-        <div style="color:#193432; font-size:0.75rem">z = Wa + b<br>a = f(z)</div>
+      <div style="color:var(--ink-2); font-size:1.3rem">&rarr;</div>
+      <div style="background:var(--fill-2); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.8rem; text-align:center; min-width:90px">
+        <div style="font-weight:700; color:var(--ink); font-size:0.8rem">Layer 2</div>
+        <div style="color:var(--ink); font-size:0.75rem">z = Wa + b<br>a = f(z)</div>
       </div>
-      <div style="color:#6c6c66; font-size:1.1rem">&rarr; &hellip; &rarr;</div>
-      <div style="background:#83c3c0; border:1.5px solid #193432; border-radius:6px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
-        <div style="font-weight:700; color:#193432; font-size:0.8rem">Output &#375;</div>
-        <div style="color:#193432; font-size:0.75rem">prediction</div>
+      <div style="color:var(--ink-2); font-size:1.1rem">&rarr; &hellip; &rarr;</div>
+      <div style="background:var(--line-soft); border:1.5px solid var(--ink); border-radius:2px; padding:0.5rem 0.8rem; text-align:center; min-width:80px">
+        <div style="font-weight:700; color:var(--ink); font-size:0.8rem">Output &#375;</div>
+        <div style="color:var(--ink); font-size:0.75rem">prediction</div>
       </div>
     </div>
-    <p style="text-align:center; color:#6c6c66; font-size:0.8rem; margin-top:0.75rem">At each layer: <strong>z = Wx + b</strong> (weighted sum), then <strong>a = f(z)</strong> (activation). Pass <em>a</em> to the next layer.</p>
+    <p style="text-align:center; color:var(--ink-2); font-size:0.8rem; margin-top:0.75rem">At each layer: <strong>z = Wx + b</strong> (weighted sum), then <strong>a = f(z)</strong> (activation). Pass <em>a</em> to the next layer.</p>
   </div>
 
   <div class="def-list">
@@ -311,26 +310,26 @@
   </ul>
 
   <div class="diagram" style="padding:1rem; overflow-x:auto">
-    <table style="font-family:sans-serif; font-size:0.82rem; border-collapse:collapse; width:100%; min-width:420px">
+    <table style="font-family:var(--font-plate); font-size:0.82rem; border-collapse:collapse; width:100%">
       <thead>
-        <tr style="background:#e4f0ef">
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Architecture</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Capability</th>
-          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid #e5e4e0">Typical use</th>
+        <tr style="background:var(--fill-0)">
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid var(--rule)">Architecture</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid var(--rule)">Capability</th>
+          <th style="padding:0.5rem 0.75rem; text-align:left; border-bottom:2px solid var(--rule)">Typical use</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e5e4e0">
+        <tr style="border-bottom:1px solid var(--rule)">
           <td style="padding:0.4rem 0.75rem">Single perceptron</td>
           <td style="padding:0.4rem 0.75rem">Linear boundary only</td>
           <td style="padding:0.4rem 0.75rem">Linearly separable problems</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+        <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
           <td style="padding:0.4rem 0.75rem">1 hidden layer (MLP)</td>
           <td style="padding:0.4rem 0.75rem">Any smooth curve (in theory)</td>
           <td style="padding:0.4rem 0.75rem">Basic pattern recognition</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0">
+        <tr style="border-bottom:1px solid var(--rule)">
           <td style="padding:0.4rem 0.75rem">2–5 hidden layers</td>
           <td style="padding:0.4rem 0.75rem">Hierarchical features</td>
           <td style="padding:0.4rem 0.75rem">Images, audio, text</td>
@@ -345,8 +344,7 @@
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the three layer types: <strong>Input</strong> (no computation), <strong>Hidden</strong> (learns features), <strong>Output</strong> (prediction). The forward pass computes <strong>z = Wx + b</strong> then <strong>a = f(z)</strong> at each layer. "Deep" means many hidden layers. Nonlinearity is what makes depth valuable.
+    <div class="callout-title">Exam Alert</div>Know the three layer types: <strong>Input</strong> (no computation), <strong>Hidden</strong> (learns features), <strong>Output</strong> (prediction). The forward pass computes <strong>z = Wx + b</strong> then <strong>a = f(z)</strong> at each layer. "Deep" means many hidden layers. Nonlinearity is what makes depth valuable.
   </div>
 
   <!-- ───────────── QUIZ ───────────── -->
@@ -404,7 +402,7 @@
     <button class="quiz-next" onclick="showDone()">See results &rarr;</button>
   </div>
 
-  <div id="done-box" style="display:none; background:var(--success-light); border:1.5px solid var(--success); border-radius:8px; padding:1.2rem 1.5rem; font-family:sans-serif; margin:2rem 0">
+  <div id="done-box" style="display:none; background:var(--success-light); border:1.5px solid var(--success); border-radius:2px; padding:1.2rem 1.5rem; font-family:var(--font-plate); margin:2rem 0">
     <div style="font-weight:700; color:var(--success); margin-bottom:0.4rem">Lesson Complete</div>
     <div id="done-score" style="font-size:0.9rem; color:var(--text)"></div>
   </div>
@@ -508,7 +506,6 @@
   }
 </script>
 
-</div>
 <script src="../assets/nav.js"></script>
 </body>
 </html>

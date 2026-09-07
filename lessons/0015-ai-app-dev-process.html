@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 15 — AI Application Development Process</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 04 · Lesson 15 &nbsp;|&nbsp; AI Development Framework</div>
+    <div class="plate-num">15</div>
     <h1>AI Application Development Process</h1>
     <p class="subtitle">How a real AI project goes from a problem statement to a deployed application — the six stages every developer follows.</p>
   </header>
@@ -28,56 +46,54 @@
     <svg viewBox="0 0 560 100" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <defs>
         <marker id="pp" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-          <polygon points="0 0,7 3.5,0 7" fill="#6c6c66"/>
+          <polygon points="0 0,7 3.5,0 7" style="fill:var(--ink-2)"/>
         </marker>
       </defs>
 
-      <rect x="2"   y="30" width="74" height="40" rx="6" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="39"  y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">① Requirement</text>
-      <text x="39"  y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">Analysis</text>
+      <rect x="2"   y="30" width="74" height="40" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="39"  y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">① Requirement</text>
+      <text x="39"  y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Analysis</text>
 
-      <line x1="76"  y1="50" x2="86"  y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#pp)"/>
+      <line x1="76"  y1="50" x2="86"  y2="50" stroke-width="1.5" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
 
-      <rect x="86"  y="30" width="74" height="40" rx="6" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="123" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">② Environment</text>
-      <text x="123" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">Setup</text>
+      <rect x="86"  y="30" width="74" height="40" rx="6" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="123" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">② Environment</text>
+      <text x="123" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Setup</text>
 
-      <line x1="160" y1="50" x2="170" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#pp)"/>
+      <line x1="160" y1="50" x2="170" y2="50" stroke-width="1.5" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
 
-      <rect x="170" y="30" width="74" height="40" rx="6" fill="#a9d5d3" stroke="#193432" stroke-width="1.5"/>
-      <text x="207" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">③ Data</text>
-      <text x="207" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">Preparation</text>
+      <rect x="170" y="30" width="74" height="40" rx="6" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <text x="207" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">③ Data</text>
+      <text x="207" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Preparation</text>
 
-      <line x1="244" y1="50" x2="254" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#pp)"/>
+      <line x1="244" y1="50" x2="254" y2="50" stroke-width="1.5" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
 
-      <rect x="254" y="30" width="74" height="40" rx="6" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="291" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">④ Network</text>
-      <text x="291" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">Building</text>
+      <rect x="254" y="30" width="74" height="40" rx="6" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="291" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">④ Network</text>
+      <text x="291" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Building</text>
 
-      <line x1="328" y1="50" x2="338" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#pp)"/>
+      <line x1="328" y1="50" x2="338" y2="50" stroke-width="1.5" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
 
-      <rect x="338" y="30" width="74" height="40" rx="6" fill="#5aafab" stroke="#193432" stroke-width="1.5"/>
-      <text x="375" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">⑤ Model</text>
-      <text x="375" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#193432" font-weight="700">Training</text>
+      <rect x="338" y="30" width="74" height="40" rx="6" stroke-width="1.5" style="fill:var(--line); stroke:var(--ink)"/>
+      <text x="375" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">⑤ Model</text>
+      <text x="375" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Training</text>
 
-      <line x1="412" y1="50" x2="422" y2="50" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#pp)"/>
+      <line x1="412" y1="50" x2="422" y2="50" stroke-width="1.5" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
 
-      <rect x="422" y="30" width="130" height="40" rx="6" fill="#2f605e" stroke="#193432" stroke-width="2"/>
-      <text x="487" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#ffffff" font-weight="700">⑥ Application</text>
-      <text x="487" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#ffffff" font-weight="700">Development</text>
+      <rect x="422" y="30" width="130" height="40" rx="6" stroke-width="2" style="fill:var(--ink); stroke:var(--ink)"/>
+      <text x="487" y="48" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--sheet)">⑥ Application</text>
+      <text x="487" y="60" font-family="sans-serif" font-size="8.5" text-anchor="middle" font-weight="700" style="fill:var(--sheet)">Development</text>
 
       <!-- Feedback loop arrow below -->
-      <path d="M 552 72 Q 552 90 277 90 Q 4 90 4 72" fill="none" stroke="#6c6c66" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#pp)"/>
-      <text x="277" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6c6c66">Feedback &amp; Iteration</text>
+      <path d="M 552 72 Q 552 90 277 90 Q 4 90 4 72" fill="none" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <text x="277" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">Feedback &amp; Iteration</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.3rem">
-      AI development is a loop, not a straight line. Feedback from deployment drives improvements in data and the model.
+    <p class="diagram-caption">AI development is a loop, not a straight line. Feedback from deployment drives improvements in data and the model.
     </p>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Memorise the six stages in order: <strong>Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development</strong>. The exam often asks you to identify which stage a described activity belongs to.
+    <div class="callout-title">Exam Alert</div>Memorise the six stages in order: <strong>Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development</strong>. The exam often asks you to identify which stage a described activity belongs to.
   </div>
 
   <!-- ───────────── SECTION 2: Each stage in detail ───────────── -->
@@ -132,34 +148,34 @@
   <div class="diagram" style="padding:1rem">
     <table style="width:100%; border-collapse:collapse; font-size:0.85rem">
       <thead>
-        <tr style="background:#e4f0ef; border-bottom:2px solid #3b7a77; color:#2c5e5c">
+        <tr style="background:var(--fill-0); border-bottom:2px solid var(--line); color:var(--ink)">
           <th style="padding:0.5rem 0.8rem; text-align:left; width:22%">Stage</th>
           <th style="padding:0.5rem 0.8rem; text-align:left">What happens in this project</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e5e4e0">
-          <td style="padding:0.5rem 0.8rem; color:#3b7a77; font-weight:700">① Requirement</td>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:0.5rem 0.8rem; color:var(--line); font-weight:700">① Requirement</td>
           <td style="padding:0.5rem 0.8rem">Classify 28×28 greyscale images into digits 0–9. Target: &gt;99% accuracy on MNIST test set. Inference must run in under 10ms.</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
-          <td style="padding:0.5rem 0.8rem; color:#2c5e5c; font-weight:700">② Environment</td>
+        <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
+          <td style="padding:0.5rem 0.8rem; color:var(--ink); font-weight:700">② Environment</td>
           <td style="padding:0.5rem 0.8rem">Create a ModelArts training job — select MindSpore 2.x, Ascend 910 instance. No local setup needed.</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0">
-          <td style="padding:0.5rem 0.8rem; color:#193432; font-weight:700">③ Data</td>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:0.5rem 0.8rem; color:var(--ink); font-weight:700">③ Data</td>
           <td style="padding:0.5rem 0.8rem">Download MNIST (60,000 train / 10,000 test images). Normalise pixel values to [0, 1]. Upload to OBS (Huawei Object Storage). No augmentation needed — MNIST is already clean.</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
-          <td style="padding:0.5rem 0.8rem; color:#193432; font-weight:700">④ Network</td>
+        <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
+          <td style="padding:0.5rem 0.8rem; color:var(--ink); font-weight:700">④ Network</td>
           <td style="padding:0.5rem 0.8rem">Implement LeNet5 as nn.Cell with construct() method (Lesson 14). Input: 32×32×1 (MNIST images are padded from 28×28).</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0">
-          <td style="padding:0.5rem 0.8rem; color:#193432; font-weight:700">⑤ Training</td>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:0.5rem 0.8rem; color:var(--ink); font-weight:700">⑤ Training</td>
           <td style="padding:0.5rem 0.8rem">Use Adam (lr=0.001), SoftmaxCrossEntropyWithLogits loss, batch size 32, 10 epochs. Watch validation accuracy per epoch via ModelArts dashboard.</td>
         </tr>
         <tr>
-          <td style="padding:0.5rem 0.8rem; color:#193432; font-weight:700">⑥ Application</td>
+          <td style="padding:0.5rem 0.8rem; color:var(--ink); font-weight:700">⑥ Application</td>
           <td style="padding:0.5rem 0.8rem">Export model to MindIR format. Deploy via MindSpore Serving as a REST API. Mobile client sends image → server returns digit prediction.</td>
         </tr>
       </tbody>
@@ -175,111 +191,111 @@
     <svg viewBox="0 0 560 200" width="560" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
 
       <!-- ONE-TO-ONE -->
-      <text x="56" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66" font-weight="700">One-to-One</text>
-      <rect x="30" y="70" width="52" height="28" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="56" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">x</text>
-      <rect x="30" y="24" width="52" height="28" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="56" y="42" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">y</text>
-      <rect x="24" y="48" width="64" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="56" y="60" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#2c5e5c">RNN cell</text>
-      <line x1="56" y1="66" x2="56" y2="52" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="56" y1="48" x2="56" y2="36" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <text x="56" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">e.g. image → label</text>
-      <text x="56" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">(plain classifier)</text>
+      <text x="56" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink-2)">One-to-One</text>
+      <rect x="30" y="70" width="52" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="56" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">x</text>
+      <rect x="30" y="24" width="52" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="56" y="42" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">y</text>
+      <rect x="24" y="48" width="64" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="56" y="60" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink)">RNN cell</text>
+      <line x1="56" y1="66" x2="56" y2="52" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="56" y1="48" x2="56" y2="36" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <text x="56" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">e.g. image → label</text>
+      <text x="56" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">(plain classifier)</text>
 
       <!-- ONE-TO-MANY -->
-      <text x="168" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66" font-weight="700">One-to-Many</text>
+      <text x="168" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink-2)">One-to-Many</text>
       <!-- Input -->
-      <rect x="142" y="70" width="52" height="28" rx="5" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="168" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#2c5e5c">x</text>
+      <rect x="142" y="70" width="52" height="28" rx="5" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="168" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink)">x</text>
       <!-- Cells -->
-      <rect x="118" y="48" width="38" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="137" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
-      <rect x="162" y="48" width="38" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="181" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
+      <rect x="118" y="48" width="38" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="137" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
+      <rect x="162" y="48" width="38" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="181" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
       <!-- Outputs -->
-      <rect x="118" y="24" width="38" height="20" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="137" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">y₁</text>
-      <rect x="162" y="24" width="38" height="20" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="181" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">y₂</text>
+      <rect x="118" y="24" width="38" height="20" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="137" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">y₁</text>
+      <rect x="162" y="24" width="38" height="20" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="181" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">y₂</text>
       <!-- Arrows -->
-      <line x1="168" y1="70" x2="137" y2="67" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="137" y1="66" x2="137" y2="52" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="137" y1="48" x2="137" y2="46" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="155" y1="57" x2="162" y2="57" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="181" y1="66" x2="181" y2="52" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="181" y1="48" x2="181" y2="46" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <text x="168" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">e.g. image → caption</text>
-      <text x="168" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">(image captioning)</text>
+      <line x1="168" y1="70" x2="137" y2="67" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="137" y1="66" x2="137" y2="52" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="137" y1="48" x2="137" y2="46" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="155" y1="57" x2="162" y2="57" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="181" y1="66" x2="181" y2="52" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="181" y1="48" x2="181" y2="46" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <text x="168" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">e.g. image → caption</text>
+      <text x="168" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">(image captioning)</text>
 
       <!-- MANY-TO-ONE -->
-      <text x="300" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66" font-weight="700">Many-to-One</text>
-      <rect x="264" y="70" width="38" height="20" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="283" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">x₁</text>
-      <rect x="308" y="70" width="38" height="20" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="327" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">x₂</text>
-      <rect x="264" y="48" width="38" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="283" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
-      <rect x="308" y="48" width="38" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="327" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
-      <rect x="288" y="24" width="52" height="20" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="314" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">y</text>
-      <line x1="283" y1="70" x2="283" y2="68" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="302" y1="57" x2="308" y2="57" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="327" y1="70" x2="327" y2="68" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="327" y1="48" x2="314" y2="46" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <text x="300" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">e.g. review → sentiment</text>
-      <text x="300" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">(sentiment analysis)</text>
+      <text x="300" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink-2)">Many-to-One</text>
+      <rect x="264" y="70" width="38" height="20" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="283" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">x₁</text>
+      <rect x="308" y="70" width="38" height="20" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="327" y="84" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">x₂</text>
+      <rect x="264" y="48" width="38" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="283" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
+      <rect x="308" y="48" width="38" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="327" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
+      <rect x="288" y="24" width="52" height="20" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="314" y="38" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">y</text>
+      <line x1="283" y1="70" x2="283" y2="68" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="302" y1="57" x2="308" y2="57" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="327" y1="70" x2="327" y2="68" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="327" y1="48" x2="314" y2="46" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <text x="300" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">e.g. review → sentiment</text>
+      <text x="300" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">(sentiment analysis)</text>
 
       <!-- MANY-TO-MANY -->
-      <text x="450" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66" font-weight="700">Many-to-Many</text>
-      <rect x="406" y="70" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="424" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">x₁</text>
-      <rect x="448" y="70" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="466" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">x₂</text>
-      <rect x="406" y="48" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="424" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
-      <rect x="448" y="48" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-      <text x="466" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">cell</text>
-      <rect x="406" y="26" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="424" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">y₁</text>
-      <rect x="448" y="26" width="36" height="18" rx="4" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="466" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" fill="#2c5e5c">y₂</text>
-      <line x1="424" y1="70" x2="424" y2="67" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="442" y1="57" x2="448" y2="57" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="466" y1="70" x2="466" y2="67" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="424" y1="48" x2="424" y2="46" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <line x1="466" y1="48" x2="466" y2="46" stroke="#6c6c66" stroke-width="1" marker-end="url(#pp)"/>
-      <text x="450" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">e.g. word → POS tag</text>
-      <text x="450" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">(sequence labelling)</text>
+      <text x="450" y="16" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink-2)">Many-to-Many</text>
+      <rect x="406" y="70" width="36" height="18" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="424" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">x₁</text>
+      <rect x="448" y="70" width="36" height="18" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="466" y="83" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">x₂</text>
+      <rect x="406" y="48" width="36" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="424" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
+      <rect x="448" y="48" width="36" height="18" rx="4" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="466" y="60" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">cell</text>
+      <rect x="406" y="26" width="36" height="18" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="424" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">y₁</text>
+      <rect x="448" y="26" width="36" height="18" rx="4" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="466" y="39" font-family="sans-serif" font-size="7" text-anchor="middle" style="fill:var(--ink)">y₂</text>
+      <line x1="424" y1="70" x2="424" y2="67" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="442" y1="57" x2="448" y2="57" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="466" y1="70" x2="466" y2="67" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="424" y1="48" x2="424" y2="46" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <line x1="466" y1="48" x2="466" y2="46" stroke-width="1" marker-end="url(#pp)" style="stroke:var(--ink-2)"/>
+      <text x="450" y="116" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">e.g. word → POS tag</text>
+      <text x="450" y="128" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">(sequence labelling)</text>
     </svg>
   </div>
 
   <table style="width:100%; border-collapse:collapse; font-size:0.87rem; margin-top:0.5rem">
     <thead>
-      <tr style="background:#e4f0ef; border-bottom:2px solid #3b7a77; color:#2c5e5c">
+      <tr style="background:var(--fill-0); border-bottom:2px solid var(--line); color:var(--ink)">
         <th style="padding:0.6rem 0.8rem; text-align:left">Type</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Input → Output</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Real-world example</th>
       </tr>
     </thead>
     <tbody>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">One-to-One</td>
         <td style="padding:0.5rem 0.8rem">Single → Single</td>
         <td style="padding:0.5rem 0.8rem">Image classification (not really sequential, but the degenerate case)</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">One-to-Many</td>
         <td style="padding:0.5rem 0.8rem">Single → Sequence</td>
         <td style="padding:0.5rem 0.8rem">Image captioning (one photo → a sentence of words)</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">Many-to-One</td>
         <td style="padding:0.5rem 0.8rem">Sequence → Single</td>
         <td style="padding:0.5rem 0.8rem">Sentiment analysis (a review → positive/negative label)</td>
       </tr>
-      <tr style="background:#f7f7f6">
+      <tr style="background:var(--plate)">
         <td style="padding:0.5rem 0.8rem; font-weight:700">Many-to-Many</td>
         <td style="padding:0.5rem 0.8rem">Sequence → Sequence</td>
         <td style="padding:0.5rem 0.8rem">Machine translation (sentence → sentence) or POS tagging (word → tag for each word)</td>
@@ -288,8 +304,7 @@
   </table>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    The exam may describe a task and ask which RNN type applies. Key examples: <strong>sentiment analysis = many-to-one</strong>, <strong>machine translation = many-to-many</strong> (often via Seq2Seq), <strong>image captioning = one-to-many</strong>.
+    <div class="callout-title">Exam Alert</div>The exam may describe a task and ask which RNN type applies. Key examples: <strong>sentiment analysis = many-to-one</strong>, <strong>machine translation = many-to-many</strong> (often via Seq2Seq), <strong>image captioning = one-to-many</strong>.
   </div>
 
   <!-- ───────────── SECTION 5: ModelArts ───────────── -->
@@ -299,25 +314,21 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Data Management</div>
-      Upload datasets to OBS (Object Storage Service). Label images with the built-in data labelling tool. Generate train/val/test splits automatically.
+      <div class="def-term">Data Management</div>Upload datasets to OBS (Object Storage Service). Label images with the built-in data labelling tool. Generate train/val/test splits automatically.
     </div>
     <div class="def-item">
-      <div class="def-term">Training Jobs</div>
-      Submit a MindSpore training script. ModelArts provisions Ascend NPU instances, runs training, logs metrics, and saves checkpoints to OBS — no server management needed.
+      <div class="def-term">Training Jobs</div>Submit a MindSpore training script. ModelArts provisions Ascend NPU instances, runs training, logs metrics, and saves checkpoints to OBS — no server management needed.
     </div>
     <div class="def-item">
-      <div class="def-term">Automated Hyperparameter Search</div>
-      ModelArts can run many training jobs in parallel with different hyperparameter combinations and report which performed best (grid or random search, Lesson 06).
+      <div class="def-term">Automated Hyperparameter Search</div>ModelArts can run many training jobs in parallel with different hyperparameter combinations and report which performed best (grid or random search, Lesson 06).
     </div>
     <div class="def-item">
-      <div class="def-term">Model Deployment</div>
-      One-click deploy a saved model as a real-time API endpoint. ModelArts handles scaling, load balancing, and monitoring.
+      <div class="def-term">Model Deployment</div>One-click deploy a saved model as a real-time API endpoint. ModelArts handles scaling, load balancing, and monitoring.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
+    <div class="callout-title">Exam Alert</div>
     <strong>ModelArts</strong> is Huawei's cloud AI development platform. It supports the full pipeline from data labelling to model serving, running on <strong>Ascend NPU</strong> hardware. It is the primary platform for MindSpore development in the HCIA-AI exam context.
   </div>
 
@@ -334,7 +345,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">Requirement Analysis — revisit the requirements once the data is understood</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -347,7 +358,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">One-to-One — the email is treated as a single unit mapped to a single category</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -360,7 +371,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">The data augmentation strategy and train/val/test split ratios</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -373,7 +384,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">ModelArts AutoML — the platform feature that serves models after hyperparameter search</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -386,12 +397,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">Increase the learning rate and retrain on the same training data for more epochs</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>The 6-stage AI pipeline: Requirement Analysis → Environment Setup → Data Preparation → Network Building → Model Training → Application Development</li>
@@ -415,8 +426,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0014-ai-frameworks.html">← Lesson 14: AI Development Frameworks</a>
-    <a href="0016-transfer-learning.html" class="nav-next">Next: Transfer Learning →</a>
+    <a href="0014-ai-frameworks.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 14: AI Development Frameworks</a>
+    <a href="0016-transfer-learning.html" class="nav-next">Next: Transfer Learning <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -459,7 +470,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

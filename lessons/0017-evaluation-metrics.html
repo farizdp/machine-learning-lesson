@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 17 — Model Evaluation Metrics</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Advanced · Lesson 17 &nbsp;|&nbsp; Model Evaluation</div>
+    <div class="plate-num">17</div>
     <h1>Model Evaluation Metrics</h1>
     <p class="subtitle">Accuracy alone can lie. These are the numbers that actually tell you whether your model is good — and good for what.</p>
   </header>
@@ -25,8 +43,7 @@
   <p>Suppose you build a cancer screening model. The dataset has 990 healthy patients and 10 cancer patients. A model that predicts "healthy" for every single person gets <strong>99% accuracy</strong> — yet it misses every cancer case and is completely useless.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">The class imbalance trap</div>
-    Accuracy = (correct predictions) / (all predictions). When one class vastly outnumbers another, a model can score high accuracy by ignoring the minority class entirely. In medical, fraud detection, and security tasks, the minority class is usually the one that matters most.
+    <div class="callout-title">The class imbalance trap</div>Accuracy = (correct predictions) / (all predictions). When one class vastly outnumbers another, a model can score high accuracy by ignoring the minority class entirely. In medical, fraud detection, and security tasks, the minority class is usually the one that matters most.
   </div>
 
   <p>You need metrics that distinguish between <strong>different types of errors</strong>. That starts with the confusion matrix.</p>
@@ -40,67 +57,62 @@
     <svg viewBox="0 0 420 200" width="420" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
 
       <!-- Axis labels -->
-      <text x="240" y="18" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6c6c66" font-weight="700">Predicted</text>
-      <text x="155" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66">Positive</text>
-      <text x="325" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66">Negative</text>
+      <text x="240" y="18" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" style="fill:var(--ink-2)">Predicted</text>
+      <text x="155" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink-2)">Positive</text>
+      <text x="325" y="34" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink-2)">Negative</text>
 
-      <text x="28" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#6c6c66" font-weight="700" transform="rotate(-90 28 110)">Actual</text>
-      <text x="58" y="95" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66">Positive</text>
-      <text x="58" y="155" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#6c6c66">Negative</text>
+      <text x="28" y="110" font-family="sans-serif" font-size="10" text-anchor="middle" font-weight="700" transform="rotate(-90 28 110)" style="fill:var(--ink-2)">Actual</text>
+      <text x="58" y="95" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink-2)">Positive</text>
+      <text x="58" y="155" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--ink-2)">Negative</text>
 
       <!-- TP -->
-      <rect x="80" y="40" width="160" height="60" rx="5" fill="#d8f3e5" stroke="#1a6b3f" stroke-width="2"/>
-      <text x="160" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#1a6b3f" font-weight="700">TP</text>
-      <text x="160" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1a6b3f">True Positive</text>
-      <text x="160" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1a6b3f">Sick → predicted sick ✓</text>
+      <rect x="80" y="40" width="160" height="60" rx="5" stroke-width="2" style="fill:var(--go-tint); stroke:var(--go)"/>
+      <text x="160" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="700" style="fill:var(--go)">TP</text>
+      <text x="160" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--go)">True Positive</text>
+      <text x="160" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--go)">Sick → predicted sick </text>
 
       <!-- FN -->
-      <rect x="248" y="40" width="160" height="60" rx="5" fill="#fde8e8" stroke="#c12929" stroke-width="2"/>
-      <text x="328" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#c12929" font-weight="700">FN</text>
-      <text x="328" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#c12929">False Negative</text>
-      <text x="328" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#c12929">Sick → predicted healthy ✗</text>
+      <rect x="248" y="40" width="160" height="60" rx="5" stroke-width="2" style="fill:var(--stop-tint); stroke:var(--stop)"/>
+      <text x="328" y="62" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="700" style="fill:var(--stop)">FN</text>
+      <text x="328" y="76" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--stop)">False Negative</text>
+      <text x="328" y="90" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--stop)">Sick → predicted healthy </text>
 
       <!-- FP -->
-      <rect x="80" y="108" width="160" height="60" rx="5" fill="#fde8e8" stroke="#c12929" stroke-width="2"/>
-      <text x="160" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#c12929" font-weight="700">FP</text>
-      <text x="160" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#c12929">False Positive</text>
-      <text x="160" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#c12929">Healthy → predicted sick ✗</text>
+      <rect x="80" y="108" width="160" height="60" rx="5" stroke-width="2" style="fill:var(--stop-tint); stroke:var(--stop)"/>
+      <text x="160" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="700" style="fill:var(--stop)">FP</text>
+      <text x="160" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--stop)">False Positive</text>
+      <text x="160" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--stop)">Healthy → predicted sick </text>
 
       <!-- TN -->
-      <rect x="248" y="108" width="160" height="60" rx="5" fill="#d8f3e5" stroke="#1a6b3f" stroke-width="2"/>
-      <text x="328" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" fill="#1a6b3f" font-weight="700">TN</text>
-      <text x="328" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#1a6b3f">True Negative</text>
-      <text x="328" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#1a6b3f">Healthy → predicted healthy ✓</text>
+      <rect x="248" y="108" width="160" height="60" rx="5" stroke-width="2" style="fill:var(--go-tint); stroke:var(--go)"/>
+      <text x="328" y="130" font-family="sans-serif" font-size="11" text-anchor="middle" font-weight="700" style="fill:var(--go)">TN</text>
+      <text x="328" y="144" font-family="sans-serif" font-size="9" text-anchor="middle" style="fill:var(--go)">True Negative</text>
+      <text x="328" y="158" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--go)">Healthy → predicted healthy </text>
 
       <!-- Danger label for FN -->
-      <text x="370" y="56" font-family="sans-serif" font-size="8" fill="#c12929" font-weight="700">⚠ Most</text>
-      <text x="370" y="67" font-family="sans-serif" font-size="8" fill="#c12929" font-weight="700">dangerous</text>
-      <text x="370" y="78" font-family="sans-serif" font-size="8" fill="#c12929" font-weight="700">in medicine</text>
+      <text x="370" y="56" font-family="sans-serif" font-size="8" font-weight="700" style="fill:var(--stop)"> Most</text>
+      <text x="370" y="67" font-family="sans-serif" font-size="8" font-weight="700" style="fill:var(--stop)">dangerous</text>
+      <text x="370" y="78" font-family="sans-serif" font-size="8" font-weight="700" style="fill:var(--stop)">in medicine</text>
     </svg>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">TP — True Positive</div>
-      Model said Positive, reality is Positive. Correct detection. (Sick patient correctly flagged.)
+      <div class="def-term">TP — True Positive</div>Model said Positive, reality is Positive. Correct detection. (Sick patient correctly flagged.)
     </div>
     <div class="def-item">
-      <div class="def-term">TN — True Negative</div>
-      Model said Negative, reality is Negative. Correct rejection. (Healthy patient correctly cleared.)
+      <div class="def-term">TN — True Negative</div>Model said Negative, reality is Negative. Correct rejection. (Healthy patient correctly cleared.)
     </div>
     <div class="def-item">
-      <div class="def-term">FP — False Positive (Type I Error)</div>
-      Model said Positive, reality is Negative. False alarm. (Healthy patient incorrectly flagged — causes unnecessary anxiety and follow-up tests.)
+      <div class="def-term">FP — False Positive (Type I Error)</div>Model said Positive, reality is Negative. False alarm. (Healthy patient incorrectly flagged — causes unnecessary anxiety and follow-up tests.)
     </div>
     <div class="def-item">
-      <div class="def-term">FN — False Negative (Type II Error)</div>
-      Model said Negative, reality is Positive. Missed detection. (Sick patient incorrectly cleared — often the most dangerous error in medical and security contexts.)
+      <div class="def-term">FN — False Negative (Type II Error)</div>Model said Negative, reality is Positive. Missed detection. (Sick patient incorrectly cleared — often the most dangerous error in medical and security contexts.)
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Memorise the four cells: <strong>TP</strong> (correct positive), <strong>TN</strong> (correct negative), <strong>FP</strong> (wrong alarm), <strong>FN</strong> (missed detection). All other metrics are derived from these four numbers.
+    <div class="callout-title">Exam Alert</div>Memorise the four cells: <strong>TP</strong> (correct positive), <strong>TN</strong> (correct negative), <strong>FP</strong> (wrong alarm), <strong>FN</strong> (missed detection). All other metrics are derived from these four numbers.
   </div>
 
   <!-- ───────────── SECTION 3: Metrics ───────────── -->
@@ -130,31 +142,30 @@
     <svg viewBox="0 0 460 130" width="460" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
 
       <!-- Low threshold scenario -->
-      <rect x="10" y="10" width="200" height="110" rx="8" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="110" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">Low threshold → "say Positive more often"</text>
-      <text x="110" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1a6b3f">↑ Recall (catch more real cases)</text>
-      <text x="110" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#c12929">↓ Precision (more false alarms too)</text>
-      <text x="110" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">Use when missing a positive is</text>
-      <text x="110" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">the worst outcome.</text>
-      <text x="110" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6c6c66">Example: cancer screening</text>
-      <text x="110" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6c6c66">(miss no sick patient)</text>
+      <rect x="10" y="10" width="200" height="110" rx="8" stroke-width="1.5" stroke-dasharray="5,3" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="110" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">Low threshold → "say Positive more often"</text>
+      <text x="110" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" style="fill:var(--go)">↑ Recall (catch more real cases)</text>
+      <text x="110" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" style="fill:var(--stop)">↓ Precision (more false alarms too)</text>
+      <text x="110" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">Use when missing a positive is</text>
+      <text x="110" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">the worst outcome.</text>
+      <text x="110" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">Example: cancer screening</text>
+      <text x="110" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">(miss no sick patient)</text>
 
       <!-- Arrow between -->
-      <text x="230" y="70" font-family="sans-serif" font-size="18" fill="#6c6c66" text-anchor="middle">⇄</text>
-      <text x="230" y="84" font-family="sans-serif" font-size="7.5" fill="#6c6c66" text-anchor="middle">trade-off</text>
+      <text x="230" y="70" font-family="sans-serif" font-size="18" text-anchor="middle" style="fill:var(--ink-2)">⇄</text>
+      <text x="230" y="84" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">trade-off</text>
 
       <!-- High threshold scenario -->
-      <rect x="250" y="10" width="200" height="110" rx="8" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="350" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#2c5e5c" font-weight="700">High threshold → "only say Positive when sure"</text>
-      <text x="350" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#1a6b3f">↑ Precision (few false alarms)</text>
-      <text x="350" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" fill="#c12929">↓ Recall (miss more real cases)</text>
-      <text x="350" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">Use when a false alarm is</text>
-      <text x="350" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" fill="#6c6c66">costly or disruptive.</text>
-      <text x="350" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6c6c66">Example: spam filter</text>
-      <text x="350" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" fill="#6c6c66">(don't block real emails)</text>
+      <rect x="250" y="10" width="200" height="110" rx="8" stroke-width="1.5" stroke-dasharray="5,3" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="350" y="26" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--ink)">High threshold → "only say Positive when sure"</text>
+      <text x="350" y="42" font-family="sans-serif" font-size="8.5" text-anchor="middle" style="fill:var(--go)">↑ Precision (few false alarms)</text>
+      <text x="350" y="56" font-family="sans-serif" font-size="8.5" text-anchor="middle" style="fill:var(--stop)">↓ Recall (miss more real cases)</text>
+      <text x="350" y="76" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">Use when a false alarm is</text>
+      <text x="350" y="88" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--ink-2)">costly or disruptive.</text>
+      <text x="350" y="100" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">Example: spam filter</text>
+      <text x="350" y="112" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">(don't block real emails)</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.4rem">
-      Adjusting the classification threshold shifts the Precision–Recall trade-off. F1 balances both.
+    <p class="diagram-caption">Adjusting the classification threshold shifts the Precision–Recall trade-off. F1 balances both.
     </p>
   </div>
 
@@ -172,8 +183,7 @@
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Four formulas to memorise:
+    <div class="callout-title">Exam Alert</div>Four formulas to memorise:
     <ul style="margin:0.4rem 0 0">
       <li><strong>Accuracy</strong> = (TP+TN) / (TP+TN+FP+FN)</li>
       <li><strong>Precision</strong> = TP / (TP+FP)</li>
@@ -197,50 +207,48 @@
     <svg viewBox="0 0 320 240" width="320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%">
       <defs>
         <marker id="rc" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-          <polygon points="0 0,6 3,0 6" fill="#6c6c66"/>
+          <polygon points="0 0,6 3,0 6" style="fill:var(--ink-2)"/>
         </marker>
       </defs>
 
       <!-- Axes -->
-      <line x1="44" y1="10" x2="44" y2="205" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#rc)"/>
-      <line x1="44" y1="200" x2="290" y2="200" stroke="#6c6c66" stroke-width="1.5" marker-end="url(#rc)"/>
+      <line x1="44" y1="10" x2="44" y2="205" stroke-width="1.5" marker-end="url(#rc)" style="stroke:var(--ink-2)"/>
+      <line x1="44" y1="200" x2="290" y2="200" stroke-width="1.5" marker-end="url(#rc)" style="stroke:var(--ink-2)"/>
 
       <!-- Axis labels -->
-      <text x="10" y="105" font-family="sans-serif" font-size="8.5" fill="#6c6c66" text-anchor="middle" transform="rotate(-90 10 105)">True Positive Rate (Recall)</text>
-      <text x="167" y="220" font-family="sans-serif" font-size="8.5" fill="#6c6c66" text-anchor="middle">False Positive Rate</text>
-      <text x="44" y="207" font-family="sans-serif" font-size="7.5" fill="#6c6c66" text-anchor="middle">0</text>
-      <text x="285" y="207" font-family="sans-serif" font-size="7.5" fill="#6c6c66" text-anchor="middle">1</text>
-      <text x="36" y="202" font-family="sans-serif" font-size="7.5" fill="#6c6c66" text-anchor="end">0</text>
-      <text x="36" y="18" font-family="sans-serif" font-size="7.5" fill="#6c6c66" text-anchor="end">1</text>
+      <text x="10" y="105" font-family="sans-serif" font-size="8.5" text-anchor="middle" transform="rotate(-90 10 105)" style="fill:var(--ink-2)">True Positive Rate (Recall)</text>
+      <text x="167" y="220" font-family="sans-serif" font-size="8.5" text-anchor="middle" style="fill:var(--ink-2)">False Positive Rate</text>
+      <text x="44" y="207" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">0</text>
+      <text x="285" y="207" font-family="sans-serif" font-size="7.5" text-anchor="middle" style="fill:var(--ink-2)">1</text>
+      <text x="36" y="202" font-family="sans-serif" font-size="7.5" text-anchor="end" style="fill:var(--ink-2)">0</text>
+      <text x="36" y="18" font-family="sans-serif" font-size="7.5" text-anchor="end" style="fill:var(--ink-2)">1</text>
 
       <!-- Random classifier diagonal -->
-      <line x1="44" y1="200" x2="285" y2="15" stroke="#e5e4e0" stroke-width="1.5" stroke-dasharray="5,3"/>
-      <text x="210" y="120" font-family="sans-serif" font-size="7.5" fill="#6c6c66">random (AUC=0.5)</text>
+      <line x1="44" y1="200" x2="285" y2="15" stroke-width="1.5" stroke-dasharray="5,3" style="stroke:var(--rule)"/>
+      <text x="210" y="120" font-family="sans-serif" font-size="7.5" style="fill:var(--ink-2)">random (AUC=0.5)</text>
 
       <!-- Good model curve -->
-      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15" fill="none" stroke="#3b7a77" stroke-width="2.5"/>
-      <text x="90" y="55" font-family="sans-serif" font-size="8" fill="#2c5e5c" font-weight="700">Good model</text>
-      <text x="90" y="66" font-family="sans-serif" font-size="7.5" fill="#2c5e5c">AUC ≈ 0.92</text>
+      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15" fill="none" stroke-width="2.5" style="stroke:var(--line)"/>
+      <text x="90" y="55" font-family="sans-serif" font-size="8" font-weight="700" style="fill:var(--ink)">Good model</text>
+      <text x="90" y="66" font-family="sans-serif" font-size="7.5" style="fill:var(--ink)">AUC ≈ 0.92</text>
 
       <!-- Perfect model curve -->
-      <path d="M 44 200 L 44 15 L 285 15" fill="none" stroke="#1a6b3f" stroke-width="1.5" stroke-dasharray="4,2"/>
-      <text x="50" y="40" font-family="sans-serif" font-size="7.5" fill="#1a6b3f">perfect (AUC=1.0)</text>
+      <path d="M 44 200 L 44 15 L 285 15" fill="none" stroke-width="1.5" stroke-dasharray="4,2" style="stroke:var(--go)"/>
+      <text x="50" y="40" font-family="sans-serif" font-size="7.5" style="fill:var(--go)">perfect (AUC=1.0)</text>
 
       <!-- AUC shading -->
-      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15 L 285 200 Z" fill="#e4f0ef" opacity="0.4"/>
-      <text x="180" y="170" font-family="sans-serif" font-size="9" fill="#3b7a77" text-anchor="middle" font-weight="700">AUC</text>
-      <text x="180" y="183" font-family="sans-serif" font-size="8" fill="#3b7a77" text-anchor="middle">(area under</text>
-      <text x="180" y="194" font-family="sans-serif" font-size="8" fill="#3b7a77" text-anchor="middle">the curve)</text>
+      <path d="M 44 200 Q 60 60 100 40 Q 160 20 285 15 L 285 200 Z" opacity="0.4" style="fill:var(--fill-0)"/>
+      <text x="180" y="170" font-family="sans-serif" font-size="9" text-anchor="middle" font-weight="700" style="fill:var(--line)">AUC</text>
+      <text x="180" y="183" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--line)">(area under</text>
+      <text x="180" y="194" font-family="sans-serif" font-size="8" text-anchor="middle" style="fill:var(--line)">the curve)</text>
     </svg>
-    <p style="font-size:0.78rem; color:#6c6c66; text-align:center; margin-top:0.3rem">
-      A curve hugging the top-left corner means high TPR at low FPR — a good model. AUC summarises the whole curve as one number.
+    <p class="diagram-caption">A curve hugging the top-left corner means high TPR at low FPR — a good model. AUC summarises the whole curve as one number.
     </p>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">AUC (Area Under the Curve)</div>
-      A single number from 0 to 1 summarising the entire ROC curve. Interpretation: the probability that the model ranks a random positive example higher than a random negative example.<br>
+      <div class="def-term">AUC (Area Under the Curve)</div>A single number from 0 to 1 summarising the entire ROC curve. Interpretation: the probability that the model ranks a random positive example higher than a random negative example.<br>
       <strong>AUC = 0.5</strong>: no better than random guessing.<br>
       <strong>AUC = 1.0</strong>: perfect classifier.<br>
       <strong>AUC &gt; 0.9</strong>: excellent; <strong>0.7–0.9</strong>: acceptable; <strong>&lt; 0.7</strong>: poor.
@@ -248,7 +256,7 @@
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
+    <div class="callout-title">Exam Alert</div>
     <strong>ROC curve</strong>: plots TPR (Y) vs FPR (X) at all thresholds. <strong>AUC</strong>: area under the ROC curve, ranges 0–1. AUC = 0.5 is random; AUC = 1.0 is perfect. AUC is threshold-independent — it evaluates the model's overall discriminating power regardless of where you set the decision boundary.
   </div>
 
@@ -257,29 +265,29 @@
 
   <table style="width:100%; border-collapse:collapse; font-size:0.87rem">
     <thead>
-      <tr style="background:#e4f0ef; border-bottom:2px solid #3b7a77; color:#2c5e5c">
+      <tr style="background:var(--fill-0); border-bottom:2px solid var(--line); color:var(--ink)">
         <th style="padding:0.6rem 0.8rem; text-align:left">Situation</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Metric to prioritise</th>
         <th style="padding:0.6rem 0.8rem; text-align:left">Why</th>
       </tr>
     </thead>
     <tbody>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem">Balanced classes, general use</td>
         <td style="padding:0.5rem 0.8rem; font-weight:700">Accuracy</td>
         <td style="padding:0.5rem 0.8rem">Fair summary when both classes are equally represented</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.5rem 0.8rem">Missing a positive is costly (cancer, fraud)</td>
-        <td style="padding:0.5rem 0.8rem; font-weight:700; color:#3b7a77">Recall ↑</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700; color:var(--line)">Recall ↑</td>
         <td style="padding:0.5rem 0.8rem">Minimise FN (missed real cases)</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0">
+      <tr style="border-bottom:1px solid var(--rule)">
         <td style="padding:0.5rem 0.8rem">False alarms are costly (spam filter, legal action)</td>
-        <td style="padding:0.5rem 0.8rem; font-weight:700; color:#3b7a77">Precision ↑</td>
+        <td style="padding:0.5rem 0.8rem; font-weight:700; color:var(--line)">Precision ↑</td>
         <td style="padding:0.5rem 0.8rem">Minimise FP (false accusations)</td>
       </tr>
-      <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+      <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
         <td style="padding:0.5rem 0.8rem">Imbalanced classes, both errors matter</td>
         <td style="padding:0.5rem 0.8rem; font-weight:700">F1 Score</td>
         <td style="padding:0.5rem 0.8rem">Harmonic mean punishes extreme imbalance between P and R</td>
@@ -299,12 +307,10 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Macro-average</div>
-      Compute the metric (Precision, Recall, F1) for each class independently, then average them equally. Treats every class as equally important regardless of how many examples it has.
+      <div class="def-term">Macro-average</div>Compute the metric (Precision, Recall, F1) for each class independently, then average them equally. Treats every class as equally important regardless of how many examples it has.
     </div>
     <div class="def-item">
-      <div class="def-term">Weighted average</div>
-      Same as macro, but weights each class's metric by how many examples it has. Better when class sizes differ greatly — large classes contribute more to the final number.
+      <div class="def-term">Weighted average</div>Same as macro, but weights each class's metric by how many examples it has. Better when class sizes differ greatly — large classes contribute more to the final number.
     </div>
   </div>
 
@@ -321,7 +327,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">50.0% — computed as TP / (TP + TN) = 50 / 985</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -334,7 +340,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">98.0% — computed as TN / (TN + FP) = 935 / 945</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -347,7 +353,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">AUC-ROC — summarises performance at all thresholds and ignores false negatives specifically</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -360,7 +366,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">The model's precision and recall are both exactly 50%, perfectly balanced</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -373,12 +379,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">100% accurate — it classifies all samples, but the precision cannot be calculated</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>Confusion matrix: TP (correct positive), TN (correct negative), FP (false alarm), FN (missed detection)</li>
@@ -404,8 +410,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0016-transfer-learning.html">← Lesson 16: Transfer Learning</a>
-    <a href="0018-ai-ethics.html" class="nav-next">Next: AI Ethics →</a>
+    <a href="0016-transfer-learning.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 16: Transfer Learning</a>
+    <a href="0018-ai-ethics.html" class="nav-next">Next: AI Ethics <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -448,7 +454,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

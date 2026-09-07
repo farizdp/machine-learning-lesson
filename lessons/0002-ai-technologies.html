@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 02 — AI Technologies: NLP, CV & Foundation Models</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 01 · Lesson 2 of 4 &nbsp;|&nbsp; AI Overview</div>
+    <div class="plate-num">02</div>
     <h1>AI Technologies: NLP, Computer Vision & Foundation Models</h1>
     <p class="subtitle">A map of what AI can actually do — the major technical fields you need to know for the exam.</p>
   </header>
@@ -23,8 +41,7 @@
   <p>In the last lesson, you learned that AI is a broad field. But what does it actually <em>do</em>? In practice, AI research is divided into a handful of major technical directions. You need to know these — both their names and what they solve.</p>
 
   <div class="callout tip">
-    <div class="callout-title">The Big Picture</div>
-    Think of AI as a toolbox. The toolbox has several compartments:
+    <div class="callout-title">The Big Picture</div>Think of AI as a toolbox. The toolbox has several compartments:
     <strong>NLP</strong> (for language), <strong>Computer Vision</strong> (for images/video),
     <strong>Speech Processing</strong> (for sound), <strong>Decision-making Systems</strong>,
     and <strong>Big Data Analysis</strong>. Today we focus on the two most important for the exam: NLP and CV.
@@ -39,30 +56,25 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">📂 Text Classification</div>
-      Assign a label to a piece of text. <br>
+      <div class="def-term">Text Classification</div>Assign a label to a piece of text. <br>
       <em>Examples:</em> Is this email spam or not? Is this review positive or negative? What topic is this news article about?
     </div>
     <div class="def-item">
-      <div class="def-term">🏷 Sequence Labelling</div>
-      Tag <em>each word</em> in a sentence with a label. <br>
+      <div class="def-term">Sequence Labelling</div>Tag <em>each word</em> in a sentence with a label. <br>
       <em>Example:</em> In "Apple was founded by Steve Jobs in California" — tag "Apple" as <code>ORG</code>, "Steve Jobs" as <code>PERSON</code>, "California" as <code>LOCATION</code>. This is called <strong>Named Entity Recognition (NER)</strong>.
     </div>
     <div class="def-item">
-      <div class="def-term">✍️ Text Generation</div>
-      Produce new text given some input. <br>
+      <div class="def-term">Text Generation</div>Produce new text given some input. <br>
       <em>Examples:</em> Machine translation (English → Chinese), summarization, question answering, chatbots. <strong>ChatGPT is a text generation system.</strong>
     </div>
     <div class="def-item">
-      <div class="def-term">🕸 Knowledge Graph</div>
-      Build a structured map of facts and their relationships. <br>
+      <div class="def-term">Knowledge Graph</div>Build a structured map of facts and their relationships. <br>
       <em>Example:</em> "Paris" → <em>is capital of</em> → "France" → <em>is in</em> → "Europe". Search engines use these to answer factual questions directly.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all four NLP tasks: <strong>Text Classification, Sequence Labelling, Text Generation, Knowledge Graph</strong>. Know one real-world example for each.
+    <div class="callout-title">Exam Alert</div>Know all four NLP tasks: <strong>Text Classification, Sequence Labelling, Text Generation, Knowledge Graph</strong>. Know one real-world example for each.
   </div>
 
   <!-- ───────────── SECTION 2 ───────────── -->
@@ -72,35 +84,29 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">🎯 Object Detection</div>
-      Find and locate objects in an image, drawing a box around each one. <br>
+      <div class="def-term">Object Detection</div>Find and locate objects in an image, drawing a box around each one. <br>
       <em>Example:</em> A self-driving car detecting pedestrians, traffic lights, and other vehicles in real time.
     </div>
     <div class="def-item">
-      <div class="def-term">✂️ Image Segmentation</div>
-      Go beyond bounding boxes — colour every <em>pixel</em> according to what it belongs to. <br>
+      <div class="def-term">Image Segmentation</div>Go beyond bounding boxes — colour every <em>pixel</em> according to what it belongs to. <br>
       <em>Example:</em> In a medical scan, colour the tumour pixels red and healthy tissue blue so doctors can measure it precisely.
     </div>
     <div class="def-item">
-      <div class="def-term">🎥 Object Tracking</div>
-      Follow a specific object across <em>multiple frames</em> of a video. <br>
+      <div class="def-term">Object Tracking</div>Follow a specific object across <em>multiple frames</em> of a video. <br>
       <em>Example:</em> Tracking a footballer's movement across an entire match for performance analysis.
     </div>
     <div class="def-item">
-      <div class="def-term">🔤 OCR (Optical Character Recognition)</div>
-      Read text from images. <br>
+      <div class="def-term">OCR (Optical Character Recognition)</div>Read text from images. <br>
       <em>Example:</em> Scanning a handwritten form and converting it to editable text; reading license plates from a camera.
     </div>
     <div class="def-item">
-      <div class="def-term">🎨 Image Generation</div>
-      Create new images from scratch, or from a text description. <br>
+      <div class="def-term">Image Generation</div>Create new images from scratch, or from a text description. <br>
       <em>Example:</em> Stable Diffusion, DALL-E — type "a cat in a spacesuit" and get a realistic image.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know all five CV tasks: <strong>Object Detection, Image Segmentation, Object Tracking, OCR, Image Generation</strong>. The distinction between Object Detection (boxes around objects) and Image Segmentation (pixel-level labelling) is commonly tested.
+    <div class="callout-title">Exam Alert</div>Know all five CV tasks: <strong>Object Detection, Image Segmentation, Object Tracking, OCR, Image Generation</strong>. The distinction between Object Detection (boxes around objects) and Image Segmentation (pixel-level labelling) is commonly tested.
   </div>
 
   <!-- ───────────── SECTION 3 ───────────── -->
@@ -111,8 +117,7 @@
   <p><strong>Foundation Models</strong> are massive AI models trained on enormous amounts of diverse data, which can then be adapted to many different tasks. They are the basis of ChatGPT, DALL-E, and Huawei's PanGu.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Think of a Foundation Model like a university graduate with a broad education. They don't know everything about surgery, law, or engineering — but they have a <em>strong general foundation</em> that lets them be trained quickly for any of those specializations. Before Foundation Models, every AI was like someone who only ever studied one subject and couldn't switch.
+    <div class="callout-title">Analogy</div>Think of a Foundation Model like a university graduate with a broad education. They don't know everything about surgery, law, or engineering — but they have a <em>strong general foundation</em> that lets them be trained quickly for any of those specializations. Before Foundation Models, every AI was like someone who only ever studied one subject and couldn't switch.
   </div>
 
   <h3>Where Do Foundation Models Come From? The Transformer</h3>
@@ -122,37 +127,36 @@
   <p>There are three flavours of Transformer architecture:</p>
 
   <div class="diagram" style="text-align:left">
-    <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:0.875rem;">
+    <table style="width:100%; border-collapse:collapse; font-family:var(--font-plate); font-size:0.875rem;">
       <thead>
-        <tr style="background:#e4f0ef; color:#2c5e5c">
-          <th style="padding:0.6rem 1rem; text-align:left; border-radius:6px 0 0 0">Type</th>
+        <tr style="background:var(--fill-0); color:var(--ink)">
+          <th style="padding:0.6rem 1rem; text-align:left; border-radius:2px 0 0 0">Type</th>
           <th style="padding:0.6rem 1rem; text-align:left">What it does best</th>
           <th style="padding:0.6rem 1rem; text-align:left; border-radius:0 6px 0 0">Example models</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid #e5e4e0">
+        <tr style="border-bottom:1px solid var(--rule)">
           <td style="padding:0.6rem 1rem; font-weight:700">Encoder-Only</td>
           <td style="padding:0.6rem 1rem">Understanding text (classification, NER, search)</td>
-          <td style="padding:0.6rem 1rem; color:#6c6c66">BERT, RoBERTa</td>
+          <td style="padding:0.6rem 1rem; color:var(--ink-2)">BERT, RoBERTa</td>
         </tr>
-        <tr style="border-bottom:1px solid #e5e4e0; background:#f7f7f6">
+        <tr style="border-bottom:1px solid var(--rule); background:var(--plate)">
           <td style="padding:0.6rem 1rem; font-weight:700">Decoder-Only</td>
           <td style="padding:0.6rem 1rem">Generating text (chat, code, completion)</td>
-          <td style="padding:0.6rem 1rem; color:#6c6c66">GPT-4, DeepSeek, LLaMA</td>
+          <td style="padding:0.6rem 1rem; color:var(--ink-2)">GPT-4, DeepSeek, LLaMA</td>
         </tr>
         <tr>
           <td style="padding:0.6rem 1rem; font-weight:700">Encoder + Decoder</td>
           <td style="padding:0.6rem 1rem">Transforming text (translation, summarization)</td>
-          <td style="padding:0.6rem 1rem; color:#6c6c66">T5, BART, original Transformer</td>
+          <td style="padding:0.6rem 1rem; color:var(--ink-2)">T5, BART, original Transformer</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the three Transformer types and their use cases. Encoder-only = understanding. Decoder-only = generation. Both = transformation. BERT is Encoder-only; GPT is Decoder-only.
+    <div class="callout-title">Exam Alert</div>Know the three Transformer types and their use cases. Encoder-only = understanding. Decoder-only = generation. Both = transformation. BERT is Encoder-only; GPT is Decoder-only.
   </div>
 
   <h3>Emergence — The Surprise Property</h3>
@@ -162,8 +166,7 @@
   <p>A small language model might only finish sentences. A large one suddenly can do arithmetic, write code, translate languages, and reason about abstract problems — without being specifically trained on those tasks. These abilities "emerge" from scale.</p>
 
   <div class="callout tip">
-    <div class="callout-title">Key idea</div>
-    Emergence means: <em>the whole is more than the sum of its parts</em>. Just adding more data and parameters produces qualitatively new capabilities, not just "more of the same."
+    <div class="callout-title">Key idea</div>Emergence means: <em>the whole is more than the sum of its parts</em>. Just adding more data and parameters produces qualitatively new capabilities, not just "more of the same."
   </div>
 
   <h3>Chain-of-Thought (CoT) — Teaching AI to Think Step by Step</h3>
@@ -171,8 +174,7 @@
   <p>By default, a language model generates an answer in one shot. But if you prompt it to <em>show its reasoning</em> — "Think step by step" — it dramatically improves on complex tasks. This technique is called <strong>Chain-of-Thought (CoT)</strong>.</p>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    If someone asks you "What is 17 × 23?", you probably can't do it instantly. But if you write it out: 17 × 20 = 340, 17 × 3 = 51, total = 391 — you get there. CoT is prompting the AI to do the same.
+    <div class="callout-title">Analogy</div>If someone asks you "What is 17 × 23?", you probably can't do it instantly. But if you write it out: 17 × 20 = 340, 17 × 3 = 51, total = 391 — you get there. CoT is prompting the AI to do the same.
   </div>
 
   <!-- ───────────── SECTION 4 ───────────── -->
@@ -183,28 +185,27 @@
   <div class="diagram">
     <svg viewBox="0 0 420 240" width="380" xmlns="http://www.w3.org/2000/svg">
       <!-- Layer 4 -->
-      <rect x="20" y="10" width="380" height="48" rx="6" fill="#83c3c0" stroke="#193432" stroke-width="1.5"/>
-      <text x="210" y="30" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#193432">AI Applications</text>
-      <text x="210" y="48" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#193432">Finance · Healthcare · Security · Education · Retail · Agriculture</text>
+      <rect x="20" y="10" width="380" height="48" rx="6" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--ink)"/>
+      <text x="210" y="30" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--ink)">AI Applications</text>
+      <text x="210" y="48" text-anchor="middle" font-family="sans-serif" font-size="10.5" style="fill:var(--ink)">Finance · Healthcare · Security · Education · Retail · Agriculture</text>
       <!-- Layer 3 -->
-      <rect x="20" y="68" width="380" height="48" rx="6" fill="#a9d5d3" stroke="#193432" stroke-width="1.5"/>
-      <text x="210" y="88" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#193432">Technical Directions</text>
-      <text x="210" y="106" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#193432">CV · NLP · Speech · Decision-making · Big Data Analysis</text>
+      <rect x="20" y="68" width="380" height="48" rx="6" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+      <text x="210" y="88" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--ink)">Technical Directions</text>
+      <text x="210" y="106" text-anchor="middle" font-family="sans-serif" font-size="10.5" style="fill:var(--ink)">CV · NLP · Speech · Decision-making · Big Data Analysis</text>
       <!-- Layer 2 -->
-      <rect x="20" y="126" width="380" height="48" rx="6" fill="#cbe6e5" stroke="#2c5e5c" stroke-width="1.5"/>
-      <text x="210" y="147" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#193432">AI Basic Elements</text>
-      <text x="210" y="165" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#193432">Data → Algorithms → Computing Power</text>
+      <rect x="20" y="126" width="380" height="48" rx="6" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--ink)"/>
+      <text x="210" y="147" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--ink)">AI Basic Elements</text>
+      <text x="210" y="165" text-anchor="middle" font-family="sans-serif" font-size="10.5" style="fill:var(--ink)">Data → Algorithms → Computing Power</text>
       <!-- Layer 1 -->
-      <rect x="20" y="184" width="380" height="48" rx="6" fill="#eef7f6" stroke="#3b7a77" stroke-width="1.5"/>
-      <text x="210" y="204" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#193432">Infrastructure</text>
-      <text x="210" y="222" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#193432">Cloud Computing · Big Data Platforms · Servers · AI Chips · IoT</text>
+      <rect x="20" y="184" width="380" height="48" rx="6" stroke-width="1.5" style="fill:var(--fill-0); stroke:var(--line)"/>
+      <text x="210" y="204" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" style="fill:var(--ink)">Infrastructure</text>
+      <text x="210" y="222" text-anchor="middle" font-family="sans-serif" font-size="10.5" style="fill:var(--ink)">Cloud Computing · Big Data Platforms · Servers · AI Chips · IoT</text>
     </svg>
-    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.5rem">The AI industry ecosystem — from infrastructure up to applications</p>
+    <p class="diagram-caption">The AI industry ecosystem — from infrastructure up to applications</p>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the five main AI technical directions: <strong>Computer Vision (CV), Speech Processing, Natural Language Processing (NLP), Decision-making Systems, Big Data Analysis</strong>. And know the industry application areas: Finance, Healthcare, Security, Entertainment, Education, Retail, Agriculture.
+    <div class="callout-title">Exam Alert</div>Know the five main AI technical directions: <strong>Computer Vision (CV), Speech Processing, Natural Language Processing (NLP), Decision-making Systems, Big Data Analysis</strong>. And know the industry application areas: Finance, Healthcare, Security, Entertainment, Education, Retail, Agriculture.
   </div>
 
   <!-- ───────────── QUIZ ───────────── -->
@@ -220,7 +221,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">OCR</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next question →</button>
+    <button class="quiz-next" onclick="show('q2')">Next question <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -233,7 +234,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">Knowledge Graph</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next question →</button>
+    <button class="quiz-next" onclick="show('q3')">Next question <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -246,7 +247,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">Both → text generation and understanding equally</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next question →</button>
+    <button class="quiz-next" onclick="show('q4')">Next question <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -259,7 +260,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">Fine-tuning</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next question →</button>
+    <button class="quiz-next" onclick="show('q5')">Next question <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -272,12 +273,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">Decision-making Systems</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>NLP tasks: Text Classification, Sequence Labelling, Text Generation, Knowledge Graph</li>
@@ -295,8 +296,7 @@
   <!-- ───────────── SOURCE ───────────── -->
   <div class="source">
     <strong>Primary source for this lesson:</strong>
-    <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank">
-      The Illustrated Transformer — Jay Alammar
+    <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank">The Illustrated Transformer — Jay Alammar
     </a>
     — The clearest visual explanation of how Transformers work. Read sections 1–3 (stop before "Multi-Head Attention"). ~15 min.
     <br><br>
@@ -304,8 +304,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0001-what-is-ai.html">← Lesson 01: What Is AI?</a>
-    <a href="0003-deepseek-applications-pangu.html" class="nav-next">Next: DeepSeek & AI Applications →</a>
+    <a href="0001-what-is-ai.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 01: What Is AI?</a>
+    <a href="0003-deepseek-applications-pangu.html" class="nav-next">Next: DeepSeek & AI Applications <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -348,7 +348,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 11 — Convolutional Neural Networks (CNN)</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Chapter 03 · Lesson 11 &nbsp;|&nbsp; Deep Learning &amp; Foundation Models</div>
+    <div class="plate-num">11</div>
     <h1>Convolutional Neural Networks (CNN)</h1>
     <p class="subtitle">How AI learned to see — the architecture behind every image recognition system.</p>
   </header>
@@ -25,8 +43,7 @@
   <p>In Lesson 08 you learned about fully-connected (FC) networks where every neuron connects to every other. For images, this breaks down immediately:</p>
 
   <div class="callout tip">
-    <div class="callout-title">The scale problem</div>
-    A small 224×224 colour image has 224 × 224 × 3 = <strong>150,528 input values</strong>. If the first hidden layer has 1,000 neurons, that's already <strong>150 million parameters</strong> — just for layer one. Untrainable, and the network ignores the spatial structure of the image entirely.
+    <div class="callout-title">The scale problem</div>A small 224×224 colour image has 224 × 224 × 3 = <strong>150,528 input values</strong>. If the first hidden layer has 1,000 neurons, that's already <strong>150 million parameters</strong> — just for layer one. Untrainable, and the network ignores the spatial structure of the image entirely.
   </div>
 
   <p>CNNs solve both problems by exploiting two facts about images:</p>
@@ -36,8 +53,7 @@
   </ul>
 
   <div class="callout analogy">
-    <div class="callout-title">Analogy</div>
-    Instead of asking "how does every pixel relate to every other pixel?", a CNN slides a small <em>magnifying glass</em> (the kernel) across the image and looks for local patterns — edges, curves, textures. The same glass is used everywhere, which massively reduces the number of parameters needed.
+    <div class="callout-title">Analogy</div>Instead of asking "how does every pixel relate to every other pixel?", a CNN slides a small <em>magnifying glass</em> (the kernel) across the image and looks for local patterns — edges, curves, textures. The same glass is used everywhere, which massively reduces the number of parameters needed.
   </div>
 
   <!-- ───────────── SECTION 2: The Convolution Operation ───────────── -->
@@ -46,124 +62,116 @@
   <p>The core of a CNN is the <strong>convolution</strong>: slide a small grid called a <strong>kernel</strong> (or filter) across the input, compute a dot product at each position, and record the results in an <strong>output feature map</strong>.</p>
 
   <div class="diagram" style="padding:1.5rem">
-    <div style="font-family:sans-serif; font-size:0.82rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; justify-content:center">
+    <div style="font-family:var(--font-plate); font-size:0.82rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; justify-content:center">
 
       <!-- Input patch -->
       <div>
-        <div style="font-weight:700; color:#6c6c66; margin-bottom:0.4rem; text-align:center">Input (5×5)</div>
+        <div style="font-weight:700; color:var(--ink-2); margin-bottom:0.4rem; text-align:center">Input (5×5)</div>
         <svg viewBox="0 0 110 110" width="110" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <style>.cell { font-family:sans-serif; font-size:10px; text-anchor:middle; dominant-baseline:middle; }</style>
+            <style>.cell { font-family:var(--font-plate); font-size:10px; text-anchor:middle; dominant-baseline:middle; }</style>
           </defs>
           <!-- Grid 5×5 -->
-          <rect x="2"  y="2"  width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="22" y="2"  width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="42" y="2"  width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="62" y="2"  width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="82" y="2"  width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="2"  y="2"  width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="22" y="2"  width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="42" y="2"  width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="62" y="2"  width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="82" y="2"  width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
-          <rect x="2"  y="22" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="22" y="22" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="42" y="22" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="62" y="22" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="82" y="22" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="2"  y="22" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="22" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="42" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="62" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="82" y="22" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
-          <rect x="2"  y="42" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="22" y="42" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="42" y="42" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="62" y="42" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="82" y="42" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="2"  y="42" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="22" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="42" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="62" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="82" y="42" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
-          <rect x="2"  y="62" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="22" y="62" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="42" y="62" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="62" y="62" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="82" y="62" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="2"  y="62" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="22" y="62" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="42" y="62" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="62" y="62" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="82" y="62" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
-          <rect x="2"  y="82" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="22" y="82" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="42" y="82" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="62" y="82" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="82" y="82" width="20" height="20" fill="#eef7f6" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="2"  y="82" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="22" y="82" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="42" y="82" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="62" y="82" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="82" y="82" width="20" height="20" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
           <!-- Values -->
-          <text x="12"  y="12"  class="cell" fill="#193432">1</text><text x="32"  y="12"  class="cell" fill="#193432">0</text><text x="52"  y="12"  class="cell" fill="#193432">2</text><text x="72"  y="12"  class="cell" fill="#193432">1</text><text x="92"  y="12"  class="cell" fill="#193432">0</text>
-          <text x="12"  y="32"  class="cell" fill="#193432">0</text><text x="32"  y="32"  class="cell" fill="#193432">1</text><text x="52"  y="32"  class="cell" fill="#193432">0</text><text x="72"  y="32"  class="cell" fill="#193432">1</text><text x="92"  y="32"  class="cell" fill="#193432">0</text>
-          <text x="12"  y="52"  class="cell" fill="#193432">1</text><text x="32"  y="52"  class="cell" fill="#193432">2</text><text x="52"  y="52"  class="cell" fill="#193432">1</text><text x="72"  y="52"  class="cell" fill="#193432">0</text><text x="92"  y="52"  class="cell" fill="#193432">1</text>
-          <text x="12"  y="72"  class="cell" fill="#193432">0</text><text x="32"  y="72"  class="cell" fill="#193432">0</text><text x="52"  y="72"  class="cell" fill="#193432">1</text><text x="72"  y="72"  class="cell" fill="#193432">2</text><text x="92"  y="72"  class="cell" fill="#193432">0</text>
-          <text x="12"  y="92"  class="cell" fill="#193432">1</text><text x="32"  y="92"  class="cell" fill="#193432">0</text><text x="52"  y="92"  class="cell" fill="#193432">0</text><text x="72"  y="92"  class="cell" fill="#193432">1</text><text x="92"  y="92"  class="cell" fill="#193432">1</text>
+          <text x="12"  y="12"  class="cell" style="fill:var(--ink)">1</text><text x="32"  y="12"  class="cell" style="fill:var(--ink)">0</text><text x="52"  y="12"  class="cell" style="fill:var(--ink)">2</text><text x="72"  y="12"  class="cell" style="fill:var(--ink)">1</text><text x="92"  y="12"  class="cell" style="fill:var(--ink)">0</text>
+          <text x="12"  y="32"  class="cell" style="fill:var(--ink)">0</text><text x="32"  y="32"  class="cell" style="fill:var(--ink)">1</text><text x="52"  y="32"  class="cell" style="fill:var(--ink)">0</text><text x="72"  y="32"  class="cell" style="fill:var(--ink)">1</text><text x="92"  y="32"  class="cell" style="fill:var(--ink)">0</text>
+          <text x="12"  y="52"  class="cell" style="fill:var(--ink)">1</text><text x="32"  y="52"  class="cell" style="fill:var(--ink)">2</text><text x="52"  y="52"  class="cell" style="fill:var(--ink)">1</text><text x="72"  y="52"  class="cell" style="fill:var(--ink)">0</text><text x="92"  y="52"  class="cell" style="fill:var(--ink)">1</text>
+          <text x="12"  y="72"  class="cell" style="fill:var(--ink)">0</text><text x="32"  y="72"  class="cell" style="fill:var(--ink)">0</text><text x="52"  y="72"  class="cell" style="fill:var(--ink)">1</text><text x="72"  y="72"  class="cell" style="fill:var(--ink)">2</text><text x="92"  y="72"  class="cell" style="fill:var(--ink)">0</text>
+          <text x="12"  y="92"  class="cell" style="fill:var(--ink)">1</text><text x="32"  y="92"  class="cell" style="fill:var(--ink)">0</text><text x="52"  y="92"  class="cell" style="fill:var(--ink)">0</text><text x="72"  y="92"  class="cell" style="fill:var(--ink)">1</text><text x="92"  y="92"  class="cell" style="fill:var(--ink)">1</text>
         </svg>
       </div>
-
-      <div style="font-size:1.5rem; color:#6c6c66">✕</div>
 
       <!-- Kernel -->
       <div>
-        <div style="font-weight:700; color:#6c6c66; margin-bottom:0.4rem; text-align:center">Kernel (3×3)</div>
+        <div style="font-weight:700; color:var(--ink-2); margin-bottom:0.4rem; text-align:center">Kernel (3×3)</div>
         <svg viewBox="0 0 66 66" width="66" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2"  y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="22" y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="2"  y="22" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="22" y="22" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="22" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="2"  y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="22" y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <text x="12" y="12" class="cell" fill="#193432">1</text><text x="32" y="12" class="cell" fill="#193432">0</text><text x="52" y="12" class="cell" fill="#193432">1</text>
-          <text x="12" y="32" class="cell" fill="#193432">0</text><text x="32" y="32" class="cell" fill="#193432">1</text><text x="52" y="32" class="cell" fill="#193432">0</text>
-          <text x="12" y="52" class="cell" fill="#193432">1</text><text x="32" y="52" class="cell" fill="#193432">0</text><text x="52" y="52" class="cell" fill="#193432">1</text>
+          <rect x="2"  y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="22" y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="2"  y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="22" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="2"  y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="22" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <text x="12" y="12" class="cell" style="fill:var(--ink)">1</text><text x="32" y="12" class="cell" style="fill:var(--ink)">0</text><text x="52" y="12" class="cell" style="fill:var(--ink)">1</text>
+          <text x="12" y="32" class="cell" style="fill:var(--ink)">0</text><text x="32" y="32" class="cell" style="fill:var(--ink)">1</text><text x="52" y="32" class="cell" style="fill:var(--ink)">0</text>
+          <text x="12" y="52" class="cell" style="fill:var(--ink)">1</text><text x="32" y="52" class="cell" style="fill:var(--ink)">0</text><text x="52" y="52" class="cell" style="fill:var(--ink)">1</text>
         </svg>
       </div>
 
-      <div style="font-size:1.5rem; color:#6c6c66">=</div>
+      <div style="font-size:1.5rem; color:var(--ink-2)">=</div>
 
       <!-- Output -->
       <div>
-        <div style="font-weight:700; color:#6c6c66; margin-bottom:0.4rem; text-align:center">Feature Map (3×3)</div>
+        <div style="font-weight:700; color:var(--ink-2); margin-bottom:0.4rem; text-align:center">Feature Map (3×3)</div>
         <svg viewBox="0 0 66 66" width="66" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2"  y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="22" y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="2"  width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="2"  y="22" width="20" height="20" fill="#a9d5d3" stroke="#2c5e5c" stroke-width="1.5"/>
-          <rect x="22" y="22" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="22" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="2"  y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="22" y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="42" y="42" width="20" height="20" fill="#cbe6e5" stroke="#3b7a77" stroke-width="1.5"/>
-          <text x="12" y="12" class="cell" fill="#193432">4</text><text x="32" y="12" class="cell" fill="#193432">3</text><text x="52" y="12" class="cell" fill="#193432">4</text>
-          <text x="12" y="32" class="cell" fill="#193432" font-weight="bold">5</text><text x="32" y="32" class="cell" fill="#193432">3</text><text x="52" y="32" class="cell" fill="#193432">3</text>
-          <text x="12" y="52" class="cell" fill="#193432">1</text><text x="32" y="52" class="cell" fill="#193432">2</text><text x="52" y="52" class="cell" fill="#193432">3</text>
+          <rect x="2"  y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="22" y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="2"  width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="2"  y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-2); stroke:var(--ink)"/>
+          <rect x="22" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="22" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="2"  y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="22" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <rect x="42" y="42" width="20" height="20" stroke-width="1.5" style="fill:var(--fill-1); stroke:var(--line)"/>
+          <text x="12" y="12" class="cell" style="fill:var(--ink)">4</text><text x="32" y="12" class="cell" style="fill:var(--ink)">3</text><text x="52" y="12" class="cell" style="fill:var(--ink)">4</text>
+          <text x="12" y="32" class="cell" font-weight="bold" style="fill:var(--ink)">5</text><text x="32" y="32" class="cell" style="fill:var(--ink)">3</text><text x="52" y="32" class="cell" style="fill:var(--ink)">3</text>
+          <text x="12" y="52" class="cell" style="fill:var(--ink)">1</text><text x="32" y="52" class="cell" style="fill:var(--ink)">2</text><text x="52" y="52" class="cell" style="fill:var(--ink)">3</text>
         </svg>
       </div>
     </div>
-    <p style="color:#6c6c66; font-size:0.8rem; margin-top:0.75rem; text-align:center">
-      The highlighted 3×3 yellow region of the input is multiplied element-wise with the kernel, summed → one output value (5 shown highlighted). Slide the kernel one step right and repeat.
+    <p class="diagram-caption">The highlighted 3×3 yellow region of the input is multiplied element-wise with the kernel, summed → one output value (5 shown highlighted). Slide the kernel one step right and repeat.
     </p>
   </div>
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Kernel (Filter)</div>
-      A small grid of learnable weights (e.g. 3×3, 5×5). Each kernel learns to detect a specific pattern — one might detect horizontal edges, another vertical edges, another curves. A single convolutional layer uses <em>many</em> kernels in parallel.
+      <div class="def-term">Kernel (Filter)</div>A small grid of learnable weights (e.g. 3×3, 5×5). Each kernel learns to detect a specific pattern — one might detect horizontal edges, another vertical edges, another curves. A single convolutional layer uses <em>many</em> kernels in parallel.
     </div>
     <div class="def-item">
-      <div class="def-term">Stride</div>
-      How many pixels the kernel moves at each step. Stride=1: move one pixel at a time (produces a large output). Stride=2: skip every other position (halves the output size).
+      <div class="def-term">Stride</div>How many pixels the kernel moves at each step. Stride=1: move one pixel at a time (produces a large output). Stride=2: skip every other position (halves the output size).
     </div>
     <div class="def-item">
-      <div class="def-term">Padding</div>
-      Adding a border of zeros around the input before convolving. <strong>Same padding</strong>: output is the same size as input. <strong>Valid padding</strong>: no border added, output shrinks.
+      <div class="def-term">Padding</div>Adding a border of zeros around the input before convolving. <strong>Same padding</strong>: output is the same size as input. <strong>Valid padding</strong>: no border added, output shrinks.
     </div>
     <div class="def-item">
-      <div class="def-term">Feature Map</div>
-      The output of applying one kernel to the entire input. If you have 32 kernels, you get 32 feature maps — one per kernel — stacked into a volume.
+      <div class="def-term">Feature Map</div>The output of applying one kernel to the entire input. If you have 32 kernels, you get 32 feature maps — one per kernel — stacked into a volume.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Output size formula for one dimension: <strong>(Input − Kernel + 2×Padding) / Stride + 1</strong>. For a 5×5 input, 3×3 kernel, stride 1, no padding: (5 − 3 + 0)/1 + 1 = <strong>3</strong>. This matches the diagram above.
+    <div class="callout-title">Exam Alert</div>Output size formula for one dimension: <strong>(Input − Kernel + 2×Padding) / Stride + 1</strong>. For a 5×5 input, 3×3 kernel, stride 1, no padding: (5 − 3 + 0)/1 + 1 = <strong>3</strong>. This matches the diagram above.
   </div>
 
   <!-- ───────────── SECTION 3: CNN Architecture ───────────── -->
@@ -172,40 +180,40 @@
   <p>A CNN is a sequence of three layer types, repeated and then followed by fully-connected layers for the final classification:</p>
 
   <div class="diagram" style="padding:1.2rem; overflow-x:auto">
-    <div style="display:flex; align-items:center; gap:0.3rem; min-width:560px; font-family:sans-serif; font-size:0.78rem; flex-wrap:nowrap">
+    <div style="display:flex; align-items:center; gap:0.3rem; min-width:560px; font-family:var(--font-plate); font-size:0.78rem; flex-wrap:nowrap">
 
       <div style="text-align:center; flex:none">
-        <div style="background:#eef7f6; border:1.5px solid #3b7a77; border-radius:6px; padding:0.6rem 0.4rem; color:#193432; font-weight:700; width:70px">Input<br><span style="font-weight:400; font-size:0.7rem">Image</span></div>
+        <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.6rem 0.4rem; color:var(--ink); font-weight:700; width:70px">Input<br><span style="font-weight:400; font-size:0.7rem">Image</span></div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
 
       <div style="text-align:center; flex:none">
-        <div style="background:#cbe6e5; border:1.5px solid #3b7a77; border-radius:6px; padding:0.6rem 0.4rem; color:#193432; font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
+        <div style="background:var(--fill-1); border:1.5px solid var(--line); border-radius:2px; padding:0.6rem 0.4rem; color:var(--ink); font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
       <div style="text-align:center; flex:none">
-        <div style="background:#a9d5d3; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.6rem 0.4rem; color:#193432; font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
+        <div style="background:var(--fill-2); border:1.5px solid var(--ink); border-radius:2px; padding:0.6rem 0.4rem; color:var(--ink); font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
 
       <div style="text-align:center; flex:none">
-        <div style="background:#83c3c0; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.6rem 0.4rem; color:#ffffff; font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
+        <div style="background:var(--line-soft); border:1.5px solid var(--ink); border-radius:2px; padding:0.6rem 0.4rem; color:var(--on-fill); font-weight:700; width:74px">Conv<br><span style="font-weight:400; font-size:0.7rem">+ ReLU</span></div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
       <div style="text-align:center; flex:none">
-        <div style="background:#5aafab; border:1.5px solid #2c5e5c; border-radius:6px; padding:0.6rem 0.4rem; color:#ffffff; font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
+        <div style="background:var(--line); border:1.5px solid var(--ink); border-radius:2px; padding:0.6rem 0.4rem; color:var(--sheet); font-weight:700; width:74px">Pooling<br><span style="font-weight:400; font-size:0.7rem">Downsample</span></div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
 
       <div style="text-align:center; flex:none">
-        <div style="background:#428a86; border:1.5px solid #193432; border-radius:6px; padding:0.6rem 0.4rem; color:#ffffff; font-weight:700; width:60px">Flatten</div>
+        <div style="background:var(--line); border:1.5px solid var(--ink); border-radius:2px; padding:0.6rem 0.4rem; color:var(--sheet); font-weight:700; width:60px">Flatten</div>
       </div>
-      <div style="color:#6c6c66">→</div>
+      <div style="color:var(--ink-2)"><span class="conn" aria-hidden="true"></span></div>
       <div style="text-align:center; flex:none">
-        <div style="background:#193432; border:1.5px solid #193432; border-radius:6px; padding:0.6rem 0.4rem; color:#ffffff; font-weight:700; width:70px">FC Layer<br><span style="font-weight:400; font-size:0.7rem">+ Softmax</span></div>
+        <div style="background:var(--ink); border:1.5px solid var(--ink); border-radius:2px; padding:0.6rem 0.4rem; color:var(--sheet); font-weight:700; width:70px">FC Layer<br><span style="font-weight:400; font-size:0.7rem">+ Softmax</span></div>
       </div>
     </div>
-    <p style="color:#6c6c66; font-size:0.78rem; margin-top:0.75rem; text-align:center">Conv layers extract features → Pooling layers compress → FC layers classify</p>
+    <p class="diagram-caption">Conv layers extract features → Pooling layers compress → FC layers classify</p>
   </div>
 
   <!-- ───────────── SECTION 4: Convolutional Layer ───────────── -->
@@ -215,22 +223,18 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Parameter sharing</div>
-      Every position in the input shares the same kernel weights. A 3×3 kernel applied to any size image has only 9 learnable weights — regardless of image size. This is why CNNs have vastly fewer parameters than FC networks.
+      <div class="def-term">Parameter sharing</div>Every position in the input shares the same kernel weights. A 3×3 kernel applied to any size image has only 9 learnable weights — regardless of image size. This is why CNNs have vastly fewer parameters than FC networks.
     </div>
     <div class="def-item">
-      <div class="def-term">Local connectivity</div>
-      Each output neuron only "sees" a small local region of the input (the receptive field of the kernel). Irrelevant distant pixels don't interfere.
+      <div class="def-term">Local connectivity</div>Each output neuron only "sees" a small local region of the input (the receptive field of the kernel). Irrelevant distant pixels don't interfere.
     </div>
     <div class="def-item">
-      <div class="def-term">What kernels learn</div>
-      Early layers: low-level features (edges, corners, colour gradients). Middle layers: textures and shapes. Deep layers: high-level parts (eyes, wheels, words).
+      <div class="def-term">What kernels learn</div>Early layers: low-level features (edges, corners, colour gradients). Middle layers: textures and shapes. Deep layers: high-level parts (eyes, wheels, words).
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Two key properties of convolutional layers: <strong>parameter sharing</strong> (same kernel weights used everywhere) and <strong>local connectivity</strong> (each neuron only sees a local region). These are what make CNNs efficient for images.
+    <div class="callout-title">Exam Alert</div>Two key properties of convolutional layers: <strong>parameter sharing</strong> (same kernel weights used everywhere) and <strong>local connectivity</strong> (each neuron only sees a local region). These are what make CNNs efficient for images.
   </div>
 
   <!-- ───────────── SECTION 5: Pooling Layer ───────────── -->
@@ -239,77 +243,75 @@
   <p>Pooling <strong>downsamples</strong> the feature maps — it reduces the spatial size while keeping the most important information. This reduces computation and builds some <strong>translation invariance</strong> (the same feature detected slightly shifted still gives the same pooled output).</p>
 
   <div class="diagram" style="padding:1.2rem">
-    <div style="font-family:sans-serif; font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
+    <div style="font-family:var(--font-plate); font-size:0.82rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
 
       <!-- Max pooling -->
       <div style="text-align:center">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Max Pooling (2×2, stride 2)</div>
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Max Pooling (2×2, stride 2)</div>
         <svg viewBox="0 0 160 80" width="160" xmlns="http://www.w3.org/2000/svg">
           <!-- Input 4x4 — four quadrants, each mapping 1:1 to an output cell: olive / teal / slate / plum -->
-          <rect x="2"  y="2"  width="18" height="18" fill="#e6edde" stroke="#526d36" stroke-width="1"/>
-          <rect x="20" y="2"  width="18" height="18" fill="#e6edde" stroke="#526d36" stroke-width="1"/>
-          <rect x="2"  y="20" width="18" height="18" fill="#e6edde" stroke="#526d36" stroke-width="1"/>
-          <rect x="20" y="20" width="18" height="18" fill="#a4c284" stroke="#526d36" stroke-width="1.5"/>
+          <rect x="2"  y="2"  width="18" height="18" stroke-width="1" style="fill:var(--ochre-tint); stroke:var(--ochre)"/>
+          <rect x="20" y="2"  width="18" height="18" stroke-width="1" style="fill:var(--ochre-tint); stroke:var(--ochre)"/>
+          <rect x="2"  y="20" width="18" height="18" stroke-width="1" style="fill:var(--ochre-tint); stroke:var(--ochre)"/>
+          <rect x="20" y="20" width="18" height="18" stroke-width="1.5" style="fill:var(--ochre-soft); stroke:var(--ochre)"/>
 
-          <rect x="38" y="2"  width="18" height="18" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="56" y="2"  width="18" height="18" fill="#83c3c0" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="38" y="20" width="18" height="18" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
-          <rect x="56" y="20" width="18" height="18" fill="#e4f0ef" stroke="#3b7a77" stroke-width="1"/>
+          <rect x="38" y="2"  width="18" height="18" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="56" y="2"  width="18" height="18" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--line)"/>
+          <rect x="38" y="20" width="18" height="18" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
+          <rect x="56" y="20" width="18" height="18" stroke-width="1" style="fill:var(--fill-0); stroke:var(--line)"/>
 
-          <rect x="2"  y="38" width="18" height="18" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1"/>
-          <rect x="20" y="38" width="18" height="18" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1"/>
-          <rect x="2"  y="56" width="18" height="18" fill="#e4e8f0" stroke="#3d4f7b" stroke-width="1"/>
-          <rect x="20" y="56" width="18" height="18" fill="#aab6d5" stroke="#3d4f7b" stroke-width="1.5"/>
+          <rect x="2"  y="38" width="18" height="18" stroke-width="1" style="fill:var(--blue-tint); stroke:var(--blue)"/>
+          <rect x="20" y="38" width="18" height="18" stroke-width="1" style="fill:var(--blue-tint); stroke:var(--blue)"/>
+          <rect x="2"  y="56" width="18" height="18" stroke-width="1" style="fill:var(--blue-tint); stroke:var(--blue)"/>
+          <rect x="20" y="56" width="18" height="18" stroke-width="1.5" style="fill:var(--blue-soft); stroke:var(--blue)"/>
 
-          <rect x="38" y="38" width="18" height="18" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1"/>
-          <rect x="56" y="38" width="18" height="18" fill="#c284ab" stroke="#7b3d64" stroke-width="1.5"/>
-          <rect x="38" y="56" width="18" height="18" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1"/>
-          <rect x="56" y="56" width="18" height="18" fill="#f0e4ec" stroke="#7b3d64" stroke-width="1"/>
+          <rect x="38" y="38" width="18" height="18" stroke-width="1" style="fill:var(--purple-tint); stroke:var(--purple)"/>
+          <rect x="56" y="38" width="18" height="18" stroke-width="1.5" style="fill:var(--purple-soft); stroke:var(--purple)"/>
+          <rect x="38" y="56" width="18" height="18" stroke-width="1" style="fill:var(--purple-tint); stroke:var(--purple)"/>
+          <rect x="56" y="56" width="18" height="18" stroke-width="1" style="fill:var(--purple-tint); stroke:var(--purple)"/>
 
           <!-- Values -->
-          <text x="11" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#3d5327">1</text>
-          <text x="29" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#3d5327">3</text>
-          <text x="11" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#3d5327">2</text>
-          <text x="29" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#263319" font-weight="bold">4</text>
+          <text x="11" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ochre-deep)">1</text>
+          <text x="29" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ochre-deep)">3</text>
+          <text x="11" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ochre-deep)">2</text>
+          <text x="29" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--ochre-deep)">4</text>
 
-          <text x="47" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c5e5c">5</text>
-          <text x="65" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#193432" font-weight="bold">7</text>
-          <text x="47" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c5e5c">1</text>
-          <text x="65" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c5e5c">6</text>
+          <text x="47" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ink)">5</text>
+          <text x="65" y="13" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--ink)">7</text>
+          <text x="47" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ink)">1</text>
+          <text x="65" y="31" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--ink)">6</text>
 
-          <text x="11" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c3b5e">2</text>
-          <text x="29" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c3b5e">0</text>
-          <text x="11" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#2c3b5e">1</text>
-          <text x="29" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#192133" font-weight="bold">8</text>
+          <text x="11" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--blue-deep)">2</text>
+          <text x="29" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--blue-deep)">0</text>
+          <text x="11" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--blue-deep)">1</text>
+          <text x="29" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--blue-deep)">8</text>
 
-          <text x="47" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#5e2c4c">3</text>
-          <text x="65" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#33192a" font-weight="bold">9</text>
-          <text x="47" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#5e2c4c">4</text>
-          <text x="65" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#5e2c4c">2</text>
+          <text x="47" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--purple-deep)">3</text>
+          <text x="65" y="49" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--purple-deep)">9</text>
+          <text x="47" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--purple-deep)">4</text>
+          <text x="65" y="67" class="cell" font-family="sans-serif" font-size="9" text-anchor="middle" dominant-baseline="middle" style="fill:var(--purple-deep)">2</text>
 
           <!-- Arrow -->
-          <text x="90" y="40" font-family="sans-serif" font-size="14" fill="#6c6c66">→</text>
+          <text x="90" y="40" font-family="sans-serif" font-size="14" style="fill:var(--ink-2)">→</text>
 
           <!-- Output 2x2 -->
-          <rect x="110" y="12" width="22" height="22" fill="#a4c284" stroke="#526d36" stroke-width="1.5"/>
-          <rect x="132" y="12" width="22" height="22" fill="#83c3c0" stroke="#3b7a77" stroke-width="1.5"/>
-          <rect x="110" y="34" width="22" height="22" fill="#aab6d5" stroke="#3d4f7b" stroke-width="1.5"/>
-          <rect x="132" y="34" width="22" height="22" fill="#c284ab" stroke="#7b3d64" stroke-width="1.5"/>
+          <rect x="110" y="12" width="22" height="22" stroke-width="1.5" style="fill:var(--ochre-soft); stroke:var(--ochre)"/>
+          <rect x="132" y="12" width="22" height="22" stroke-width="1.5" style="fill:var(--line-soft); stroke:var(--line)"/>
+          <rect x="110" y="34" width="22" height="22" stroke-width="1.5" style="fill:var(--blue-soft); stroke:var(--blue)"/>
+          <rect x="132" y="34" width="22" height="22" stroke-width="1.5" style="fill:var(--purple-soft); stroke:var(--purple)"/>
 
-          <text x="121" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#263319" font-weight="bold">4</text>
-          <text x="143" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#193432" font-weight="bold">7</text>
-          <text x="121" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#192133" font-weight="bold">8</text>
-          <text x="143" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" fill="#33192a" font-weight="bold">9</text>
+          <text x="121" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--ochre-deep)">4</text>
+          <text x="143" y="23" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--ink)">7</text>
+          <text x="121" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--blue-deep)">8</text>
+          <text x="143" y="45" font-family="sans-serif" font-size="10" text-anchor="middle" dominant-baseline="middle" font-weight="bold" style="fill:var(--purple-deep)">9</text>
         </svg>
-        <div style="font-size:0.75rem; color:#6c6c66; margin-top:0.3rem">Take the <strong>maximum</strong> value in each 2×2 region</div>
+        <div style="font-size:0.75rem; color:var(--ink-2); margin-top:0.3rem">Take the <strong>maximum</strong> value in each 2×2 region</div>
       </div>
 
       <!-- Average pooling -->
       <div style="text-align:center; display:flex; flex-direction:column; justify-content:flex-start; align-items:center">
-        <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Average Pooling (2×2, stride 2)</div>
-        <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:0.8rem 1rem; font-size:0.82rem; color:#2a2a28; margin-top:0.5rem; text-align:left; max-width:180px">
-          Takes the <strong>average</strong> of each 2×2 region instead of the maximum.<br><br>
-          Both reduce spatial size by 2× in each dimension when stride = pool size.
+        <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Average Pooling (2×2, stride 2)</div>
+        <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.8rem 1rem; font-size:0.82rem; color:var(--ink); margin-top:0.5rem; text-align:left; max-width:180px">Takes the <strong>average</strong> of each 2×2 region instead of the maximum.<br><br>Both reduce spatial size by 2× in each dimension when stride = pool size.
         </div>
       </div>
     </div>
@@ -317,21 +319,18 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Max Pooling</div>
-      Takes the largest value in each region. Keeps the strongest feature response. Most commonly used. Helps the network be robust to small translations — if the feature shifts one pixel, the max in the region stays the same.
+      <div class="def-term">Max Pooling</div>Takes the largest value in each region. Keeps the strongest feature response. Most commonly used. Helps the network be robust to small translations — if the feature shifts one pixel, the max in the region stays the same.
     </div>
     <div class="def-item">
-      <div class="def-term">Average Pooling</div>
-      Takes the mean of each region. Smoother, retains more context. Used in some architectures (e.g. Global Average Pooling at the end of modern CNNs instead of a Flatten layer).
+      <div class="def-term">Average Pooling</div>Takes the mean of each region. Smoother, retains more context. Used in some architectures (e.g. Global Average Pooling at the end of modern CNNs instead of a Flatten layer).
     </div>
     <div class="def-item">
-      <div class="def-term">No learnable parameters</div>
-      Pooling layers have no weights — they just downsample. This makes them cheap and they don't contribute to overfitting.
+      <div class="def-term">No learnable parameters</div>Pooling layers have no weights — they just downsample. This makes them cheap and they don't contribute to overfitting.
     </div>
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
+    <div class="callout-title">Exam Alert</div>
     <strong>Max Pooling</strong> = take the maximum in each window (most common). <strong>Average Pooling</strong> = take the mean. Both reduce spatial dimensions without learnable parameters. Pooling adds <strong>translation invariance</strong>.
   </div>
 
@@ -342,23 +341,19 @@
 
   <div class="def-list">
     <div class="def-item">
-      <div class="def-term">Flatten</div>
-      Convert the 3D feature volume (height × width × channels) into a single 1D vector. No computation — just reshaping.
+      <div class="def-term">Flatten</div>Convert the 3D feature volume (height × width × channels) into a single 1D vector. No computation — just reshaping.
     </div>
     <div class="def-item">
-      <div class="def-term">Fully-Connected (Dense) Layer</div>
-      One or more FC layers combine the extracted features into a final prediction. Last layer uses Softmax for multi-class output.
+      <div class="def-term">Fully-Connected (Dense) Layer</div>One or more FC layers combine the extracted features into a final prediction. Last layer uses Softmax for multi-class output.
     </div>
   </div>
 
   <div class="callout analogy">
-    <div class="callout-title">The full CNN pipeline in one sentence</div>
-    Convolutional layers act as a <em>feature extractor</em> (learning what's in the image), and fully-connected layers act as a <em>classifier</em> (deciding which category based on those features).
+    <div class="callout-title">The full CNN pipeline in one sentence</div>Convolutional layers act as a <em>feature extractor</em> (learning what's in the image), and fully-connected layers act as a <em>classifier</em> (deciding which category based on those features).
   </div>
 
   <div class="callout exam">
-    <div class="callout-title">⚠ Exam Alert</div>
-    Know the three CNN layer types and their roles: <strong>Convolutional</strong> (extract features, has learnable kernels), <strong>Pooling</strong> (downsample, no learnable parameters), <strong>Fully-Connected</strong> (classify based on extracted features). The typical order is: Conv → ReLU → Pool → … → Flatten → FC → Softmax.
+    <div class="callout-title">Exam Alert</div>Know the three CNN layer types and their roles: <strong>Convolutional</strong> (extract features, has learnable kernels), <strong>Pooling</strong> (downsample, no learnable parameters), <strong>Fully-Connected</strong> (classify based on extracted features). The typical order is: Conv → ReLU → Pool → … → Flatten → FC → Softmax.
   </div>
 
   <!-- ───────────── QUIZ ───────────── -->
@@ -374,7 +369,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">3×3 — the output matches the kernel size</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -387,7 +382,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">Pooling invariance — downsampling removes sensitivity to exact feature positions</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -400,7 +395,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">14 — the sum of all values in the window</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -413,7 +408,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',true)">Zero — pooling layers have no learnable parameters</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -426,12 +421,12 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">To apply the convolutional kernels across the spatial dimensions of the input</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="showComplete()">Finish lesson →</button>
+    <button class="quiz-next" onclick="showComplete()">Finish lesson <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div id="lesson-complete" style="display:none">
     <div class="callout tip" style="margin-top:1.5rem">
-      <div class="callout-title">✅ Lesson Complete!</div>
+      <div class="callout-title">Lesson Complete!</div>
       <strong>You now know:</strong>
       <ul style="margin-top:0.5rem">
         <li>Why CNNs beat FC networks for images: parameter sharing + local connectivity</li>
@@ -456,8 +451,8 @@
   </div>
 
   <div class="lesson-nav">
-    <a href="0010-optimizers-regularization.html">← Lesson 10: Optimizers &amp; Regularization</a>
-    <a href="0012-rnn-lstm.html" class="nav-next">Next: RNN &amp; LSTM →</a>
+    <a href="0010-optimizers-regularization.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 10: Optimizers &amp; Regularization</a>
+    <a href="0012-rnn-lstm.html" class="nav-next">Next: RNN &amp; LSTM <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -500,7 +495,7 @@ function answer(btn, qid, isCorrect) {
   }
   fb.textContent = isCorrect ? explanations[qid].correct : explanations[qid].wrong;
   fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'wrong');
-  next.style.display = 'inline-block';
+  next.style.display = 'inline-flex';
 }
 
 function show(qid) {

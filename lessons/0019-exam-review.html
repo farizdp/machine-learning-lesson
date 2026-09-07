@@ -4,9 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 19 — HCIA-AI Exam Review</title>
+  <meta name="color-scheme" content="light dark" />
+  <script>
+    /* Resolve the theme before first paint so the board never flashes. */
+    (function () {
+      try {
+        var t = localStorage.getItem('hcia-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* private mode: fall through to the OS preference */ }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="../assets/style.css" />
 </head>
 <body>
+<!--
+  THE WAYFINDING BOARD · seed 9cc4c9a1 · full direction contract in /index.html
+  One signal hue marks position and action; rank comes from weight, case and
+  rule; every state carries a drawn mark, never a hue alone.
+-->
 <div class="page">
 
   <div class="progress-bar">
@@ -14,7 +32,7 @@
   </div>
 
   <header>
-    <div class="lesson-meta">Advanced · Lesson 19 &nbsp;|&nbsp; Exam Preparation</div>
+    <div class="plate-num">19</div>
     <h1>HCIA-AI Exam Review</h1>
     <p class="subtitle">20 mock questions across all four chapters. Same format, same difficulty, same topic distribution as the real exam.</p>
   </header>
@@ -37,8 +55,8 @@
 
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; font-size:0.82rem">
 
-    <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:0.9rem">
-      <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Chapter 1 — AI Overview</div>
+    <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.9rem">
+      <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Chapter 1 — AI Overview</div>
       <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
         <li>3 AI schools: <strong>Symbolism, Connectionism, Behaviorism</strong></li>
         <li>3 elements: <strong>Data, Computing Power, Algorithms</strong></li>
@@ -49,8 +67,8 @@
       </ul>
     </div>
 
-    <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:0.9rem">
-      <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Chapter 2 — Machine Learning</div>
+    <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.9rem">
+      <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Chapter 2 — Machine Learning</div>
       <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
         <li>Feature selection: <strong>Filter (statistics), Wrapper (trains model), Embedded (L1/tree)</strong></li>
         <li>GD variants: BGD (all), <strong>SGD (one sample)</strong>, MBGD (mini-batch)</li>
@@ -61,8 +79,8 @@
       </ul>
     </div>
 
-    <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:0.9rem">
-      <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Chapter 3 — Deep Learning</div>
+    <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.9rem">
+      <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Chapter 3 — Deep Learning</div>
       <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
         <li>ReLU: solves vanishing gradient; default activation</li>
         <li>CNN output: <strong>(Input − Kernel + 2P) / Stride + 1</strong></li>
@@ -76,8 +94,8 @@
       </ul>
     </div>
 
-    <div style="background:#e4f0ef; border:1.5px solid #3b7a77; border-radius:8px; padding:0.9rem">
-      <div style="font-weight:700; color:#2c5e5c; margin-bottom:0.5rem">Chapter 4 &amp; Advanced</div>
+    <div style="background:var(--fill-0); border:1.5px solid var(--line); border-radius:2px; padding:0.9rem">
+      <div style="font-weight:700; color:var(--ink); margin-bottom:0.5rem">Chapter 4 &amp; Advanced</div>
       <ul style="margin:0; padding-left:1.2rem; line-height:1.9">
         <li>MindSpore base class: <strong>nn.Cell</strong>; forward method: <strong>construct()</strong></li>
         <li>MindSpore modes: <strong>Graph (static)</strong>, PyNative (dynamic)</li>
@@ -92,15 +110,15 @@
   </div>
 
   <!-- ───────────── SCORE TRACKER ───────────── -->
-  <div id="scoreboard" style="margin-top:1.5rem; padding:0.9rem 1.2rem; background:#f3f3f2; border-radius:8px; font-family:sans-serif; font-size:0.88rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap">
-    <span style="font-weight:700; color:#2a2a28">Mock Exam Progress</span>
+  <div id="scoreboard" style="margin-top:1.5rem; padding:0.9rem 1.2rem; background:var(--fill-0); border-radius:2px; font-family:var(--font-plate); font-size:0.88rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap">
+    <span style="font-weight:700; color:var(--ink)">Mock Exam Progress</span>
     <span>Answered: <strong id="answered-count">0</strong> / 20</span>
-    <span>Correct: <strong id="correct-count" style="color:#1a6b3f">0</strong></span>
-    <span>Score: <strong id="score-pct" style="color:#3b7a77">—</strong></span>
+    <span>Correct: <strong id="correct-count" style="color:var(--go)">0</strong></span>
+    <span>Score: <strong id="score-pct" style="color:var(--line)">—</strong></span>
   </div>
 
   <!-- ───────────── CHAPTER 1 QUESTIONS ───────────── -->
-  <h2 style="margin-top:1.8rem">Chapter 1 — AI Overview &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6c6c66">(Questions 1–5)</span></h2>
+  <h2 style="margin-top:1.8rem">Chapter 1 — AI Overview &nbsp;<span style="font-size:0.85rem; font-weight:400; color:var(--ink-2)">(Questions 1–5)</span></h2>
 
   <div class="quiz" id="q1">
     <div class="quiz-title">Question 1 of 20</div>
@@ -112,7 +130,7 @@
       <button class="quiz-option" onclick="answer(this,'q1',false)">Probabilism — uses Bayesian inference to reason under uncertainty</button>
     </div>
     <div class="quiz-feedback" id="q1-fb"></div>
-    <button class="quiz-next" onclick="show('q2')">Next →</button>
+    <button class="quiz-next" onclick="show('q2')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q2" style="display:none">
@@ -125,7 +143,7 @@
       <button class="quiz-option" onclick="answer(this,'q2',false)">BERT uses dynamic graphs; GPT uses static graphs for faster inference</button>
     </div>
     <div class="quiz-feedback" id="q2-fb"></div>
-    <button class="quiz-next" onclick="show('q3')">Next →</button>
+    <button class="quiz-next" onclick="show('q3')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q3" style="display:none">
@@ -138,7 +156,7 @@
       <button class="quiz-option" onclick="answer(this,'q3',false)">Python, PyTorch, and Cloud computing platforms</button>
     </div>
     <div class="quiz-feedback" id="q3-fb"></div>
-    <button class="quiz-next" onclick="show('q4')">Next →</button>
+    <button class="quiz-next" onclick="show('q4')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q4" style="display:none">
@@ -151,7 +169,7 @@
       <button class="quiz-option" onclick="answer(this,'q4',false)">Basic Model (LLM) → Scenario Model → Industry Model</button>
     </div>
     <div class="quiz-feedback" id="q4-fb"></div>
-    <button class="quiz-next" onclick="show('q5')">Next →</button>
+    <button class="quiz-next" onclick="show('q5')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q5" style="display:none">
@@ -164,11 +182,11 @@
       <button class="quiz-option" onclick="answer(this,'q5',false)">An Ensemble Model — multiple models combined to produce more robust predictions</button>
     </div>
     <div class="quiz-feedback" id="q5-fb"></div>
-    <button class="quiz-next" onclick="show('q6')">Next →</button>
+    <button class="quiz-next" onclick="show('q6')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <!-- ───────────── CHAPTER 2 QUESTIONS ───────────── -->
-  <h2 style="display:none" id="ch2-header">Chapter 2 — Machine Learning &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6c6c66">(Questions 6–10)</span></h2>
+  <h2 style="display:none" id="ch2-header">Chapter 2 — Machine Learning &nbsp;<span style="font-size:0.85rem; font-weight:400; color:var(--ink-2)">(Questions 6–10)</span></h2>
 
   <div class="quiz" id="q6" style="display:none">
     <div class="quiz-title">Question 6 of 20</div>
@@ -180,7 +198,7 @@
       <button class="quiz-option" onclick="answer(this,'q6',false)">Projection method — reduces dimensions by transforming features into a lower-dimensional space</button>
     </div>
     <div class="quiz-feedback" id="q6-fb"></div>
-    <button class="quiz-next" onclick="show('q7')">Next →</button>
+    <button class="quiz-next" onclick="show('q7')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q7" style="display:none">
@@ -193,7 +211,7 @@
       <button class="quiz-option" onclick="answer(this,'q7',false)">Class imbalance — the test set has a different class distribution than the training set</button>
     </div>
     <div class="quiz-feedback" id="q7-fb"></div>
-    <button class="quiz-next" onclick="show('q8')">Next →</button>
+    <button class="quiz-next" onclick="show('q8')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q8" style="display:none">
@@ -206,7 +224,7 @@
       <button class="quiz-option" onclick="answer(this,'q8',false)">Random Forest is supervised; GBDT is a semi-supervised method that also uses unlabelled data</button>
     </div>
     <div class="quiz-feedback" id="q8-fb"></div>
-    <button class="quiz-next" onclick="show('q9')">Next →</button>
+    <button class="quiz-next" onclick="show('q9')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q9" style="display:none">
@@ -219,7 +237,7 @@
       <button class="quiz-option" onclick="answer(this,'q9',false)">The same fold is always used for validation across all K rounds for consistency</button>
     </div>
     <div class="quiz-feedback" id="q9-fb"></div>
-    <button class="quiz-next" onclick="show('q10')">Next →</button>
+    <button class="quiz-next" onclick="show('q10')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q10" style="display:none">
@@ -232,11 +250,11 @@
       <button class="quiz-option" onclick="answer(this,'q10',false)">Adam — uses momentum and adaptive learning rates, not individual samples</button>
     </div>
     <div class="quiz-feedback" id="q10-fb"></div>
-    <button class="quiz-next" onclick="show('q11')">Next →</button>
+    <button class="quiz-next" onclick="show('q11')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <!-- ───────────── CHAPTER 3 QUESTIONS ───────────── -->
-  <h2 style="display:none" id="ch3-header">Chapter 3 — Deep Learning &amp; Foundation Models &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6c6c66">(Questions 11–15)</span></h2>
+  <h2 style="display:none" id="ch3-header">Chapter 3 — Deep Learning &amp; Foundation Models &nbsp;<span style="font-size:0.85rem; font-weight:400; color:var(--ink-2)">(Questions 11–15)</span></h2>
 
   <div class="quiz" id="q11" style="display:none">
     <div class="quiz-title">Question 11 of 20</div>
@@ -248,7 +266,7 @@
       <button class="quiz-option" onclick="answer(this,'q11',false)">3×3 — the output always matches the kernel size when no padding is used</button>
     </div>
     <div class="quiz-feedback" id="q11-fb"></div>
-    <button class="quiz-next" onclick="show('q12')">Next →</button>
+    <button class="quiz-next" onclick="show('q12')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q12" style="display:none">
@@ -261,7 +279,7 @@
       <button class="quiz-option" onclick="answer(this,'q12',false)">The Output Gate will block that element from appearing in the hidden state output</button>
     </div>
     <div class="quiz-feedback" id="q12-fb"></div>
-    <button class="quiz-next" onclick="show('q13')">Next →</button>
+    <button class="quiz-next" onclick="show('q13')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q13" style="display:none">
@@ -274,7 +292,7 @@
       <button class="quiz-option" onclick="answer(this,'q13',false)">Momentum and AdaGrad — it adds momentum to AdaGrad's accumulated squared gradient sum</button>
     </div>
     <div class="quiz-feedback" id="q13-fb"></div>
-    <button class="quiz-next" onclick="show('q14')">Next →</button>
+    <button class="quiz-next" onclick="show('q14')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q14" style="display:none">
@@ -287,7 +305,7 @@
       <button class="quiz-option" onclick="answer(this,'q14',false)">Use dropout only on the output layer, keeping all hidden layer neurons active</button>
     </div>
     <div class="quiz-feedback" id="q14-fb"></div>
-    <button class="quiz-next" onclick="show('q15')">Next →</button>
+    <button class="quiz-next" onclick="show('q15')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q15" style="display:none">
@@ -300,11 +318,11 @@
       <button class="quiz-option" onclick="answer(this,'q15',false)">To add positional information to the attention scores before the softmax is applied</button>
     </div>
     <div class="quiz-feedback" id="q15-fb"></div>
-    <button class="quiz-next" onclick="show('q16')">Next →</button>
+    <button class="quiz-next" onclick="show('q16')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <!-- ───────────── CHAPTER 4 + ADVANCED QUESTIONS ───────────── -->
-  <h2 style="display:none" id="ch4-header">Chapter 4 &amp; Advanced Topics &nbsp;<span style="font-size:0.85rem; font-weight:400; color:#6c6c66">(Questions 16–20)</span></h2>
+  <h2 style="display:none" id="ch4-header">Chapter 4 &amp; Advanced Topics &nbsp;<span style="font-size:0.85rem; font-weight:400; color:var(--ink-2)">(Questions 16–20)</span></h2>
 
   <div class="quiz" id="q16" style="display:none">
     <div class="quiz-title">Question 16 of 20</div>
@@ -316,7 +334,7 @@
       <button class="quiz-option" onclick="answer(this,'q16',false)">MindSpore will automatically rename forward() to construct() and warn the developer</button>
     </div>
     <div class="quiz-feedback" id="q16-fb"></div>
-    <button class="quiz-next" onclick="show('q17')">Next →</button>
+    <button class="quiz-next" onclick="show('q17')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q17" style="display:none">
@@ -329,7 +347,7 @@
       <button class="quiz-option" onclick="answer(this,'q17',false)">① Requirement Analysis — determining what data will be needed and from which sources</button>
     </div>
     <div class="quiz-feedback" id="q17-fb"></div>
-    <button class="quiz-next" onclick="show('q18')">Next →</button>
+    <button class="quiz-next" onclick="show('q18')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q18" style="display:none">
@@ -342,7 +360,7 @@
       <button class="quiz-option" onclick="answer(this,'q18',false)">Freeze only the early layers and fine-tune deep layers at a standard learning rate</button>
     </div>
     <div class="quiz-feedback" id="q18-fb"></div>
-    <button class="quiz-next" onclick="show('q19')">Next →</button>
+    <button class="quiz-next" onclick="show('q19')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q19" style="display:none">
@@ -355,7 +373,7 @@
       <button class="quiz-option" onclick="answer(this,'q19',false)">87.1% — computed as 2×TP / (2×TP + FP + FN) treated as equal to Precision alone</button>
     </div>
     <div class="quiz-feedback" id="q19-fb"></div>
-    <button class="quiz-next" onclick="show('q20')">Next →</button>
+    <button class="quiz-next" onclick="show('q20')">Next <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <div class="quiz" id="q20" style="display:none">
@@ -368,15 +386,15 @@
       <button class="quiz-option" onclick="answer(this,'q20',false)">Differential privacy noise is automatically added to the training data before it is collected</button>
     </div>
     <div class="quiz-feedback" id="q20-fb"></div>
-    <button class="quiz-next" onclick="showFinalScore()">See my score →</button>
+    <button class="quiz-next" onclick="showFinalScore()">See my score <span class="arrow" aria-hidden="true"></span></button>
   </div>
 
   <!-- ───────────── FINAL SCORE ───────────── -->
   <div id="final-score" style="display:none; margin-top:1.5rem">
     <div class="callout tip">
-      <div class="callout-title">🎓 Mock Exam Complete!</div>
-      <p style="font-size:1.1rem; margin:0.5rem 0">Your score: <strong id="final-num" style="font-size:1.4rem; color:#3b7a77"></strong> / 20 &nbsp;(<span id="final-pct" style="color:#3b7a77"></span>)</p>
-      <div id="score-band" style="margin-top:0.5rem; padding:0.6rem 0.9rem; border-radius:6px; font-size:0.88rem"></div>
+      <div class="callout-title">Mock Exam Complete!</div>
+      <p style="font-size:1.1rem; margin:0.5rem 0">Your score: <strong id="final-num" style="font-size:1.4rem; color:var(--line)"></strong> / 20 &nbsp;(<span id="final-pct" style="color:var(--line)"></span>)</p>
+      <div id="score-band" style="margin-top:0.5rem; padding:0.6rem 0.9rem; border-radius:2px; font-size:0.88rem"></div>
       <div style="margin-top:1rem; font-size:0.88rem">
         <strong>Wrong answers:</strong> go back to the lesson for that topic (the chapter header tells you which one).
         <br>
@@ -387,35 +405,29 @@
     <h2 style="margin-top:1.5rem">Exam Day Tips</h2>
     <div class="def-list">
       <div class="def-item">
-        <div class="def-term">Know the MindSpore vocabulary cold</div>
-        The exam tests <code>nn.Cell</code> vs <code>nn.Module</code>, <code>construct()</code> vs <code>forward()</code>, Graph Mode vs PyNative, and MindSpore Serving vs Lite. These are easy marks if memorised.
+        <div class="def-term">Know the MindSpore vocabulary cold</div>The exam tests <code>nn.Cell</code> vs <code>nn.Module</code>, <code>construct()</code> vs <code>forward()</code>, Graph Mode vs PyNative, and MindSpore Serving vs Lite. These are easy marks if memorised.
       </div>
       <div class="def-item">
-        <div class="def-term">Use the output size formula on any CNN question</div>
-        Write it out: (Input − Kernel + 2P) / Stride + 1. Plug in the numbers. Don't guess.
+        <div class="def-term">Use the output size formula on any CNN question</div>Write it out: (Input − Kernel + 2P) / Stride + 1. Plug in the numbers. Don't guess.
       </div>
       <div class="def-item">
-        <div class="def-term">LSTM: know all three gate names and what each does</div>
-        Forget = erase old memory. Input + Candidate = write new memory. Output = expose cell state as hidden state. Any question mentioning "cell state" or "long-range dependency" is about LSTM.
+        <div class="def-term">LSTM: know all three gate names and what each does</div>Forget = erase old memory. Input + Candidate = write new memory. Output = expose cell state as hidden state. Any question mentioning "cell state" or "long-range dependency" is about LSTM.
       </div>
       <div class="def-item">
-        <div class="def-term">Match metric to scenario instantly</div>
-        Miss a cancer case = worst → Recall. False alarm is costly → Precision. Imbalanced classes → F1. Comparing models → AUC.
+        <div class="def-term">Match metric to scenario instantly</div>Miss a cancer case = worst → Recall. False alarm is costly → Precision. Imbalanced classes → F1. Comparing models → AUC.
       </div>
       <div class="def-item">
-        <div class="def-term">Three AI schools, three elements</div>
-        Schools: Symbolism / Connectionism / Behaviorism. Elements: Data / Computing Power / Algorithms. These appear in early Chapter 1 questions — don't lose easy marks here.
+        <div class="def-term">Three AI schools, three elements</div>Schools: Symbolism / Connectionism / Behaviorism. Elements: Data / Computing Power / Algorithms. These appear in early Chapter 1 questions — don't lose easy marks here.
       </div>
       <div class="def-item">
-        <div class="def-term">Flag and skip, don't get stuck</div>
-        90 minutes for ~60 questions = 90 seconds each. If a question requires long mental arithmetic, flag it, move on, come back. The scoring is equal per question.
+        <div class="def-term">Flag and skip, don't get stuck</div>90 minutes for ~60 questions = 90 seconds each. If a question requires long mental arithmetic, flag it, move on, come back. The scoring is equal per question.
       </div>
     </div>
   </div>
 
   <div class="lesson-nav" style="margin-top:2rem">
-    <a href="0018-ai-ethics.html">← Lesson 18: AI Ethics</a>
-    <a href="0001-what-is-ai.html" class="nav-next">Back to Lesson 01 →</a>
+    <a href="0018-ai-ethics.html"><span class="arrow arrow-back" aria-hidden="true"></span>Lesson 18: AI Ethics</a>
+    <a href="0001-what-is-ai.html" class="nav-next">Back to Lesson 01 <span class="arrow" aria-hidden="true"></span></a>
   </div>
 
 </div>
@@ -517,21 +529,21 @@ function showFinalScore() {
 
   const band = document.getElementById('score-band');
   if (pct >= 90) {
-    band.style.background = '#d8f3e5'; band.style.border = '1px solid #1a6b3f';
-    band.style.color = '#1a6b3f';
-    band.textContent = '🎉 Excellent! You are very likely to pass the real exam. Focus on reviewing any questions you got wrong.';
+    band.style.background = 'var(--go-tint)'; band.style.border = '1px solid var(--go)';
+    band.style.color = 'var(--go)';
+    band.textContent = ' Excellent! You are very likely to pass the real exam. Focus on reviewing any questions you got wrong.';
   } else if (pct >= 70) {
-    band.style.background = '#d8f3e5'; band.style.border = '1px solid #1a6b3f';
-    band.style.color = '#1a6b3f';
-    band.textContent = '👍 Good. Above the 60% pass threshold. Review wrong answers carefully, then redo this mock in 2 days.';
+    band.style.background = 'var(--go-tint)'; band.style.border = '1px solid var(--go)';
+    band.style.color = 'var(--go)';
+    band.textContent = ' Good. Above the 60% pass threshold. Review wrong answers carefully, then redo this mock in 2 days.';
   } else if (pct >= 60) {
-    band.style.background = '#fde8e8'; band.style.border = '1px solid #c12929';
-    band.style.color = '#c12929';
-    band.textContent = '⚠️ Close to passing. Review the lessons for every chapter where you dropped marks, then redo this mock.';
+    band.style.background = 'var(--stop-tint)'; band.style.border = '1px solid var(--stop)';
+    band.style.color = 'var(--stop)';
+    band.textContent = ' Close to passing. Review the lessons for every chapter where you dropped marks, then redo this mock.';
   } else {
-    band.style.background = '#fde8e8'; band.style.border = '1px solid #c12929';
-    band.style.color = '#c12929';
-    band.textContent = '📚 More review needed. Go back to the lessons where you lost marks. Focus on Chapter 3 and Chapter 4 — they carry the most exam weight.';
+    band.style.background = 'var(--stop-tint)'; band.style.border = '1px solid var(--stop)';
+    band.style.color = 'var(--stop)';
+    band.textContent = ' More review needed. Go back to the lessons where you lost marks. Focus on Chapter 3 and Chapter 4 — they carry the most exam weight.';
   }
 
   document.getElementById('final-score').style.display = 'block';

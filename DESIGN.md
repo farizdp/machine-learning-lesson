@@ -1,258 +1,365 @@
 ---
 name: HCIA-AI Self-Paced Course
-description: A minimalist field-guide for learning AI/ML — calm teal accents, docs-style sidebar, one concept per screen.
+description: Nineteen AI/ML lessons signposted like a building — one signal red, ink, air, and hairline rules.
 colors:
-  muted-teal: "#3b7a77"
-  muted-teal-deep: "#2c5e5c"
-  muted-teal-mist: "#e4f0ef"
-  paper: "#f7f7f6"
-  surface: "#ffffff"
-  hairline: "#e5e4e0"
-  ink: "#2a2a28"
-  ink-muted: "#6c6c66"
-  code-surface: "#f3f3f2"
-  amber: "#966010"
-  amber-mist: "#fef3c7"
-  moss: "#1a6b3f"
-  moss-mist: "#d8f3e5"
-  clay: "#c12929"
-  clay-mist: "#fde8e8"
-  slate: "#3d4f7b"
-  slate-deep: "#2c3b5e"
-  slate-mist: "#e4e8f0"
-  plum: "#7b3d64"
-  plum-deep: "#5e2c4c"
-  plum-mist: "#f0e4ec"
-  olive: "#526d36"
-  olive-deep: "#3d5327"
-  olive-mist: "#e6edde"
+  plate: "#f4f4f2"
+  sheet: "#ffffff"
+  ink: "#111111"
+  ink-2: "#5c5c58"
+  ink-3: "#8f8f8a"
+  rule: "#d5d5d0"
+  rule-strong: "#111111"
+  signal: "#e5341f"
+  signal-ink: "#c62b13"
+  signal-tint: "#fdeae6"
+  on-signal: "#ffffff"
+  go: "#0f7b3d"
+  go-tint: "#e4f4ea"
+  stop: "#c9281a"
+  stop-tint: "#fceae7"
+  blue: "#1b56c4"
+  blue-deep: "#143f92"
+  blue-tint: "#e7edfa"
+  blue-soft: "#9db4e6"
+  purple: "#7a3ea8"
+  purple-deep: "#5a2d7d"
+  purple-tint: "#f2e9f8"
+  purple-soft: "#c19ad9"
+  ochre: "#8a5200"
+  ochre-deep: "#654000"
+  ochre-tint: "#f7eede"
+  ochre-soft: "#d8b478"
+  line: "#55554f"
+  line-soft: "#b9b9b2"
+  fill-0: "#f7f7f5"
+  fill-1: "#eaeae6"
+  fill-2: "#d9d9d3"
+  fill-3: "#bcbcb5"
+  on-fill: "#111111"
+  invert-bg: "#111111"
+  invert-ink: "#f4f4f2"
+  invert-ink-2: "#a8a8a2"
+  invert-rule: "#3a3a36"
+  invert-signal: "#ff6a4d"
 typography:
+  numeral:
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "clamp(3.6rem, 11vw, 6rem)"
+    fontWeight: 700
+    lineHeight: 0.82
+    letterSpacing: "-0.035em"
   display:
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2.1rem"
-    fontWeight: 800
-    lineHeight: 1.15
-    letterSpacing: "normal"
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "clamp(2.3rem, 7vw, 3.6rem)"
+    fontWeight: 700
+    lineHeight: 0.98
+    letterSpacing: "-0.028em"
   headline:
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2rem"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "normal"
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "clamp(1.9rem, 5.5vw, 2.7rem)"
+    fontWeight: 600
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
   title:
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "1.3rem"
-    fontWeight: 700
-    lineHeight: 1.3
-    letterSpacing: "normal"
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: "-0.012em"
+  subtitle:
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "1.1rem"
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: "0.005em"
   body:
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "1rem"
+    fontFamily: "Barlow, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif"
+    fontSize: "17px"
     fontWeight: 400
-    lineHeight: 1.8
-    letterSpacing: "normal"
+    lineHeight: 1.7
+    letterSpacing: "0.001em"
   label:
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "0.75rem"
-    fontWeight: 700
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "0.72rem"
+    fontWeight: 600
     lineHeight: 1.3
-    letterSpacing: "0.08em"
-  mono:
-    fontFamily: "'Menlo', 'Monaco', 'Courier New', monospace"
-    fontSize: "0.85em"
-    fontWeight: 400
+    letterSpacing: "0.16em"
+  action:
+    fontFamily: "Barlow Condensed, Barlow, Arial Narrow, -apple-system, sans-serif"
+    fontSize: "0.88rem"
+    fontWeight: 600
+    lineHeight: 1.3
+    letterSpacing: "0.1em"
+  code:
+    fontFamily: "JetBrains Mono, ui-monospace, Menlo, Consolas, monospace"
+    fontSize: "0.82em"
+    fontWeight: 500
     lineHeight: 1.5
     letterSpacing: "normal"
 rounded:
-  sm: "3px"
-  md: "5px"
-  lg: "6px"
-  xl: "8px"
+  plate: "2px"
+  focus: "1px"
 spacing:
-  xs: "0.3rem"
-  sm: "0.5rem"
-  md: "0.75rem"
-  base: "1rem"
-  lg: "1.5rem"
-  xl: "2rem"
-  2xl: "2.5rem"
+  s1: "0.25rem"
+  s2: "0.5rem"
+  s3: "0.75rem"
+  s4: "1rem"
+  s5: "1.5rem"
+  s6: "2rem"
+  s7: "3rem"
+  s8: "4.5rem"
 components:
-  button-primary:
-    backgroundColor: "{colors.muted-teal}"
-    textColor: "#ffffff"
-    rounded: "{rounded.md}"
-    padding: "0.6rem 1.4rem"
-  button-primary-hover:
-    backgroundColor: "{colors.muted-teal-deep}"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.lg}"
-    padding: "0.75rem 1rem"
-  callout-tip:
-    backgroundColor: "{colors.muted-teal-mist}"
-    textColor: "{colors.muted-teal-deep}"
-    rounded: "0"
-    padding: "1rem 1.2rem"
+  button-action:
+    backgroundColor: "{colors.signal}"
+    textColor: "{colors.on-signal}"
+    typography: "{typography.action}"
+    rounded: "{rounded.plate}"
+    padding: "0.62rem 1.15rem"
+  button-action-hover:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.plate}"
+  callout:
+    backgroundColor: "{colors.sheet}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.plate}"
+    padding: "0 1rem 0.95rem"
   callout-exam:
-    backgroundColor: "{colors.amber-mist}"
-    textColor: "{colors.amber}"
-    rounded: "0"
-    padding: "1rem 1.2rem"
+    backgroundColor: "{colors.invert-bg}"
+    textColor: "{colors.invert-ink}"
+    rounded: "{rounded.plate}"
+    padding: "0 1rem 0.95rem"
+  quiz-option:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    padding: "0.8rem 2.4rem 0.8rem 1.1rem"
+  quiz-option-correct:
+    backgroundColor: "{colors.go-tint}"
+    textColor: "{colors.go}"
+  quiz-option-wrong:
+    backgroundColor: "{colors.stop-tint}"
+    textColor: "{colors.stop}"
+  diagram:
+    backgroundColor: "{colors.sheet}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.plate}"
+    padding: "1.5rem 1rem"
+    width: "44rem"
+  nav-rail:
+    backgroundColor: "{colors.sheet}"
+    textColor: "{colors.ink-2}"
+    width: "260px"
   nav-link-active:
-    backgroundColor: "{colors.muted-teal-mist}"
-    textColor: "{colors.muted-teal}"
-    rounded: "0"
-    padding: "0.32rem 1rem 0.32rem 1.1rem"
+    backgroundColor: "{colors.fill-0}"
+    textColor: "{colors.ink}"
+    padding: "0.34rem 1rem"
 ---
 
 # Design System: HCIA-AI Self-Paced Course
 
 ## Overview
 
-**Creative North Star: "The Field Guide"**
+**Creative North Star: "The Wayfinding Board"**
 
-This is a trusted reference you consult one entry at a time, not a marketing surface competing for attention. Every lesson opens the same way — a numbered badge, an uppercase label, a short title — and the visual language stays out of the way of the concept being taught. Density stays low: one idea per screen, generous line-height (1.8 body), a content column capped at 700px so paragraphs never sprawl past a comfortable reading measure.
+The world is technical-exhibition and transit wayfinding signage. Nineteen lessons are treated as a building to be signposted: numbered, spaced, and impossible to get lost in. Every surface behaves like a sign face — a flat plate on a wall, lettered in condensed type, ruled with hairlines, and carrying exactly one colour that means *here* or *go*. Nothing decorates; everything directs. A reader should be able to answer "where am I in the nineteen?" from any scroll position without reading a word of prose.
 
-The palette is warm and approachable despite its restraint: a single muted teal accent does almost all the expressive work (links, active states, the h2 rail, the primary button), set against warm off-white paper rather than clinical white-and-black. Nothing in the system reaches for drama — no heavy shadows, no saturated color blocks, no display serif. The system earns trust through consistency (the same left-border-rail pattern marks emphasis everywhere: headings, callouts, active nav links) rather than through visual flourish.
+Density is deliberately low. The page is air, ink, and rules: a `#f4f4f2` plate ground with `#ffffff` sign faces raised on it, near-black `#111111` ink, and a single signal red `#e5341f` that appears only where position or action lives. Hierarchy is built from weight, case, and horizontal rules rather than a long size ramp — a 2px black rule above a section heading does more ranking work than any font-size step could. Numbers are monumental: the lesson numeral is set at `clamp(3.6rem, 11vw, 6rem)` in Barlow Condensed as the page's own mark, the way a platform number is the largest thing on a station sign.
+
+The build refuses two things the category defaults to: the course-site card grid, and the hero-with-eyebrow. The homepage is a directory board of ruled rows, not cards. And a small label stacked above a heading is banned outright — the chapter a reader is in is answered by the position rule, as wayfinding, not by a decorative kicker. This is the build's thesis, not a stylistic preference.
+
+Light and dark are two separately authored palettes with a pre-paint boot script and a remembered `localStorage` choice, defaulting to the OS preference — not an inverted or filtered light theme.
 
 **Key Characteristics:**
-- Docs-style fixed left sidebar (252px) that collapses off-canvas below 900px, replaced by a hamburger toggle
-- A single accent color (muted teal) carrying every interactive and emphasis signal
-- Left-border "rail" as the recurring emphasis device — on h2, callouts, and the active nav link
-- Uppercase, letter-spaced micro-labels (eyebrows, chapter headings, quiz titles, nav group labels) as the system's one typographic flourish
-- Flat by default; the only shadow in the system belongs to the mobile sidebar overlay
+- One signal hue, reserved for position and action; everything else is ink, rule, and air.
+- Rank from weight, case, and rule — not a six-step size ramp.
+- Every state carries a drawn mark, never a hue alone.
+- Square-cornered sign plates (2px) — border *or* fill, never both plus a shadow.
+- Monumental tabular numerals in Barlow Condensed as the primary wayfinding device.
+- Two authored themes, remembered; the design survives print and reduced motion.
 
 ## Colors
 
-Warm and restrained: one working accent, a warm-paper neutral scale, and three status colors reserved for quiz feedback and callouts.
+A near-monochrome signage palette — plate, ink, and hairline rule — pierced by exactly one red.
 
 ### Primary
-- **Muted Teal** (`#3b7a77`): links, the h2 accent rail, active nav-link state, the primary button, quiz-option hover border. This is the system's only expressive color — nearly every interactive or "this matters" signal runs through it.
-- **Muted Teal Deep** (`#2c5e5c`): hover/active state for the primary button and active nav-link numerals; the pressed-in version of the accent.
-- **Muted Teal Mist** (`#e4f0ef`): the accent's light tint — tip-callout background, active nav-link background, quiz-option hover background.
+- **Signal Red** (`#e5341f` light / `#ff6a4d` dark): The one colour. It marks *position* (the here-tick on the progress rule, the active rail link's 3px left border and its numeral) and *action* (the start button, the quiz Next button, focus rings, text selection, caret). Never used for emphasis, decoration, categories, or chapter identity.
+- **Signal Ink** (`#c62b13` light / `#ff8168` dark): The body-size variant, at 5.1:1 on the plate ground. Every inline link and every accent word set at body size uses this, because Signal Red at 3.9:1 is legible only at large sizes and on plates. Underlines are drawn at 40% signal, going full on hover.
+- **Signal Tint** (`#fdeae6` light / `#38201c` dark): The palest wash of the signal, reserved for a filled signal ground under signal text. Rare.
+
+### Secondary
+- **Go Green** (`#0f7b3d` / `#4ec97e`) with **Go Tint** (`#e4f4ea` / `#16311f`): the affirmative status pair. Correct quiz options; affirmative cells inside diagrams.
+- **Stop Red** (`#c9281a` / `#ff6b5c`) with **Stop Tint** (`#fceae7` / `#38201c`): the negative status pair. Incorrect quiz options; negative cells inside diagrams. Distinct from the signal — status is a verdict, the signal is a direction.
+
+### Tertiary
+Three diagram categoricals, each with a deep / tint / soft companion:
+- **Wayfinding Blue** (`#1b56c4` / `#7aa5ff`) — deep `#143f92`, tint `#e7edfa`, soft `#9db4e6`.
+- **Wayfinding Purple** (`#7a3ea8` / `#c093e8`) — deep `#5a2d7d`, tint `#f2e9f8`, soft `#c19ad9`.
+- **Wayfinding Ochre** (`#8a5200` / `#e0a33c`) — deep `#654000`, tint `#f7eede`, soft `#d8b478`.
+
+These exist to tell unlike things apart *inside a single drawing* — two classes in a scatter plot, two branches of a tree, a gate versus a state. That is the whole job.
 
 ### Neutral
-- **Paper** (`#f7f7f6`): page background. Warm off-white, never pure white — this is what keeps the system feeling calm rather than clinical.
-- **Surface** (`#ffffff`): raised content — cards, the quiz box, the diagram box, the sidebar itself. True white, one step lighter than Paper, is how the system signals "this is a distinct block" without a shadow.
-- **Hairline** (`#e5e4e0`): all borders and dividers — header underline, card borders, sidebar edge, print-safe quiz-option borders.
-- **Ink** (`#2a2a28`): primary text.
-- **Ink Muted** (`#6c6c66`): secondary text — subtitles, meta labels, nav-link default state, source citations.
-- **Code Surface** (`#f3f3f2`): inline `<code>` background only.
-
-### Status (quiz feedback & callouts)
-- **Amber** (`#966010`) / **Amber Mist** (`#fef3c7`): the "exam"-flagged callout — Exam Alert boxes that mark certification-critical content.
-- **Moss** (`#1a6b3f`) / **Moss Mist** (`#d8f3e5`): correct quiz answers and the "analogy" callout's border/title color.
-- **Clay** (`#c12929`) / **Clay Mist** (`#fde8e8`): incorrect quiz answers.
-
-### Categorical (diagram-only)
-A second, deliberately muted-down hue family — added after the diagram-color sweep found several diagrams that need 3–4 visually distinct, non-hierarchical, non-comparative categories (SVM/k-means classes, RNN gate types, dropout layer states) where flattening to one teal treatment erased the pedagogical distinction the diagram exists to show, but no existing token was safe to reuse (Amber/Moss/Clay already carry a status meaning that would mislead). Both sit at the same restrained saturation/lightness Muted Teal uses, so they read as siblings of the interactive accent rather than a second alert system.
-- **Slate** (`#3d4f7b`) / **Slate Deep** (`#2c3b5e`) / **Slate Mist** (`#e4e8f0`): one diagram-category slot.
-- **Plum** (`#7b3d64`) / **Plum Deep** (`#5e2c4c`) / **Plum Mist** (`#f0e4ec`): a second diagram-category slot.
-- **Olive** (`#526d36`) / **Olive Deep** (`#3d5327`) / **Olive Mist** (`#e6edde`): a third diagram-category slot, added for the rare case (e.g. a 2×2 spatial-correspondence diagram) that needs four simultaneously distinguishable, non-hierarchical categories in one view.
-
-With Muted Teal as a fourth option, a diagram needing up to four genuinely parallel categories can use Teal/Slate/Plum/Olive together; a diagram needing only two or three still defaults to Rule 2's single consistent treatment unless the categories are truly inseparable without color. Reach for a fourth hue only when the correspondence being taught (which input maps to which output) is the actual point of the diagram — not for routine visual variety.
+- **Plate** (`#f4f4f2` / `#131316`): the page ground — the wall the signs hang on.
+- **Sheet** (`#ffffff` / `#1c1c20`): a raised sign face. Callouts, quizzes, diagrams, and the rail sit on it.
+- **Ink** (`#111111` / `#f2f2ef`): all primary text, headings, and strong rules.
+- **Ink 2** (`#5c5c58` / `#a3a39d`, 6.1:1): secondary text — subtitles, captions, feedback prose, rail links at rest, list markers.
+- **Ink 3** (`#8f8f8a` / `#6e6e77`, 2.95:1): rules and hairline strokes only.
+- **Rule** (`#d5d5d0` / `#34343a`): the hairline. Every 1px divider in the system.
+- **Rule Strong** (`#111111` / `#f2f2ef`): the 2px structural rule above `h2`, under the board head and chapter headings, and above the lesson nav.
+- **Diagram ink** — **Line** (`#55554f` / `#8f8f99`) primary stroke, **Line Soft** (`#b9b9b2` / `#4a4a54`) secondary stroke, and a four-step neutral fill ramp **Fill 0–3** (`#f7f7f5`, `#eaeae6`, `#d9d9d3`, `#bcbcb5`) with **On Fill** (`#111111`) for text on them.
+- **Inverted plate** — **Invert BG** (`#111111` / `#f2f2ef`), **Invert Ink** (`#f4f4f2` / `#131316`), **Invert Ink 2** (`#a8a8a2` / `#55555c`), **Invert Rule** (`#3a3a36` / `#c9c9c2`), **Invert Signal** (`#ff6a4d` / `#c62b13`): the highest-authority sign, used by the Exam Alert callout.
 
 ### Named Rules
-**The One Accent Rule.** Muted Teal is the only color used to signal "interactive" or "emphasized" — links, active states, buttons, the h2 rail, callouts, quiz hover. Status colors (Amber/Moss/Clay) are reserved strictly for quiz feedback and their matching callout types — never repurpose them as a second brand accent.
 
-**The Diagram-Only Rule.** Slate and Plum exist strictly to distinguish parallel categories *inside a single diagram or table* where no hierarchy, comparison, or verdict is intended — never on a button, link, callout, active nav state, or quiz feedback. If a diagram's categories carry a real semantic verdict (correct/incorrect, strength/weakness), use Moss/Clay instead, not Slate/Plum. If they carry no distinction at all beyond being "three of the same kind of thing," default to one consistent Muted Teal treatment — reach for Slate/Plum only when collapsing to one color would erase information the diagram exists to convey.
+**The One Signal Rule.** `--signal` marks position and action, and nothing else. Not emphasis, not category, not chapter identity, not decoration. If a red thing on the page is not "you are here" or "press this", it is a defect. At body size, use `--signal-ink` (5.1:1); `--signal` is for plates, rules, marks, and large type only.
+
+**The Rules-Only Rule.** `--ink-3` is a rule colour. It is never text and never a mark — at 2.95:1 it fails contrast for both. This was a real accessibility defect caught in review; the token carries the prohibition in its own comment so it does not recur.
+
+**The Diagram-Interior Rule.** `--blue`, `--purple` and `--ochre` (and their deep/tint/soft ramps) are categorical fills for the inside of a diagram: they separate unlike items within one drawing. They are never chapter identity, never a route or wayfinding mark, and never appear on prose, chrome, links, buttons, or the rail. A drawing that needs no categories uses the neutral `--fill-0…3` ramp instead — that is the default, and most diagrams in the build use it.
+
+**The Two-Palette Rule.** Dark is authored, not derived. Every token is redeclared under `:root[data-theme="dark"]` and again under `@media (prefers-color-scheme: dark)` guarded by `:root:not([data-theme="light"])`. Never introduce a colour that exists in only one theme, and never reach for a filter or an opacity trick to make one theme cover both.
 
 ## Typography
 
-**Body & Display Font:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` (system sans stack)
-**Label/Mono Font:** `'Menlo', 'Monaco', 'Courier New', monospace`
+**Display Font:** Barlow Condensed (with Barlow, Arial Narrow, and system sans fallbacks)
+**Body Font:** Barlow (with the full `-apple-system` / Segoe UI / Roboto stack)
+**Label/Mono Font:** JetBrains Mono (with `ui-monospace`, Menlo, Consolas)
 
-**Character:** One typeface for everything but code. Hierarchy comes entirely from size, weight, and the uppercase-label treatment — not from a second display face.
+All three load from the Google Fonts CDN with `preconnect` and `display=swap`; the fallback stacks are complete, so the pages stay legible offline in system lettering.
+
+**Character:** Barlow is a grotesk with public-signage lineage — it was drawn for the low-contrast, rounded-rectangular vocabulary of transport and municipal signs, which is exactly why it is here. Its condensed cut does the sign-plate lettering: headings, labels, buttons, rail entries, and the monumental numerals. The regular cut does the reading. `font-variant-numeric: tabular-nums` is set on every element that shows a number, so lesson numerals, counts, and positions align in a column like a departures board.
 
 ### Hierarchy
-- **Display** (800, 2.1rem, line-height 1.15): homepage hero title only. The one place weight goes above 700.
-- **Headline** (700, 2rem, line-height 1.2): the lesson `h1`.
-- **Title** (700, 1.3rem): `h2` section headers — always paired with the 3px Muted Teal left rail (`.h2` `border-left`).
-- **Body** (400, 1rem/16px, line-height 1.8): all paragraph and list copy. Line-height is deliberately generous for sustained reading.
-- **Label** (700, 0.75rem avg — ranges 0.62–0.78rem by context, letter-spacing 0.08–0.1em, uppercase): the system's one typographic flourish, reused everywhere something needs to read as a category rather than content — lesson meta, hero eyebrow, chapter headings, quiz title, callout title, nav-group labels.
+- **Numeral** (Barlow Condensed, 700, `clamp(3.6rem, 11vw, 6rem)`, line-height 0.82, tracking −0.035em): the lesson number at the top of every lesson. Block-level, ink-coloured, with an optional `<sup>` in signal at 0.2em. This is the page's own mark, never a badge chip.
+- **Display** (Barlow Condensed, 700, `clamp(2.3rem, 7vw, 3.6rem)`, line-height 0.98, tracking −0.028em): the homepage board head only.
+- **Headline** (Barlow Condensed, 600, `clamp(1.9rem, 5.5vw, 2.7rem)`, line-height 1.08, tracking −0.02em, `text-wrap: balance`): the lesson `h1`.
+- **Title** (Barlow Condensed, 600, 1.5rem, line-height 1.15, tracking −0.012em): section `h2`. Always preceded by a 2px `--rule-strong` top border and `0.75rem` of padding; separated from the previous section by `4.5rem`.
+- **Subtitle** (Barlow Condensed, 600, 1.1rem, line-height 1.4): `h3`, the sub-section step.
+- **Body** (Barlow, 400, 17px, line-height 1.7, tracking 0.001em): all reading text. Measure is held by the `34rem` column, ~70 characters. Drops to 16px below 640px.
+- **Label** (Barlow Condensed, 600, 0.72rem, tracking 0.16em, uppercase, `--ink-2`): the system's one category voice — callout titles, quiz titles, chapter headings, rail group labels, the source label.
+- **Action** (Barlow Condensed, 600, 0.88rem, tracking 0.1em, uppercase): buttons and lesson-nav links.
+- **Code** (JetBrains Mono, 500, 0.82em): inline code, on `--fill-0` with a 1px `--rule` border and a 2px radius.
 
 ### Named Rules
-**The Label Rule.** Any uppercase, letter-spaced small-caps text in this system means "this is a category, not a sentence." It never carries a full clause — only short nouns (LESSON META, CH 01 — AI OVERVIEW, EXAM ALERT).
+
+**The Rank-From-Weight Rule.** Hierarchy comes from weight, case, and rule — not from a six-step size ramp. The gap between a section heading (1.5rem) and body (17px) is small on purpose; what separates them is the 2px black rule above the heading and the 4.5rem of air before it. When a new level of rank is needed, reach for a rule or a case change before reaching for a size.
+
+**The Label-Voice Rule.** The uppercase, letter-spaced condensed label carries *short nouns only* — "Definition", "Analogy", "Exam Alert", "Ch 02 — Machine Learning". Never a clause, never a sentence. `.diagram-caption` was pulled out of this voice mid-review for exactly that reason: captions are clauses, so they are sentence case, in the text face, at 0.86rem in `--ink-2`, capped at 52ch and centred.
+
+**The No-Eyebrow Rule.** A small label stacked above a heading is banned. No kickers, no eyebrows, no category chip over a title. The chapter a reader is in is read off the position rule (`Ch 02 · Machine Learning · 5 / 19`), which is wayfinding rather than decoration. If a surface seems to need an eyebrow, it needs a rule or a position indicator instead.
 
 ## Layout
 
-Single centered content column, `max-width: 700px`, with a fixed docs-style sidebar to its left on wide viewports.
+A fixed left directory rail plus a single, left-anchored reading column. Nothing is centred in leftover space.
 
-- **Content column:** capped at 700px, centered (`margin: 0 auto`), `padding: 2.5rem 1.5rem 5rem` on the body. This width is the system's reading-comfort invariant — do not widen it to fill more of large screens.
-- **Sidebar:** fixed, 252px wide, full viewport height, independently scrollable, sits to the left of the content column (`.has-sidebar { padding-left: 252px }`).
-- **Breakpoint 900px:** sidebar goes off-canvas (`translateX(-100%)`), a hamburger toggle appears fixed top-left, content padding-left drops to 1.5rem, and a semi-transparent backdrop (`rgba(0,0,0,0.2)`) appears behind the sidebar when open.
-- **Breakpoint 600px:** base font-size drops to 15px, `h1` drops to 1.5rem. No further structural changes below this.
-- **Print:** sidebar, toggle, and backdrop are all removed; content reclaims full width; background forced to white.
-- **Vertical rhythm:** major sections separate with 2–2.5rem top margin; card-like blocks (callouts, quiz, diagram) use 1.5–2rem margin; list items use 0.3rem gaps. Consistent, generous, never cramped.
+- **The rail** (`--rail-w: 260px`) is fixed full-height on `--sheet` with a 1px right rule, and holds a head (home link), a scrolling body of five chapter groups covering all nineteen lessons, and a foot (position count + theme control). It auto-scrolls the active entry to the middle on load. `body.has-sidebar` offsets the page by `260px + 3rem`.
+- **The column** is `--board: 34rem` — the sign face, about 70 characters of Barlow at 17px. Prose, headings, rules, callouts, and quizzes all share it. It is anchored to the rail (`margin-left: 0; margin-right: auto`), not centred, so the open space always falls on the same side.
+- **Breakout** is one exception: `.diagram` is `--wide: 44rem` and pulls right into that open margin via a negative right margin (`calc(var(--board) - var(--wide))`). It is written as a single `margin` shorthand so no later rule half-resets it.
+- **Body padding** is `3rem 1.5rem 4.5rem`, dropping to `1.5rem 1rem 3rem` below 640px.
+- **Rhythm** is an eight-step scale: `0.25 / 0.5 / 0.75 / 1 / 1.5 / 2 / 3 / 4.5rem`. Section separation uses the top of that scale (`4.5rem` above an `h2`); component internals use the bottom.
+- **`--measure: 57ch`** is a secondary cap, applied only to the source-citation block at the foot of a lesson. The `34rem` board is the measure that governs everything else.
+
+**Responsive.** Three breakpoints, each doing one job:
+- **≤1200px** — the board has no room to break out; diagrams snap to `100%` and sit flush.
+- **≤960px** — the rail becomes an off-canvas drawer (`min(85vw, 300px)`) behind a hamburger toggle with a backdrop, Escape to close, and body scroll lock; the column re-centres.
+- **≤640px** — body type drops to 16px, diagram strips authored with a desktop `min-width` are overridden down to phone scale, the lesson-nav stacks, and the homepage row grid narrows.
+
+**Motion.** One easing token, `--ease: cubic-bezier(0.16, 1, 0.3, 1)`, used for every transition (0.13–0.26s). The only entrance animation in the system is the position rule's ticks, which scale up in sequence at 22ms stagger. A `prefers-reduced-motion: reduce` block flattens all animation, transition, and scroll behaviour.
+
+**Print.** The sign becomes a sheet: rail, toggles, and the position rule are hidden, the ground goes white, type drops to 11pt, the inverted Exam Alert flips to a 2px black-bordered white plate, and callouts, quizzes and diagrams get `break-inside: avoid`.
+
+### Named Rules
+
+**The One Right Edge Rule.** Every text element in the reading column ends at the same right edge (`34rem`). Diagrams are the only thing allowed past it, and only to `44rem`, only to the right, and only above 1200px. Nothing else breaks the line.
+
+**The Anchored Column Rule.** The reading column is anchored to the rail that indexes it, never centred in the leftover space. The rail, the column, and the open margin are always in the same order.
 
 ## Elevation & Depth
 
-Flat by construction. Surfaces separate from Paper by color contrast (Surface white vs. Paper off-white) and a 1px Hairline border — not by shadow. The one exception is functional, not decorative: the sidebar's mobile overlay state, which needs a shadow to read as "floating above the page" while a semi-transparent backdrop dims the content behind it.
+The system is flat. There is no elevation scale and no ambient shadow vocabulary. Depth is expressed by *ground versus sheet* — a `#f4f4f2` plate ground with `#ffffff` sign faces on it — plus 1px `--rule` hairlines and a four-step neutral fill ramp inside drawings. A raised surface reads as raised because it is lighter than the wall and outlined, not because it floats.
 
-### Shadow Vocabulary
-- **Overlay** (`box-shadow: 4px 0 20px rgba(0,0,0,0.12)`): the sidebar when open on mobile (`body.nav-open .site-nav`). Signals temporary, dismissible elevation above the page.
-- **Toggle button** (`box-shadow: 0 1px 3px rgba(0,0,0,0.08)`): the fixed hamburger button — a bare hint of lift so it reads as tappable over any background.
+Exactly one shadow exists in the entire stylesheet: `6px 0 28px rgba(0, 0, 0, 0.18)` on the mobile rail when it is open as a drawer. It is a modal-layer affordance, not a surface style, and it is the only place a shadow may be used.
 
 ### Named Rules
-**The Flat-By-Default Rule.** Nothing sits above the page at rest. Shadow is reserved for the one state where a surface genuinely floats over content it can be dismissed from (the mobile sidebar). Do not add shadows to cards, buttons, or callouts to increase their visual weight — use the Surface/Paper contrast and Hairline border instead.
+
+**The Flat Plate Rule.** A surface gets a border *or* a fill, never both plus a shadow. Sign plates are printed, not lifted. If a surface needs to feel more important, invert it — as the Exam Alert does — rather than lifting it.
 
 ## Shapes
 
-Small, consistent radii — never sharp, never pill-shaped. A four-step scale covers everything in the system:
+Square-cornered. `--r: 2px` is the only radius in the system, and it is a manufacturing tolerance rather than a curve: a sign plate has a cut edge, not a rounded one. This deliberately departs from the usual 12–16px card radius; a plate that reads as a soft card has left the world.
 
-- **sm (3px):** inline `<code>` only — barely rounded, functional.
-- **md (5px):** small interactive controls — the primary button, the lesson-badge number chip, the hamburger toggle.
-- **lg (6px):** the system's default card/control radius — callouts, def-list items, quiz-options, homepage lesson-list links, the progress bar.
-- **xl (8px):** the two largest content blocks — the quiz widget and the diagram box.
-
-Borders default to 1px Hairline. The recurring exception is the **left-border rail**: a thicker (3–4px), colored left border used as the system's one deliberate emphasis device — on `h2` (3px Muted Teal), callout boxes (4px, color matches callout type), and the active sidebar nav-link (2px Muted Teal).
+The form language otherwise is rules and rectangles:
+- **1px `--rule` hairlines** separate everything: callout title bars, quiz options, definition rows, rail sections, list dividers.
+- **2px `--rule-strong` rules** are structural: above every `h2`, under the board head and each chapter heading, above the lesson nav.
+- **A 3px left border** on the active rail entry is the one vertical rule in the system, and it is the signal.
+- **Focus** is a 2px `--signal` outline at 3px offset with a 1px radius, applied via `:focus-visible` only.
+- **Marks are drawn**, never glyphs or emoji: every icon is an inline SVG or a `data:` URI applied as a CSS `mask` over `currentColor`, at a single 2–2.4px stroke weight with round caps and joins. The set is small — info circle, nested squares, warning triangle, check, cross, arrow, home, sun, moon.
+- **Scrollbars** are themed to the world: an 11px track with a `--rule` thumb inset by a 3px `--plate` border.
 
 ## Components
 
 ### Buttons
-- **Shape:** 5–6px radius (md/lg), never sharp or pill.
-- **Primary** (`.btn-start`, `.quiz-next`): Muted Teal background, white text, 600–700 weight, `padding: 0.6rem 1.4rem` (btn-start) or `0.5rem 1.2rem` (quiz-next).
-- **Hover:** background shifts to Muted Teal Deep. No transform, no shadow — a flat color shift only (`transition: background 0.12s`).
+- **Shape:** square plate (2px radius), 1px border in the same colour as the fill.
+- **Action (`.btn`, `.btn-start`, `.quiz-next`):** signal fill with `--on-signal` text, condensed uppercase at 0.88rem / 0.1em tracking, `0.62rem 1.15rem` padding, inline-flex with a 0.5rem gap for its drawn arrow.
+- **Hover / Active:** hover flips the plate to ink (`--ink` fill and border, `--plate` text) — a colour *swap*, not a tint; active nudges 1px down. Focus uses the global signal outline.
+- There is no secondary or ghost button. Non-primary navigation is a lesson-nav link, not a lesser button.
 
 ### Callouts
-- **Style:** left-border rail (4px) in the matching status color, tinted background at the Mist variant, no radius on the standard callout, an uppercase Label-styled title above the body text.
-- **Tip** (Muted Teal / Muted Teal Mist): general teaching notes.
-- **Exam** (Amber / Amber Mist): certification-critical content — the "Exam Alert" convention from `CLAUDE.md`.
-- **Analogy** (Moss border/title, but a literal `#f0fdf4` background rather than a token — see Do's and Don'ts): real-world comparisons.
+- **Character:** a sign plate with a lettered title bar.
+- **Structure:** `--sheet` fill, 1px `--rule` border, 2px radius, `0 1rem 0.95rem` padding on the plate itself so bare text nodes are inset; the title bar bleeds back to the edges with a negative margin and sits on `--fill-0` above a 1px rule.
+- **Title:** the label voice (condensed, 0.72rem, 0.16em, uppercase) with a 15px drawn mark masked from `currentColor` on its left.
+- **Variants:** `tip` (info circle, "Definition"), `analogy` (nested squares), and `exam` — the highest-authority sign, which inverts to the `--invert-bg` plate with `--invert-ink` text, an `--invert-signal` title, a transparent title bar over an `--invert-rule` divider, and re-tinted code and list markers.
 
-### Cards / Containers
-- **Corner Style:** 6px (def-list items, homepage lesson links) or 8px (quiz box, diagram box).
-- **Background:** Surface (white) on Paper.
-- **Shadow Strategy:** none — see Elevation & Depth.
-- **Border:** 1px Hairline.
-- **Internal Padding:** 0.75–1rem for small cards (def-item), 1.5rem for large blocks (quiz, diagram).
+### Quiz
+- **Character:** a check plate. Every state carries a mark.
+- **Shape:** `--sheet` fill, 1px `--rule` border, 2px radius, zero padding — the title bar, question, options and feedback each own their insets.
+- **Options:** full-width borderless buttons in a grid, hairline-divided, `0.8rem 2.4rem 0.8rem 1.1rem` padding (the right inset reserves a fixed mark cell). Hover fills `--fill-0`; all options disable on answer.
+- **States:** `correct` takes the go tint, go text, weight 500, and a drawn ✓ mask in the reserved cell. `wrong` takes the stop tint, stop text, a drawn ✕ mask, *and* a line-through at 55% stop. State is never carried by colour alone.
+- **Feedback:** 0.94rem, and deliberately set in `--ink` rather than a status colour — the verdict is already drawn on the option, so the feedback only has to explain why. Its job is to say why the wrong answer is wrong.
+- **Next:** a signal action button, hidden until answered.
 
-### Quiz Widget
-- **Options:** 1.5px Hairline border, 6px radius, flat Paper background at rest.
-- **Hover:** border and background shift to Muted Teal / Muted Teal Mist.
-- **Correct:** Moss border, Moss Mist background, Moss text, 600 weight.
-- **Wrong:** Clay border, Clay Mist background, Clay text.
-- **Feedback copy** always explains *why* an answer is right or wrong, never just states the verdict (a content rule, not a visual one, but binding per `CLAUDE.md`).
+### Diagram
+- **Character:** a technical drawing in ink, in its own framed panel.
+- **Shape:** `--sheet` fill, 1px `--rule` border, 2px radius, `1.5rem 1rem` padding, centred content at 0.88rem.
+- **Width:** `44rem`, breaking right out of the `34rem` column above 1200px; `100%` below it.
+- **Ink:** strokes use `--line` / `--line-soft`; areas use the neutral `--fill-0…3` ramp with `--on-fill` text. Categorical hues appear only when a drawing must separate unlike items. Connectors reuse the system's own arrow mark (`.conn`), inheriting the cell's colour.
+- **Overflow:** an overflowing panel says so — a 1.75rem fade appears at the right edge, toggled by `nav.js` only when `scrollWidth` actually exceeds `clientWidth`, and a 2.75rem spacer keeps the fade off the content it advertises.
+- **Caption:** sentence case, text face, 0.86rem `--ink-2`, max 52ch, centred.
 
-### Navigation (Sidebar)
-- **Style:** fixed 252px column, Surface background, 1px Hairline right border, uppercase Label-styled group headers, links in Ink Muted at rest.
-- **Active state:** Muted Teal text, 2px Muted Teal left border, Muted Teal Mist background, 600 weight — the same rail-and-tint pattern used everywhere else in the system.
-- **Mobile:** off-canvas below 900px, hamburger toggle top-left, dimmed backdrop while open.
+### Position Rule (signature component)
+The build's answer to "where am I in the nineteen?", and the reason no eyebrow is needed. A 20px-tall flex row of nineteen ticks with 3px gaps: past lessons are 6px `--ink-2`, future lessons 6px `--rule`, and the current lesson is a full-height 20px `--signal` tick. A trailing `::after` prints the chapter and position (`Ch 02 · Machine Learning · 5 / 19`) in the condensed label voice from a `data-position` attribute. It is built by `nav.js`, exposed as `role="img"` with an "Lesson N of 19" label, and its ticks scale in at 22ms stagger under `prefers-reduced-motion: no-preference`.
 
-### Badges
-- **Lesson number badge** (`.lesson-badge`, `.nav-num`): small (1.85rem square on the homepage, inline on the sidebar), 5px radius, Hairline border, Paper background, Ink Muted numeral — inverts to Muted Teal Mist/Muted Teal Deep on hover or active state.
+### Directory Rail (signature component)
+Fixed 260px sign board on `--sheet`. Chapter groups are label-voice headings; each entry is a two-column grid (a 1.9rem condensed tabular numeral, then the title) at 0.875rem in `--ink-2` with a transparent 3px left border. Hover moves to `--ink` on `--fill-0`. The active entry takes the signal left border, a signal numeral, `--ink` text at weight 500, `--fill-0` ground, and `aria-current="page"`. The foot pairs the position count with a 30px theme toggle — a bordered square plate holding a sun/moon drawn mark, swapped by `data-theme` and remembered in `localStorage` under `hcia-theme`, with a pre-paint boot script in every page head so the board never flashes.
+
+### Lesson Navigation
+A flex row above a 2px `--rule-strong` rule at the foot of a lesson: previous on the left with a mirrored arrow mark, next pushed right with a forward arrow. Links are condensed 600 at 0.05em in `--ink` with a transparent 2px bottom border; hover moves the text to `--signal-ink` and lights the border in `--signal`. Stacks vertically below 640px.
+
+### Directory Rows (homepage)
+The homepage board is ruled rows, not cards. Each row is a three-column grid (a 3.1rem condensed numeral at 1.35rem/700 in `--ink-2`, the lesson name in the text face at 1.02rem/400, and a 16px arrow mark) on a hairline bottom rule. Hover fills `--fill-0`, turns the numeral and arrow signal, and slides the arrow 3px right. Chapter headings are label-voice, above a 2px `--rule-strong` rule, with a tabular count on the right.
+
+### Definition Rows
+A hairline-ruled list: a condensed 1.02rem `--ink` term, then `--ink-2` body at 0.97rem, each row divided by a 1px rule. Used where a lesson defines several terms in sequence — a plate would be too loud for a set of four.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** route every new emphasis signal through Muted Teal — resist introducing a second accent color even for a "special" feature.
-- **Do** use the left-border rail (colored, 2–4px) as the emphasis device for any new callout, active state, or section marker, matching the weight already used for `h2` (3px), callouts (4px), and active nav-links (2px).
-- **Do** keep uppercase Label styling (700 weight, 0.08em+ letter-spacing) reserved for short category text only, never full sentences.
-- **Do** keep the reading column at 700px max-width; widen the sidebar or margins instead of the content column if more horizontal space is needed.
-- **Do** keep quiz-option and callout copy the same length across variants (an existing content rule from `CLAUDE.md`, worth restating here since it's a visual-parity concern too — unequal option lengths visually hint at the answer).
+- **Do** keep the signal for position and action only, and use `--signal-ink` (5.1:1) whenever the red is at body size.
+- **Do** give every state a drawn mark as well as a colour — a ✓, a ✕, a strike-through, a tick height, a border.
+- **Do** build rank with a 2px `--rule-strong` rule, a weight change, or uppercase condensed lettering before reaching for a bigger size.
+- **Do** hold the `34rem` right edge for all prose, callouts, and quizzes; break out only a `.diagram`, only to `44rem`, only rightward, only above 1200px.
+- **Do** draw icons as inline SVG or a masked `data:` URI at a 2–2.4px stroke weight, inheriting `currentColor`.
+- **Do** author both themes when adding any colour: `:root`, `:root[data-theme="dark"]`, and the `prefers-color-scheme` block.
+- **Do** set `font-variant-numeric: tabular-nums` on anything that shows a number.
+- **Do** use the neutral `--fill-0…3` ramp for diagram areas by default; reach for a categorical hue only when a drawing must separate unlike items.
+- **Do** keep the label voice to short nouns; anything with a verb in it is sentence-case body text.
 
 ### Don't:
-- **Don't** add box-shadow to cards, buttons, or callouts — depth in this system comes from Surface/Paper contrast and Hairline borders, not shadow (see The Flat-By-Default Rule).
-- **Don't** introduce a second display typeface. `--font-serif` already exists as a token in the codebase but currently resolves to the identical system-sans stack as `--font-sans` — treat this as a naming artifact to eventually clean up, not a live serif you can rely on.
-- **Don't** inline per-lesson `<style>` blocks for anything `assets/style.css` already covers (a `CLAUDE.md` rule); the one existing exception (`0011-cnn.html`'s scoped SVG cell styles) is diagram-specific markup, not a page-level style override, and should stay the narrow exception rather than the precedent.
-- **Don't** carry forward the `.callout.analogy` background as a literal `#f0fdf4` in new work — it sits outside the token set defined in this file's frontmatter; use `{colors.moss-mist}` or a properly tokenized new mist color instead.
+- **Don't** put a label, kicker, or eyebrow above a heading. The position rule carries the chapter.
+- **Don't** use `--ink-3` for text or for a mark. It is a rule colour at 2.95:1, and using it as either is an accessibility defect.
+- **Don't** use `--blue`, `--purple`, or `--ochre` outside a diagram interior — not for chapter identity, not as a route mark, not on links, chrome, buttons, or the rail.
+- **Don't** combine a border, a fill, and a shadow on one surface. Border or fill; the drawer shadow is the only shadow in the system.
+- **Don't** soften the corners. `2px` is the radius; a 12–16px card radius leaves the world.
+- **Don't** signal state with hue alone, and don't colour the quiz feedback prose — the drawn mark is already the verdict.
+- **Don't** introduce an emoji or a glyph icon. Every mark in this system is drawn at one stroke weight.
+- **Don't** centre the reading column or float it in the leftover space; it is anchored to the rail.
+- **Don't** add a second accent, a gradient, or a tinted background band. One signal, one ground, one sheet.

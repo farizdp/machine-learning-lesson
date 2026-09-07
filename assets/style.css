@@ -1,473 +1,1004 @@
-/* Shared stylesheet for all lessons */
+/* ============================================================================
+   THE WAYFINDING BOARD — shared stylesheet for the HCIA-AI course
+   ----------------------------------------------------------------------------
+   World: technical-exhibition and transit wayfinding signage.
+   Nineteen lessons treated as a building to be signposted: numbered, spaced,
+   and impossible to get lost in. One signal hue, ink, air, and hairline rules.
 
+   Rules this file enforces:
+   - Rank comes from weight, case and rule — not a six-step size ramp.
+   - State is a mark, never only a hue (every state carries a glyph or rule).
+   - Plates are square-cornered sign faces. Border OR fill, never both + shadow.
+   - Signal red marks position and action only. It is the page's one colour.
+   - Diagrams are technical drawings in ink; the signal marks what matters.
+   ========================================================================== */
+
+/* ── Tokens: light plate (daylight signage) ─────────────────────────────── */
 :root {
-  --bg: #f7f7f6;
-  --surface: #ffffff;
-  --border: #e5e4e0;
-  --text: #2a2a28;
-  --text-muted: #6c6c66;
-  --accent: #3b7a77;
-  --accent-light: #e4f0ef;
-  --accent-dark: #2c5e5c;
-  --warn: #966010;
-  --warn-light: #fef3c7;
-  --success: #1a6b3f;
-  --success-light: #d8f3e5;
-  --danger: #c12929;
-  --danger-light: #fde8e8;
-  --code-bg: #f3f3f2;
-  --max-w: 700px;
-  --font-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
-  --sidebar-w: 252px;
+  color-scheme: light;
+
+  /* Ground & ink */
+  --plate:        #f4f4f2;   /* page ground — the wall the signs hang on */
+  --sheet:        #ffffff;   /* raised sign face */
+  --ink:          #111111;
+  --ink-2:        #5c5c58;   /* 6.1:1 on plate */
+  --ink-3:        #8f8f8a;   /* RULES ONLY — 2.95:1, never text, never a mark */
+  --rule:         #d5d5d0;
+  --rule-strong:  #111111;
+
+  /* The one signal */
+  --signal:       #e5341f;   /* plates, rules, marks, large type (3.9:1) */
+  --signal-ink:   #c62b13;   /* links and body-size accent text (5.1:1) */
+  --signal-tint:  #fdeae6;
+  --on-signal:    #ffffff;
+
+  /* Status — always paired with a mark */
+  --go:           #0f7b3d;
+  --go-tint:      #e4f4ea;
+  --stop:         #c9281a;
+  --stop-tint:    #fceae7;
+
+  /* Diagram categoricals — INSIDE a diagram only. These name unlike things
+     apart within one drawing (classes, gates, branches). They are never
+     chapter identity, never a route mark, never used on prose, chrome,
+     links, buttons or the rail. Deep/tint/soft are the same hue's ramp. */
+  --blue:         #1b56c4;  --blue-deep:   #143f92;
+  --blue-tint:    #e7edfa;  --blue-soft:   #9db4e6;
+  --purple:       #7a3ea8;  --purple-deep: #5a2d7d;
+  --purple-tint:  #f2e9f8;  --purple-soft: #c19ad9;
+  --ochre:        #8a5200;  --ochre-deep:  #654000;
+  --ochre-tint:   #f7eede;  --ochre-soft:  #d8b478;
+
+  /* Diagram structure — technical drawing in ink */
+  --line:         #55554f;   /* primary stroke */
+  --line-soft:    #b9b9b2;   /* secondary stroke */
+  --fill-0:       #f7f7f5;
+  --fill-1:       #eaeae6;
+  --fill-2:       #d9d9d3;
+  --fill-3:       #bcbcb5;
+  --on-fill:      #111111;
+
+  /* Inverted plate (the highest-authority sign) */
+  --invert-bg:    #111111;
+  --invert-ink:   #f4f4f2;
+  --invert-ink-2: #a8a8a2;
+  --invert-rule:  #3a3a36;
+  --invert-signal:#ff6a4d;
+
+  /* Type */
+  --font-sans:  'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-plate: 'Barlow Condensed', 'Barlow', 'Arial Narrow', -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, 'Menlo', 'Consolas', monospace;
+
+  /* Geometry */
+  --r:          2px;         /* sign plates are square-cornered */
+  --rail-w:     260px;
+  --measure:    57ch;        /* ~70 characters in Barlow */
+  --board:      34rem;       /* the sign face — one right edge, at the measure */
+  --wide:       44rem;       /* diagrams break out past it, deliberately */
+
+  /* Rhythm */
+  --s1: 0.25rem; --s2: 0.5rem;  --s3: 0.75rem; --s4: 1rem;
+  --s5: 1.5rem;  --s6: 2rem;    --s7: 3rem;    --s8: 4.5rem;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Tokens: dark plate (the sign lit at night) ─────────────────────────── */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --plate:        #131316;
+  --sheet:        #1c1c20;
+  --ink:          #f2f2ef;
+  --ink-2:        #a3a39d;
+  --ink-3:        #6e6e77;
+  --rule:         #34343a;
+  --rule-strong:  #f2f2ef;
+
+  --signal:       #ff6a4d;
+  --signal-ink:   #ff8168;
+  --signal-tint:  #38201c;
+  --on-signal:    #131316;
+
+  --go:           #4ec97e;
+  --go-tint:      #16311f;
+  --stop:         #ff6b5c;
+  --stop-tint:    #38201c;
+
+  --blue:         #7aa5ff;  --blue-deep:   #a9c4ff;
+  --blue-tint:    #1a2440;  --blue-soft:   #3f5695;
+  --purple:       #c093e8;  --purple-deep: #d6b6f2;
+  --purple-tint:  #2a1e38;  --purple-soft: #6b4a8c;
+  --ochre:        #e0a33c;  --ochre-deep:  #efc275;
+  --ochre-tint:   #322614;  --ochre-soft:  #8a6a2a;
+
+  --line:         #8f8f99;
+  --line-soft:    #4a4a54;
+  --fill-0:       #202024;
+  --fill-1:       #2a2a30;
+  --fill-2:       #3a3a42;
+  --fill-3:       #4d4d57;
+  --on-fill:      #f2f2ef;
+
+  --invert-bg:    #f2f2ef;
+  --invert-ink:   #131316;
+  --invert-ink-2: #55555c;
+  --invert-rule:  #c9c9c2;
+  --invert-signal:#c62b13;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --plate: #131316; --sheet: #1c1c20;
+    --ink: #f2f2ef; --ink-2: #a3a39d; --ink-3: #6e6e77;
+    --rule: #34343a; --rule-strong: #f2f2ef;
+    --signal: #ff6a4d; --signal-ink: #ff8168; --signal-tint: #38201c; --on-signal: #131316;
+    --go: #4ec97e; --go-tint: #16311f; --stop: #ff6b5c; --stop-tint: #38201c;
+    --blue: #7aa5ff; --blue-deep: #a9c4ff; --blue-tint: #1a2440; --blue-soft: #3f5695;
+    --purple: #c093e8; --purple-deep: #d6b6f2; --purple-tint: #2a1e38; --purple-soft: #6b4a8c;
+    --ochre: #e0a33c; --ochre-deep: #efc275; --ochre-tint: #322614; --ochre-soft: #8a6a2a;
+    --line: #8f8f99; --line-soft: #4a4a54;
+    --fill-0: #202024; --fill-1: #2a2a30; --fill-2: #3a3a42; --fill-3: #4d4d57;
+    --on-fill: #f2f2ef;
+    --invert-bg: #f2f2ef; --invert-ink: #131316; --invert-ink-2: #55555c;
+    --invert-rule: #c9c9c2; --invert-signal: #c62b13;
+  }
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--plate);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.8;
-  padding: 2.5rem 1.5rem 5rem;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.001em;
+  padding: var(--s7) var(--s5) var(--s8);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.page {
-  max-width: var(--max-w);
-  margin: 0 auto;
+.page { max-width: var(--board); margin: 0 auto; }
+/* Anchored to the rail that indexes it, not floated in the leftover space. */
+.has-sidebar .page { margin-left: 0; margin-right: auto; }
+.page > * { min-width: 0; }
+
+/* Authored lesson content (tables, wide SVG, code) scrolls inside its own
+   box rather than widening the page. */
+table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+img, svg, video { max-width: 100%; height: auto; }
+pre { max-width: 100%; overflow-x: auto; }
+
+/* ── Browser surfaces: the parts we did not draw still carry the design ── */
+::selection { background: var(--signal); color: var(--on-signal); }
+:root { caret-color: var(--signal); scrollbar-color: var(--rule) transparent; scrollbar-width: thin; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rule); border: 3px solid var(--plate); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── Sign lettering ────────────────────────────────────────────────────── */
+h1, h2, h3, .plate-num, .label, .lesson-name {
+  font-family: var(--font-plate);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ── Header ── */
-header {
-  border-bottom: 2px solid var(--border);
-  padding-bottom: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.lesson-meta {
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+/* The label: the system's category voice. Short nouns only, never a clause. */
+.label,
+.callout-title,
+.quiz-title,
+.chapter-heading,
+.nav-group-label,
+.source-label {
+  font-family: var(--font-plate);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+
+/* ── Header: the sign plate ────────────────────────────────────────────── */
+/* No closing rule here: the first h2's own rule is the next thing the eye
+   meets, and two stacked rules read as a mistake. */
+header {
+  padding-bottom: var(--s2);
+  margin-bottom: var(--s6);
+}
+
+
+/* Monumental numeral — the card's own mark, not a badge chip */
+.plate-num {
+  display: block;
+  font-size: clamp(3.6rem, 11vw, 6rem);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin-bottom: var(--s3);
+}
+.plate-num sup {
+  font-size: 0.2em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  vertical-align: super;
+  color: var(--signal);
 }
 
 h1 {
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 700;
-  color: var(--text);
+  font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
 }
 
 .subtitle {
-  margin-top: 0.5rem;
-  color: var(--text-muted);
-  font-size: 1rem;
-  font-family: var(--font-sans);
-}
-
-/* ── Typography ── */
-h2 {
-  font-size: 1.3rem;
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-weight: 700;
-  border-left: 3px solid var(--accent);
-  padding-left: 0.75rem;
-}
-
-h3 {
-  font-size: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  color: var(--text);
-}
-
-p { margin-bottom: 1rem; }
-
-ul, ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-li { margin-bottom: 0.3rem; }
-
-strong { font-weight: 700; }
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover { text-decoration: underline; }
-
-code {
-  font-family: var(--font-mono);
-  font-size: 0.85em;
-  background: var(--code-bg);
-  padding: 0.1em 0.4em;
-  border-radius: 3px;
-}
-
-/* ── Callout boxes ── */
-.callout {
-  border-radius: 6px;
-  padding: 1rem 1.2rem;
-  margin: 1.5rem 0;
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
+  margin-top: var(--s4);
+  color: var(--ink-2);
+  font-size: 1.0625rem;
   line-height: 1.6;
 }
 
-.callout-title {
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-}
-
-.callout.tip {
-  background: var(--accent-light);
-  border-left: 4px solid var(--accent);
-}
-.callout.tip .callout-title { color: var(--accent-dark); }
-
-.callout.exam {
-  background: var(--warn-light);
-  border-left: 4px solid var(--warn);
-}
-.callout.exam .callout-title { color: var(--warn); }
-
-.callout.analogy {
-  background: #f0fdf4;
-  border-left: 4px solid var(--success);
-}
-.callout.analogy .callout-title { color: var(--success); }
-
-/* ── Definition list ── */
-.def-list {
-  display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0 1.5rem;
-}
-
-.def-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-}
-
-.def-term {
-  font-weight: 700;
-  color: var(--accent-dark);
-  margin-bottom: 0.2rem;
-}
-
-/* ── Quiz widget ── */
-.quiz {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 2rem 0;
-  font-family: var(--font-sans);
-}
-
-.quiz-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-}
-
-.quiz-question {
-  font-size: 1rem;
+/* ── Section headings: a rule, not a coloured bar ──────────────────────── */
+h2 {
+  font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text);
-  line-height: 1.5;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin-top: var(--s8);
+  margin-bottom: var(--s4);
+  padding-top: var(--s3);
+  border-top: 2px solid var(--rule-strong);
+  text-wrap: balance;
+}
+h2:first-of-type { margin-top: var(--s7); }
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: var(--ink);
+  margin-top: var(--s6);
+  margin-bottom: var(--s2);
 }
 
+/* ── Reading ───────────────────────────────────────────────────────────── */
+p { margin-bottom: var(--s4); }
+
+ul, ol { padding-left: 1.35rem; margin-bottom: var(--s4); }
+li { margin-bottom: var(--s2); }
+li::marker { color: var(--ink-3); }
+
+strong { font-weight: 600; color: var(--ink); }
+em { font-style: italic; }
+
+a {
+  color: var(--signal-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--signal-ink) 40%, transparent);
+  transition: text-decoration-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+a:hover { text-decoration-color: var(--signal-ink); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  font-weight: 500;
+  background: var(--fill-0);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 0.08em 0.35em;
+  border-radius: var(--r);
+}
+
+hr { border: none; border-top: 1px solid var(--rule); margin: var(--s6) 0; }
+
+/* ── Position rule: you are here, in the nineteen ──────────────────────── */
+.progress-bar {
+  --pos: 0;
+  --total: 19;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  margin-bottom: var(--s6);
+}
+.progress-bar::after {
+  content: attr(data-position);
+  font-family: var(--font-plate);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  margin-left: var(--s3);
+  align-self: center;
+  white-space: nowrap;
+}
+.tick {
+  flex: 1;
+  height: 6px;
+  background: var(--rule);
+  transform-origin: bottom;
+}
+.tick.done { background: var(--ink-2); }
+.tick.here {
+  height: 20px;
+  background: var(--signal);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tick { animation: tick-in 0.5s var(--ease) backwards; }
+  @keyframes tick-in { from { transform: scaleY(0.15); opacity: 0; } }
+}
+
+/* Legacy fill element is superseded by ticks */
+.progress-bar-fill { display: none; }
+
+/* ── Plates: callouts ──────────────────────────────────────────────────── */
+/* Padding lives on the plate itself, so bare text nodes are inset too; the
+   title bar bleeds back out to the edges with a negative margin. Putting the
+   padding on children instead indents every inline <strong> and <em>. */
+.callout {
+  margin: var(--s5) 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  background: var(--sheet);
+  font-size: 0.97rem;
+  line-height: 1.62;
+  padding: 0 1rem 0.95rem;
+}
+.callout > .callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 -1rem 0.9rem;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--fill-0);
+  color: var(--ink);
+  border-radius: var(--r) var(--r) 0 0;
+}
+.callout > .callout-title::before {
+  content: "";
+  width: 15px; height: 15px;
+  flex: none;
+  background: currentColor;
+  -webkit-mask: var(--mark) center / contain no-repeat;
+  mask: var(--mark) center / contain no-repeat;
+}
+.callout > :first-child:not(.callout-title) { padding-top: 0.9rem; }
+.callout > :last-child { margin-bottom: 0; }
+.callout p:last-child { margin-bottom: 0; }
+.callout p, .callout ul, .callout ol { max-width: none; }
+
+/* Marks — drawn, one stroke weight, never an emoji */
+.callout.tip {
+  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5'/%3E%3Cpath d='M12 7.6v.1'/%3E%3C/svg%3E");
+}
+.callout.analogy {
+  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='11' height='11' rx='1.5'/%3E%3Cpath d='M10 10h11v11H10z'/%3E%3C/svg%3E");
+  border-color: var(--rule);
+}
+.callout.analogy > .callout-title { color: var(--ink); }
+
+/* The exam alert is the highest-authority sign on the page: it inverts. */
+.callout.exam {
+  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5 22 20H2z'/%3E%3Cpath d='M12 10v4.2'/%3E%3Cpath d='M12 17.2v.1'/%3E%3C/svg%3E");
+  background: var(--invert-bg);
+  border-color: var(--invert-bg);
+  color: var(--invert-ink);
+}
+.callout.exam > .callout-title {
+  background: transparent;
+  border-bottom: 1px solid var(--invert-rule);
+  color: var(--invert-signal);
+}
+.callout.exam strong { color: var(--invert-ink); }
+.callout.exam code {
+  background: color-mix(in srgb, var(--invert-ink) 12%, transparent);
+  border-color: var(--invert-rule);
+  color: var(--invert-ink);
+}
+.callout.exam a { color: var(--invert-signal); }
+.callout.exam li::marker { color: var(--invert-ink-2); }
+
+/* ── Directory rows: definitions ───────────────────────────────────────── */
+.def-list {
+  margin: var(--s4) 0 var(--s5);
+  border-top: 1px solid var(--rule);
+}
+.def-item {
+  border-bottom: 1px solid var(--rule);
+  padding: var(--s3) 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.def-term {
+  font-family: var(--font-plate);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin-bottom: var(--s1);
+}
+
+/* ── Diagram: a technical drawing, full board width ────────────────────── */
+/* The column is anchored to the rail, so diagrams break out to the RIGHT,
+   into the board's open margin. One shorthand, so nothing resets it. */
+.diagram {
+  position: relative;
+  width: var(--wide);
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: var(--s5) var(--s4);
+  margin: var(--s5) calc(var(--board) - var(--wide)) var(--s5) 0;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink);
+  overflow-x: auto;
+}
+.diagram svg { max-width: 100%; height: auto; }
+.diagram p { max-width: none; }
+/* A scrolling strip runs out into blank sheet, so the fade never paints over
+   the content it exists to advertise. */
+.diagram > div[style*="min-width"]::after {
+  content: "";
+  flex: 0 0 2.75rem;
+}
+
+/* An overflowing diagram says so: a fade at the edge it scrolls past. */
+.diagram::after {
+  content: "";
+  position: absolute;
+  top: 1px; right: 1px; bottom: 1px;
+  width: 1.75rem;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--sheet));
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.diagram.is-scrollable::after { opacity: 1; }
+
+/* Captions are clauses, not categories, so they stay sentence case — the
+   uppercase label voice is reserved for short nouns. */
+.diagram-caption {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
+  margin: var(--s3) auto 0;
+  max-width: 52ch;
+  text-align: center;
+}
+
+/* ── Quiz: a check plate. Every state carries a mark. ──────────────────── */
+.quiz {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  margin: var(--s6) 0;
+  padding: 0;
+}
+.quiz-title {
+  padding: 0.55rem 1.1rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--fill-0);
+  color: var(--ink);
+  border-radius: var(--r) var(--r) 0 0;
+}
+.quiz-question {
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+  padding: var(--s4) 1.1rem var(--s3);
+  max-width: none;
+}
 .quiz-options {
   display: grid;
-  gap: 0.5rem;
+  border-top: 1px solid var(--rule);
 }
-
 .quiz-option {
-  padding: 0.7rem 1rem;
-  border: 1.5px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  display: block;
+  width: 100%;
   text-align: left;
-  background: var(--bg);
-  color: var(--text);
-}
-
-.quiz-option:hover:not(:disabled) {
-  border-color: var(--accent);
-  background: var(--accent-light);
-}
-
-.quiz-option.correct {
-  border-color: var(--success);
-  background: var(--success-light);
-  color: var(--success);
-  font-weight: 600;
-}
-
-.quiz-option.wrong {
-  border-color: var(--danger);
-  background: var(--danger-light);
-  color: var(--danger);
-}
-
-.quiz-feedback {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  min-height: 1.5rem;
-}
-
-.quiz-feedback.correct { color: var(--success); font-weight: 600; }
-.quiz-feedback.wrong   { color: var(--danger); }
-
-.quiz-next {
-  margin-top: 1rem;
-  background: var(--accent);
-  color: white;
+  font: inherit;
+  font-size: 0.97rem;
+  line-height: 1.45;
+  color: var(--ink);
+  background: transparent;
   border: none;
-  padding: 0.5rem 1.2rem;
-  border-radius: 5px;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.8rem 2.4rem 0.8rem 1.1rem;
   cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: none;
+  transition: background 0.14s var(--ease), color 0.14s var(--ease);
 }
-.quiz-next:hover { background: var(--accent-dark); }
+.quiz-options .quiz-option:last-child { border-bottom: none; }
+.quiz-option:hover:not(:disabled) { background: var(--fill-0); }
+.quiz-option:disabled { cursor: default; }
 
-/* ── Navigation ── */
-.lesson-nav {
-  display: flex;
-  gap: 1rem;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
+/* The mark sits in a fixed cell on the right — filled, struck, or empty. */
+.quiz-option::after {
+  content: "";
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  width: 17px; height: 17px;
+  margin-top: -8.5px;
+  opacity: 0;
+  background: currentColor;
+  -webkit-mask: var(--mark) center / contain no-repeat;
+  mask: var(--mark) center / contain no-repeat;
 }
-
-.lesson-nav a {
-  color: var(--accent);
+.quiz-option.correct {
+  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5 9.5 18 20 6.5'/%3E%3C/svg%3E");
+  background: var(--go-tint);
+  color: var(--go);
   font-weight: 500;
 }
+.quiz-option.wrong {
+  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6l12 12M18 6 6 18'/%3E%3C/svg%3E");
+  background: var(--stop-tint);
+  color: var(--stop);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--stop) 55%, transparent);
+}
+.quiz-option.correct::after,
+.quiz-option.wrong::after { opacity: 1; }
 
+.quiz-feedback {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  padding: 0 1.1rem;
+  max-width: none;
+}
+.quiz-feedback:not(:empty) { padding-top: var(--s3); padding-bottom: var(--s1); }
+/* The verdict is already carried by the option's drawn mark; the feedback
+   only has to explain why. It stays ink so it reads as prose, not alarm. */
+.quiz-feedback.correct,
+.quiz-feedback.wrong { color: var(--ink); }
+
+/* ── Actions ───────────────────────────────────────────────────────────── */
+.btn,
+.quiz-next,
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-plate);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--signal);
+  color: var(--on-signal);
+  border: 1px solid var(--signal);
+  border-radius: var(--r);
+  padding: 0.62rem 1.15rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.btn:hover, .quiz-next:hover, .btn-start:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--plate);
+  text-decoration: none;
+}
+.btn:active, .quiz-next:active, .btn-start:active { transform: translateY(1px); }
+
+.quiz-next { margin: var(--s3) 1.1rem var(--s4); display: none; }
+.quiz-next.is-visible { display: inline-flex; }
+
+.arrow {
+  display: inline-block;
+  width: 15px; height: 15px;
+  flex: none;
+  vertical-align: -2px;
+  background: currentColor;
+  -webkit-mask: var(--arrow) center / contain no-repeat;
+  mask: var(--arrow) center / contain no-repeat;
+}
+.arrow-back { transform: scaleX(-1); }
+
+/* Diagram connector — the same drawn arrow the rest of the system uses,
+   inheriting its cell's colour. */
+.conn {
+  display: inline-block;
+  width: 1.1em; height: 1.1em;
+  vertical-align: -0.2em;
+  background: currentColor;
+  -webkit-mask: var(--arrow) center / contain no-repeat;
+  mask: var(--arrow) center / contain no-repeat;
+}
+:root {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15'/%3E%3Cpath d='m13 6 6 6-6 6'/%3E%3C/svg%3E");
+}
+
+/* ── Lesson navigation: directional plates ─────────────────────────────── */
+.lesson-nav {
+  display: flex;
+  gap: var(--s4);
+  margin-top: var(--s8);
+  padding-top: var(--s5);
+  border-top: 2px solid var(--rule-strong);
+  font-size: 0.95rem;
+}
+.lesson-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-plate);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.lesson-nav a:hover { color: var(--signal-ink); border-bottom-color: var(--signal); }
 .nav-next { margin-left: auto; }
 
-/* ── Diagram / visual blocks ── */
-.diagram {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-}
-
-/* ── Progress bar ── */
-.progress-bar {
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* ── Source citation ── */
+/* ── Source citation ───────────────────────────────────────────────────── */
 .source {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  margin-top: var(--s7);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--rule);
+  max-width: var(--measure);
 }
 
-/* ── Site navigation sidebar ── */
+/* ============================================================================
+   THE DIRECTORY BOARD — the fixed left rail
+   ========================================================================== */
 .site-nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--sidebar-w);
+  top: 0; left: 0;
+  width: var(--rail-w);
   height: 100vh;
+  height: 100dvh;
   overflow-y: auto;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 0 0 3rem;
+  overscroll-behavior: contain;
+  background: var(--sheet);
+  border-right: 1px solid var(--rule);
   z-index: 100;
   font-family: var(--font-sans);
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  display: flex;
+  flex-direction: column;
 }
 
+.nav-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s4) var(--s4) var(--s3);
+  border-bottom: 1px solid var(--rule);
+}
 .nav-home {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-family: var(--font-plate);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text);
-  padding: 1.25rem 1.25rem 1.1rem;
-  border-bottom: 1px solid var(--border);
+  color: var(--ink);
   text-decoration: none;
+  flex: 1;
+  min-width: 0;
 }
-.nav-home:hover { color: var(--accent); text-decoration: none; }
+.nav-home:hover { color: var(--signal-ink); text-decoration: none; }
+.nav-home-icon { width: 16px; height: 16px; flex: none; stroke: currentColor; }
 
-.nav-home-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
+.nav-scroll { flex: 1; padding-bottom: var(--s6); }
 
-.nav-group { margin: 0.5rem 0; }
-
+.nav-group { padding-top: var(--s4); }
 .nav-group-label {
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  padding: 0.9rem 1.25rem 0.3rem;
+  padding: 0 var(--s4) var(--s2);
+  color: var(--ink-2);
 }
 
 .nav-link {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.9rem 1fr;
   align-items: baseline;
-  gap: 0.45rem;
-  padding: 0.32rem 1rem 0.32rem 1.1rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  line-height: 1.45;
+  gap: 0.15rem;
+  padding: 0.34rem var(--s4);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  line-height: 1.4;
   text-decoration: none;
-  border-left: 2px solid transparent;
-  transition: color 0.12s, background 0.12s;
+  border-left: 3px solid transparent;
+  transition: color 0.13s var(--ease), background 0.13s var(--ease);
 }
-.nav-link:hover { color: var(--text); background: var(--bg); text-decoration: none; }
+.nav-link:hover { color: var(--ink); background: var(--fill-0); text-decoration: none; }
 .nav-link.active {
-  color: var(--accent);
-  border-left-color: var(--accent);
-  background: var(--accent-light);
-  font-weight: 600;
+  color: var(--ink);
+  font-weight: 500;
+  border-left-color: var(--signal);
+  background: var(--fill-0);
 }
-
 .nav-num {
-  font-size: 0.68rem;
+  font-family: var(--font-plate);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-muted);
-  min-width: 1.4rem;
-  flex-shrink: 0;
+  color: var(--ink-2);
 }
-.nav-link.active .nav-num { color: var(--accent-dark); }
+.nav-link.active .nav-num { color: var(--signal); }
+.nav-title { min-width: 0; }
 
-.nav-title { flex: 1; }
-
-/* ── Body layout with sidebar ── */
-.has-sidebar {
-  padding-left: var(--sidebar-w);
+.nav-foot {
+  border-top: 1px solid var(--rule);
+  padding: var(--s3) var(--s4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+}
+.nav-count {
+  font-family: var(--font-plate);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ── Mobile hamburger button ── */
+/* Theme control — an authored state, not an inverted hack */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-3); }
+.theme-toggle svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.9; }
+.theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
+  :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+}
+
+.has-sidebar { padding-left: calc(var(--rail-w) + var(--s7)); }
+
+/* Mobile rail control */
 .nav-toggle {
   display: none;
   position: fixed;
-  top: 0.7rem;
-  left: 0.7rem;
+  top: 0.6rem; left: 0.6rem;
   z-index: 200;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  padding: 0.45rem 0.5rem;
-  cursor: pointer;
+  width: 38px; height: 38px;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  cursor: pointer;
 }
 .nav-toggle span {
   display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 1px;
+  width: 17px; height: 2px;
+  background: var(--ink);
+  transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
 }
+body.nav-open .nav-toggle span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 .nav-backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--ink) 35%, transparent);
   z-index: 99;
 }
 
-/* ── Print ── */
-@media print {
-  .site-nav, .nav-toggle, .nav-backdrop { display: none !important; }
-  .has-sidebar { padding-left: 0 !important; }
-  body { background: white; font-size: 13px; }
-  .quiz-option { border: 1px solid #ccc; }
-  .quiz-next { display: none !important; }
+/* ============================================================================
+   THE HOMEPAGE DIRECTORY
+   ========================================================================== */
+.board-head {
+  padding-bottom: var(--s6);
+  margin-bottom: var(--s7);
+  border-bottom: 2px solid var(--rule-strong);
+}
+.board-head h1 {
+  font-size: clamp(2.3rem, 7vw, 3.6rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.028em;
+}
+.board-desc {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 52ch;
+  margin: var(--s4) 0 var(--s5);
+}
+.board-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s5);
+  margin-bottom: var(--s5);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--rule);
+}
+.board-fact {
+  font-family: var(--font-plate);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.board-fact b { color: var(--ink); font-weight: 700; }
+
+.chapter-section { margin-bottom: var(--s7); }
+.chapter-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding-bottom: var(--s2);
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--rule-strong);
+  color: var(--ink);
+}
+.chapter-count { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+.lesson-list { list-style: none; padding: 0; margin: 0; max-width: none; }
+.lesson-item { margin: 0; }
+.lesson-item a {
+  display: grid;
+  grid-template-columns: 3.1rem 1fr auto;
+  align-items: center;
+  gap: var(--s3);
+  padding: 0.78rem 0.5rem 0.78rem 0;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 0.14s var(--ease);
+}
+.lesson-item a:hover {
+  background: var(--fill-0);
+  text-decoration: none;
+}
+.lesson-badge {
+  font-family: var(--font-plate);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+  line-height: 1;
+  transition: color 0.14s var(--ease);
+}
+.lesson-item a:hover .lesson-badge { color: var(--signal); }
+.lesson-name {
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+.lesson-arrow {
+  width: 16px; height: 16px;
+  background: var(--ink-2);
+  -webkit-mask: var(--arrow) center / contain no-repeat;
+  mask: var(--arrow) center / contain no-repeat;
+  transition: background 0.14s var(--ease), transform 0.18s var(--ease);
+}
+.lesson-item a:hover .lesson-arrow { background: var(--signal); transform: translateX(3px); }
+
+.start-cta { margin-top: var(--s2); }
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+/* Below this the board has no room to break out; diagrams sit flush. */
+@media (max-width: 1200px) {
+  .diagram { width: 100%; margin-right: 0; }
 }
 
-/* ── Responsive: sidebar collapses off-canvas below 900px ── */
-@media (max-width: 900px) {
-  .has-sidebar {
-    padding-left: 1.5rem;
-  }
+@media (max-width: 960px) {
+  .has-sidebar { padding-left: var(--s5); }
+  .has-sidebar .page { margin-left: auto; }
   .site-nav {
     transform: translateX(-100%);
-    transition: transform 0.22s ease;
-    box-shadow: none;
+    transition: transform 0.26s var(--ease);
+    width: min(85vw, 300px);
   }
   body.nav-open .site-nav {
     transform: translateX(0);
-    box-shadow: 4px 0 20px rgba(0,0,0,0.12);
+    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.18);
   }
-  body.nav-open .nav-backdrop {
-    display: block;
+  body.nav-open { overflow: hidden; }
+  body.nav-open .nav-backdrop { display: block; }
+  .nav-toggle { display: flex; }
+  .has-sidebar .page { padding-top: var(--s6); }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; padding: var(--s5) var(--s4) var(--s7); }
+  /* Hand-authored strips carry an inline min-width sized for a desktop board;
+     pull it toward the phone so the scroll is short rather than half the drawing. */
+  .diagram { padding-left: var(--s2); padding-right: var(--s2); }
+  .diagram > div[style*="min-width"] {
+    min-width: 0 !important;
+    font-size: 0.66rem !important;
+    gap: 0 !important;
   }
-  .nav-toggle {
-    display: flex;
-  }
-  /* Push content down so hamburger doesn't overlap header */
-  .has-sidebar .page {
-    padding-top: 2.75rem;
+  .diagram > div[style*="min-width"] > div { padding-left: 0.25rem !important; padding-right: 0.25rem !important; }
+  h2 { margin-top: var(--s7); }
+  .lesson-item a { grid-template-columns: 2.4rem 1fr auto; gap: var(--s2); }
+  .lesson-badge { font-size: 1.1rem; }
+  .board-facts { gap: var(--s1) var(--s4); }
+  .quiz-option { padding-right: 2.2rem; }
+  .lesson-nav { flex-direction: column; gap: var(--s3); align-items: flex-start; }
+  .nav-next { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-@media (max-width: 600px) {
-  body { font-size: 15px; }
-  h1 { font-size: 1.5rem; }
+/* ── Print: the sign becomes a sheet ───────────────────────────────────── */
+@media print {
+  :root { --plate: #fff; --sheet: #fff; --ink: #000; --ink-2: #333; }
+  .site-nav, .nav-toggle, .nav-backdrop, .quiz-next, .progress-bar { display: none !important; }
+  .has-sidebar { padding-left: 0 !important; }
+  body { background: #fff; font-size: 11pt; padding: 0; }
+  .page { max-width: none; }
+  a { color: #000; text-decoration: underline; }
+  .callout, .quiz, .diagram { break-inside: avoid; border: 1px solid #999; }
+  .callout.exam { background: #fff; color: #000; border: 2px solid #000; }
+  .callout.exam > .callout-title { color: #000; }
+  h2 { break-after: avoid; }
 }
